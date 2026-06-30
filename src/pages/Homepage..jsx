@@ -1,10 +1,12 @@
 import Header from "../ui/Header";
+import Main from "../ui/Main";
 
 function Homepage() {
   return (
-    <div>
+    <>
       <Header />
-    </div>
+      <Main />
+    </>
   );
 }
 
