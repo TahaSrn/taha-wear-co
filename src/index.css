@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "IranSansM";
+  src: url("./assets/fonts/IRANSansMedium.woff2");
+}
+
+@font-face {
+  font-family: "IranSansB";
+  src: url("./assets/fonts/IRANSansBold.woff2");
+}
+
+@theme {
+  --font-sansMed: "IranSansM", sans-serif;
+  --font-sansBold: "IranSansB", sans-serif;
+}
