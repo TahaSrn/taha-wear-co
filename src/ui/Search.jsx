@@ -1,6 +1,6 @@
 function Search() {
   return (
-    <div className="flex items-center border-[1.7px] pr-4 gap-2 border-blue-500/40 h-[46px] rounded-full overflow-hidden max-w-4xl w-full focus-within:border-blue-800 mr-[19%] my-5">
+    <div className="flex items-center border-[1.7px] pr-4 gap-2 border-stone-500/40 h-[46px] rounded-full overflow-hidden max-w-4xl w-full focus-within:border-blue-800 mr-[19%] my-5">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="22"

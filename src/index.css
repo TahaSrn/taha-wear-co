@@ -13,4 +13,8 @@
 @theme {
   --font-sansMed: "IranSansM", sans-serif;
   --font-sansBold: "IranSansB", sans-serif;
+  --color-caffee-50: #fdf6f0;
+  --color-caffee-100: #ede0d7;
+  --color-caffee-200: #d4c5b2;
+  --color-caffee-300: #c4b09c;
 }

@@ -6,8 +6,8 @@ import Search from "./Search";
 
 function Header() {
   return (
-    <header className="bg-cyan-100 flex flex-col relative">
-      <div className="block md:hidden absolute right-0 top-1/2 -translate-y-1/2">
+    <header className="bg-caffee-100 flex flex-col relative">
+      <div className="block md:hidden absolute z-30 right-0 top-1/2 -translate-y-1/2">
         <Menu />
       </div>
       <div className="flex items-center justify-center md:justify-start relative mt-4 md:mt-1 pb-4 md:pb-0">

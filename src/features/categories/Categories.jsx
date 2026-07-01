@@ -6,12 +6,12 @@ function Categories() {
   const { categories = [], isLoading } = useGetCategories();
 
   return (
-    <div className="grid grid-cols-2 gap-y-10 justify-items-center">
+    <div className="grid grid-cols-1 md:grid-cols-2 px-4 gap-x-0 gap-y-8 md:px-8">
       {isLoading
         ? Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="w-[90%] h-100 rounded-xl bg-gray-100 flex items-center justify-center"
+              className="w-[90%] mx-auto h-100 rounded-xl bg-gray-100 flex items-center justify-center"
             >
               <Spinner />
             </div>
