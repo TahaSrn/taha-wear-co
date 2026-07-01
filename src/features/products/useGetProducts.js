@@ -1,21 +1,21 @@
+// features/products/useGetProducts.js
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../services/apiProducts";
 
-export default function useGetProducts() {
+export default function useGetProducts({
+  categoryIds,
+  colors,
+  minPrice,
+  maxPrice,
+} = {}) {
   const {
-    data: products,
+    data: products = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts,
+    queryKey: ["products", categoryIds, colors, minPrice, maxPrice],
+    queryFn: () => getProducts({ categoryIds, colors, minPrice, maxPrice }),
   });
 
-  if (error) throw new Error(error.message);
-
-  return {
-    products,
-    isLoading,
-    error,
-  };
+  return { products, isLoading, error };
 }

@@ -26,14 +26,14 @@ function NewestProduct({ product }) {
   };
 
   return (
-    <div className="rounded-xl bg-white w-full h-110 flex flex-col items-center justify-start pt-1 font-sansMed relative overflow-hidden shadow-md">
+    <div className="rounded-xl bg-white w-full flex flex-col items-center justify-start pt-1 font-sansMed relative overflow-hidden shadow-md">
       <img
-        className="w-[98%] h-[65%] object-cover rounded-xl transition-transform duration-300"
+        className="w-[98%] h-65 object-cover rounded-xl transition-transform duration-300"
         src={product.productImages[0].image}
         alt={product.productImages[0].image}
       />
 
-      <div className="text-stone-800 absolute flex flex-col justify-center right-3 top-74 text-md md:text-lg text-right gap-3 w-[90%]">
+      <div className="text-stone-800 flex flex-col justify-center right-3 top-74 text-md md:text-lg text-right gap-3 w-[90%]">
         <span className="flex items-center gap-1">
           <HiOutlineCube />
           {product.name}
@@ -42,7 +42,7 @@ function NewestProduct({ product }) {
           <HiOutlineTag />
           {formatCurrency(product.price)} تومان
         </span>
-        <div className="flex justify-center">
+        <div className="flex justify-center pb-2">
           <Button type="primary" size="medium" onClick={handleAddToCart}>
             <span>افزودن به سبد خرید</span>
             <HiOutlineShoppingCart size={20} />

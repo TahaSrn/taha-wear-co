@@ -6,7 +6,7 @@ import NewestProducts from "../features/products/NewestProducts";
 function Main() {
   return (
     <main className="bg-caffee-50 text-center">
-      <div className="py-8">
+      <div className="py-12">
         <CategorySubject icon={HiOutlineSparkles} title="جدید ترین محصولات" />
         <NewestProducts />
       </div>
