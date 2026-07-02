@@ -1,12 +1,17 @@
+// src/features/cart/Cart.jsx
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import EmptyCart from "../../ui/EmptyCart";
 import CartItem from "./CartItem";
 import Header from "../../ui/Header";
 import { formatCurrency } from "../../utils/helpers";
 import Footer from "../../ui/Footer";
+import { useAuth } from "../authentication/useAuth";
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
   );
@@ -14,6 +19,15 @@ function Cart() {
   if (items.length === 0) return <EmptyCart />;
 
   console.log(items);
+
+  const handleCheckout = () => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      // اگه کاربر لاگین هست، به صفحه پرداخت برو
+      navigate("/checkout");
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-caffee-50">
@@ -67,8 +81,11 @@ function Cart() {
                 </div>
               </div>
             </div>
-            <button className="w-full font-sansMed mt-4 bg-stone-800 text-white py-2.5 md:py-3 rounded-lg hover:bg-stone-700 transition-colors cursor-pointer text-sm md:text-base">
-              ثبت سفارش
+            <button
+              onClick={handleCheckout}
+              className="w-full font-sansMed mt-4 bg-stone-800 text-white py-2.5 md:py-3 rounded-lg hover:bg-stone-700 transition-colors cursor-pointer text-sm md:text-base"
+            >
+              {!user ? "ورود برای ثبت سفارش" : "ثبت سفارش"}
             </button>
           </div>
         </div>

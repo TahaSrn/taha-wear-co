@@ -8,8 +8,15 @@ import ContactUs from "./pages/ContactUs";
 import User from "./pages/User";
 import Cart from "./features/cart/Cart";
 import { Toaster } from "react-hot-toast";
+import ProductDetails from "./pages/ProductDetails";
+import { useCartSync } from "./features/cart/useCartSync";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ArticlePage from "./pages/ArticlePage";
 
 function App() {
+  useCartSync();
+
   return (
     <>
       <Toaster
@@ -30,6 +37,12 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/user" element={<User />} />
+          <Route path="product/:productId" element={<ProductDetails />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/article/:slug" element={<ArticlePage />} />
         </Routes>
       </BrowserRouter>
     </>

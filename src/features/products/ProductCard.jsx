@@ -11,6 +11,9 @@ function ProductCard({ product }) {
 
   if (!product) return null;
 
+  const productColors = product.product_colors?.map((pc) => pc.colors) || [];
+  const firstColor = productColors[0] || null;
+
   const handleAddToCart = () => {
     dispatch(
       addItem({
@@ -18,14 +21,15 @@ function ProductCard({ product }) {
         name: product.name,
         price: product.price,
         image: product.productImages?.[0]?.image || "",
+        colorId: firstColor?.id || null,
+        colorName: firstColor?.name || null,
       }),
     );
     toast.success("به سبد خرید اضافه شد");
   };
 
+  // عکس اول با fallback
   const imageUrl = product.productImages?.[0]?.image || "";
-
-  const productColors = product.product_colors?.map((pc) => pc.colors) || [];
 
   const colorClassMap = {
     مشکی: "bg-[#2C2C2C]",
@@ -38,19 +42,26 @@ function ProductCard({ product }) {
     نارنجی: "bg-[#D4896B]",
   };
 
+  console.log(product);
+
   return (
     <div className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       <Link
         to={`/product/${product.id}`}
         className="block relative overflow-hidden"
       >
-        <img
-          src={imageUrl}
-          alt={product.name}
-          className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={product.name}
+            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-56 bg-gray-200 flex items-center justify-center text-stone-400 font-sansMed">
+            بدون تصویر
+          </div>
+        )}
 
-        {/* رنگ‌ها - بالا سمت راست */}
         {productColors.length > 0 && (
           <div className="absolute top-3 right-3 flex flex-col gap-1.5">
             {productColors.map((color) => (

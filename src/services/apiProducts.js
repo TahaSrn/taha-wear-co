@@ -1,6 +1,24 @@
+// services/apiProducts.js
 import supabase from "./supabase";
 
-// services/apiProducts.js
+// مرتب‌سازی عکس‌ها: اول P، بعد M
+const sortProductImages = (images) => {
+  if (!images || images.length === 0) return images;
+
+  // پیدا کردن عکس P
+  const pImages = images.filter((img) => img.image && img.image.includes("/P"));
+  // گرفتن عکس‌های M
+  const mImages = images.filter(
+    (img) => img.image && !img.image.includes("/P"),
+  );
+
+  // اول Pها (بر اساس id مرتب)
+  pImages.sort((a, b) => a.id - b.id);
+  mImages.sort((a, b) => a.id - b.id);
+
+  return [...pImages, ...mImages];
+};
+
 export async function getProducts({
   categoryIds,
   colors,
@@ -68,6 +86,15 @@ export async function getProducts({
     throw new Error(error.message);
   }
 
+  // مرتب‌سازی عکس‌ها برای هر محصول
+  if (products) {
+    products.forEach((product) => {
+      if (product.productImages) {
+        product.productImages = sortProductImages(product.productImages);
+      }
+    });
+  }
+
   return products;
 }
 
@@ -81,7 +108,7 @@ export async function getNewestProducts() {
         .select(
           `
       *,
-      productImages (image),
+      productImages (id, image, productId),
       product_colors (
         color_id,
         colors (
@@ -96,6 +123,15 @@ export async function getNewestProducts() {
         .limit(3);
 
       if (error) throw new Error(error.message);
+
+      // مرتب‌سازی عکس‌ها برای هر محصول
+      if (data) {
+        data.forEach((product) => {
+          if (product.productImages) {
+            product.productImages = sortProductImages(product.productImages);
+          }
+        });
+      }
 
       return data;
     }),
@@ -120,4 +156,40 @@ export async function getMaxPrice() {
   const maxPrice = Math.max(...prices);
 
   return maxPrice;
+}
+
+export async function getProduct(productId) {
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      `
+      *,
+      productImages (*),
+      product_colors (
+        color_id,
+        colors (
+          id,
+          name
+        )
+      ),
+      categories (
+        id,
+        name
+      )
+    `,
+    )
+    .eq("id", productId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching product:", error);
+    throw new Error(error.message);
+  }
+
+  // مرتب‌سازی عکس‌ها
+  if (data && data.productImages) {
+    data.productImages = sortProductImages(data.productImages);
+  }
+
+  return data;
 }

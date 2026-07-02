@@ -2,6 +2,7 @@ import Categories from "../features/categories/Categories";
 import { HiOutlineFolderOpen, HiOutlineSparkles } from "react-icons/hi";
 import CategorySubject from "../features/categories/CategorySubject";
 import NewestProducts from "../features/products/NewestProducts";
+import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 
 function Main() {
   return (
@@ -15,6 +16,8 @@ function Main() {
         <CategorySubject icon={HiOutlineFolderOpen} title="دسته بندی محصولات" />
         <Categories />
       </div>
+
+      <KnowledgeSection />
     </main>
   );
 }

@@ -1,3 +1,4 @@
+// src/ui/Footer.jsx
 import { Link } from "react-router";
 import {
   HiOutlineHome,
@@ -8,7 +9,13 @@ import {
   HiOutlineMail,
   HiOutlineLocationMarker,
 } from "react-icons/hi";
-import { FaInstagram, FaTelegramPlane, FaWhatsapp } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaTelegramPlane,
+  FaWhatsapp,
+  FaLinkedin,
+  FaGithub,
+} from "react-icons/fa";
 
 function Footer() {
   return (
@@ -70,15 +77,15 @@ function Footer() {
             <ul className="space-y-2 text-sm text-stone-400">
               <li className="flex items-center gap-2 font-sansMed">
                 <HiOutlinePhone size={18} />
-                ۰۲۱-۱۲۳۴-۵۶۷۸
+                09304130229
               </li>
               <li className="flex items-center gap-2 font-sansMed">
                 <HiOutlineMail size={18} />
-                info@tahawear.com
+                tahaahmadi0403@gmail.com
               </li>
               <li className="flex items-center gap-2 font-sansMed">
                 <HiOutlineLocationMarker size={18} />
-                تهران، خیابان ولیعصر
+                مازندران ، نور
               </li>
             </ul>
           </div>
@@ -87,20 +94,40 @@ function Footer() {
             <h4 className="text-lg font-sansBold mb-3 md:mb-4">
               ما را دنبال کنید
             </h4>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-wrap">
+              <a
+                href="https://github.com/TahaSrn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-white transition-colors text-2xl"
+                aria-label="گیت‌هاب"
+              >
+                <FaGithub />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/tahaahmadi0403/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-blue-400 transition-colors text-2xl"
+                aria-label="لینکدین"
+              >
+                <FaLinkedin />
+              </a>
+              <a
+                href="https://t.me/Taha_TNT"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-sky-400 transition-colors text-2xl"
+                aria-label="تلگرام"
+              >
+                <FaTelegramPlane />
+              </a>
               <a
                 href="#"
                 className="text-stone-400 hover:text-pink-500 transition-colors text-2xl"
                 aria-label="اینستاگرام"
               >
                 <FaInstagram />
-              </a>
-              <a
-                href="#"
-                className="text-stone-400 hover:text-blue-400 transition-colors text-2xl"
-                aria-label="تلگرام"
-              >
-                <FaTelegramPlane />
               </a>
               <a
                 href="#"
