@@ -6,7 +6,7 @@ function Categories() {
   const { categories = [], isLoading } = useGetCategories();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 px-4 gap-x-0 gap-y-8 md:px-8">
+    <div className="grid grid-cols-1 pb-20 md:grid-cols-2 px-4 gap-x-0 gap-y-8 md:px-8">
       {isLoading
         ? Array.from({ length: 4 }).map((_, i) => (
             <div

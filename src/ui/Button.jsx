@@ -1,6 +1,7 @@
 function Button({ children, type, onClick, size }) {
   const styles = {
     primary: "bg-caffee-100",
+    secondary: "bg-caffee-200",
   };
 
   const sizes = {

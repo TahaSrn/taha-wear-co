@@ -33,7 +33,7 @@ function NewestProduct({ product }) {
         alt={product.productImages[0].image}
       />
 
-      <div className="text-stone-800 flex flex-col justify-center right-3 top-74 text-md md:text-lg text-right gap-3 w-[90%]">
+      <div className="text-stone-800 flex flex-col justify-center right-3 top-75 text-md md:text-lg text-right gap-3 w-[90%] mt-3">
         <span className="flex items-center gap-1">
           <HiOutlineCube />
           {product.name}
@@ -42,7 +42,7 @@ function NewestProduct({ product }) {
           <HiOutlineTag />
           {formatCurrency(product.price)} تومان
         </span>
-        <div className="flex justify-center pb-2">
+        <div className="flex justify-center pb-3">
           <Button type="primary" size="medium" onClick={handleAddToCart}>
             <span>افزودن به سبد خرید</span>
             <HiOutlineShoppingCart size={20} />

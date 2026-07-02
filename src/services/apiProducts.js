@@ -1,14 +1,23 @@
 import supabase from "./supabase";
 
+// services/apiProducts.js
 export async function getProducts({
   categoryIds,
   colors,
   minPrice,
   maxPrice,
+  sortBy,
 } = {}) {
   let query = supabase.from("products").select(`
       *,
-      productImages (*)
+      productImages (*),
+      product_colors (
+        color_id,
+        colors (
+          id,
+          name
+        )
+      )
     `);
 
   // فیلتر بر اساس دسته‌بندی
@@ -26,15 +35,10 @@ export async function getProducts({
 
   // فیلتر بر اساس رنگ
   if (colors && colors.length > 0) {
-    const { data: productColors, error: colorError } = await supabase
+    const { data: productColors } = await supabase
       .from("product_colors")
       .select("product_id")
       .in("color_id", colors);
-
-    if (colorError) {
-      console.error("Error fetching product colors:", colorError);
-      return [];
-    }
 
     const productIds = productColors?.map((p) => p.product_id) || [];
 
@@ -43,6 +47,18 @@ export async function getProducts({
     }
 
     query = query.in("id", productIds);
+  }
+
+  // مرتب‌سازی
+  if (sortBy === "newest") {
+    query = query.order("created_at", { ascending: false });
+  } else if (sortBy === "price-asc") {
+    query = query.order("price", { ascending: true });
+  } else if (sortBy === "price-desc") {
+    query = query.order("price", { ascending: false });
+  } else {
+    // پیش‌فرض: جدیدترین
+    query = query.order("created_at", { ascending: false });
   }
 
   const { data: products, error } = await query;
@@ -65,7 +81,14 @@ export async function getNewestProducts() {
         .select(
           `
       *,
-      productImages (image)
+      productImages (image),
+      product_colors (
+        color_id,
+        colors (
+          id,
+          name
+        )
+      )
     `,
         )
         .eq("categoryId", category)

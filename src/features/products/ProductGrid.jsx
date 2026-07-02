@@ -1,11 +1,13 @@
 // src/features/shop/ProductGrid.jsx
 import { useState, useEffect } from "react";
+import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import ProductCard from "./ProductCard";
 import Pagination from "../../ui/Pagination";
 import useGetProducts from "../products/useGetProducts";
 
 function ProductGrid({ filters }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("newest");
   const productsPerPage = 12;
 
   const { products = [], isLoading } = useGetProducts({
@@ -13,11 +15,12 @@ function ProductGrid({ filters }) {
     colors: filters?.colors || [],
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
+    sortBy: sortBy,
   });
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters]);
+  }, [filters, sortBy]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -25,6 +28,10 @@ function ProductGrid({ filters }) {
     indexOfFirstProduct,
     indexOfLastProduct,
   );
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
 
   if (isLoading) {
     return (
@@ -46,15 +53,29 @@ function ProductGrid({ filters }) {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-sm text-stone-500 font-sansMed">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+        <span className="text-sm text-stone-500 font-sansMed bg-stone-100 px-4 py-1.5 rounded-full">
           {products.length} محصول
         </span>
-        <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm font-sansMed bg-white focus:ring-2 focus:ring-stone-400 focus:outline-none">
-          <option value="newest">جدیدترین</option>
-          <option value="price-asc">ارزان‌ترین</option>
-          <option value="price-desc">گران‌ترین</option>
-        </select>
+
+        <div className="relative w-full sm:w-56">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none">
+            <HiOutlineSortAscending size={18} />
+          </div>
+          <select
+            value={sortBy}
+            onChange={handleSortChange}
+            className="w-full appearance-none bg-transparent border-2 border-stone-300 hover:border-stone-400 rounded-xl px-10 py-2.5 text-sm font-sansMed text-stone-700 text-center focus:ring-2 focus:ring-stone-400 focus:border-stone-400 focus:outline-none transition-all duration-200 cursor-pointer"
+          >
+            <option value="newest">جدیدترین</option>
+            <option value="price-asc">ارزان‌ترین</option>
+            <option value="price-desc">گران‌ترین</option>
+          </select>
+          <HiChevronDown
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
+            size={18}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

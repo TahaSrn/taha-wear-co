@@ -4,8 +4,7 @@ import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import useGetCategories from "../categories/useGetCategories";
 import useGetMaxPrice from "./useGetMaxPrice";
 
-function ShopSidebar({ onFilterChange }) {
-  // تشخیص اندازه صفحه
+function ShopSidebar({ onFilterChange, initialFilters }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -22,7 +21,6 @@ function ShopSidebar({ onFilterChange }) {
     colors: !isMobile,
   });
 
-  // وقتی isMobile تغییر میکنه، openSections رو آپدیت کن
   useEffect(() => {
     setOpenSections({
       categories: !isMobile,
@@ -31,7 +29,9 @@ function ShopSidebar({ onFilterChange }) {
     });
   }, [isMobile]);
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    initialFilters?.categories || [],
+  );
   const [selectedColors, setSelectedColors] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
 
@@ -39,8 +39,25 @@ function ShopSidebar({ onFilterChange }) {
   const { maxPrice = 10000000 } = useGetMaxPrice();
 
   useEffect(() => {
+    if (initialFilters?.categories) {
+      setSelectedCategories(initialFilters.categories);
+    }
+  }, [initialFilters]);
+
+  useEffect(() => {
     setPriceRange({ min: 0, max: maxPrice });
   }, [maxPrice]);
+
+  useEffect(() => {
+    onFilterChange({
+      categories: selectedCategories,
+      colors: selectedColors,
+      priceRange: {
+        min: priceRange.min,
+        max: priceRange.max,
+      },
+    });
+  }, [selectedCategories]);
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
