@@ -1,6 +1,7 @@
 // src/pages/ProductDetails.jsx
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import useGetProduct from "../features/products/useGetProduct";
@@ -30,10 +31,10 @@ function ProductDetails() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const cartItems = useSelector((state) => state.cart.items);
 
-  // پیدا کردن آیتم با همان productId و colorId
   const cartItem = cartItems.find(
     (item) =>
       item.id === Number(productId) && item.colorId === selectedColor?.id,
@@ -42,6 +43,26 @@ function ProductDetails() {
 
   const colors = product?.product_colors?.map((pc) => pc.colors) || [];
   const hasSingleColor = colors.length === 1;
+
+  const images = product?.productImages?.map((img) => img.image) || [];
+
+  const sortedImages = [];
+  if (images.length > 0) {
+    if (images[1]) sortedImages.push(images[1]);
+    for (let i = 2; i < images.length; i++) {
+      sortedImages.push(images[i]);
+    }
+    sortedImages.push(images[0]);
+  }
+
+  const prefetchImage = (imageUrl) => {
+    if (!imageUrl) return;
+    queryClient.prefetchQuery({
+      queryKey: ["image", imageUrl],
+      queryFn: () => fetch(imageUrl).then((res) => res.blob()),
+      staleTime: 1000 * 60 * 5,
+    });
+  };
 
   useEffect(() => {
     window.scrollTo({
@@ -56,6 +77,16 @@ function ProductDetails() {
     }
   }, [hasSingleColor, colors]);
 
+  useEffect(() => {
+    if (sortedImages.length > 0) {
+      const nextIndex = (currentImageIndex + 1) % sortedImages.length;
+      const nextImage = sortedImages[nextIndex];
+      if (nextImage) {
+        prefetchImage(nextImage);
+      }
+    }
+  }, [currentImageIndex, sortedImages]);
+
   const handleAddToCart = () => {
     if (!product) return;
 
@@ -67,17 +98,14 @@ function ProductDetails() {
     const colorId = selectedColor?.id || colors[0]?.id;
     const colorName = selectedColor?.name || colors[0]?.name;
 
-    // چک کردن اینکه آیا این محصول با این رنگ قبلاً در سبد خرید هست
     const existingItem = cartItems.find(
       (item) => item.id === product.id && item.colorId === colorId,
     );
 
     if (existingItem) {
-      // اگر وجود داره، تعداد رو افزایش بده
       dispatch(increaseQuantity({ id: product.id, colorId: colorId }));
       toast.success(`یک عدد دیگر به ${product.name} (${colorName}) اضافه شد`);
     } else {
-      // اگر وجود نداره، آیتم جدید اضافه کن
       dispatch(
         addItem({
           id: product.id,
@@ -164,17 +192,6 @@ function ProductDetails() {
     );
   }
 
-  const images = product.productImages?.map((img) => img.image) || [];
-
-  const sortedImages = [];
-  if (images.length > 0) {
-    if (images[1]) sortedImages.push(images[1]);
-    for (let i = 2; i < images.length; i++) {
-      sortedImages.push(images[i]);
-    }
-    sortedImages.push(images[0]);
-  }
-
   const currentImage = sortedImages[currentImageIndex] || "";
 
   const handleNext = () => {
@@ -226,7 +243,6 @@ function ProductDetails() {
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-10">
-          {/* سمت راست: اسلایدر عکس */}
           <div className="w-full lg:w-[55%]">
             <div
               className="relative bg-gray-100 rounded-2xl overflow-hidden group"
@@ -290,7 +306,6 @@ function ProductDetails() {
             </div>
           </div>
 
-          {/* سمت چپ: اطلاعات محصول */}
           <div className="w-full lg:w-[45%] flex flex-col">
             {product.categories && (
               <div className="mb-4">
@@ -325,7 +340,6 @@ function ProductDetails() {
                     );
                   })}
                 </div>
-                {/* نمایش تعداد هر رنگ در سبد خرید */}
                 {colors.map((color) => {
                   const item = cartItems.find(
                     (i) => i.id === Number(productId) && i.colorId === color.id,
