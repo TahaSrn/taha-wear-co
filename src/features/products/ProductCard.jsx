@@ -34,7 +34,7 @@ function ProductCard({ product }) {
     آبی: "bg-[#5C6BC0]",
     قرمز: "bg-[#A0524B]",
     سبز: "bg-[#6B8E6B]",
-    طلایی: "bg-[#C9A96E]",
+    زرد: "bg-[#C9A96E]",
     نارنجی: "bg-[#D4896B]",
   };
 

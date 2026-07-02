@@ -36,7 +36,7 @@ function ProductGrid({ filters }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {Array.from({ length: 8 }).map((_, i) => (
+        {Array.from({ length: 12 }).map((_, i) => (
           <div key={i} className="bg-gray-200 rounded-xl h-80 animate-pulse" />
         ))}
       </div>

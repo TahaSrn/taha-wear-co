@@ -1,7 +1,19 @@
 import { IoIosArrowDown } from "react-icons/io";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useGetCategories from "./useGetCategories";
 
 function CategoriesSelect() {
+  const navigate = useNavigate();
+  const { categories = [], isLoading } = useGetCategories();
+
+  const handleCategoryClick = (categoryId) => {
+    if (categoryId) {
+      navigate(`/shop?category=${categoryId}`);
+    } else {
+      navigate("/shop");
+    }
+  };
+
   return (
     <div className="flex font-sansMed items-center justify-between py-1.5">
       <div className="flex items-center gap-3">
@@ -53,17 +65,26 @@ function CategoriesSelect() {
           z-2
           "
           >
-            <p className="px-3 py-2 rounded-xl hover:bg-gray-100">
+            <p
+              onClick={() => handleCategoryClick(null)}
+              className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer"
+            >
               همه محصولات
             </p>
 
-            <p className="px-3 py-2 rounded-xl hover:bg-gray-100">کت</p>
-
-            <p className="px-3 py-2 rounded-xl hover:bg-gray-100">ژاکت</p>
-
-            <p className="px-3 py-2 rounded-xl hover:bg-gray-100">شلوار</p>
-
-            <p className="px-3 py-2 rounded-xl hover:bg-gray-100">تی شرت</p>
+            {isLoading ? (
+              <p className="px-3 py-2 text-gray-400">در حال بارگذاری...</p>
+            ) : (
+              categories.map((category) => (
+                <p
+                  key={category.id}
+                  onClick={() => handleCategoryClick(category.id)}
+                  className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer"
+                >
+                  {category.name}
+                </p>
+              ))
+            )}
           </div>
         </div>
 

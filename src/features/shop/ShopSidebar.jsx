@@ -1,4 +1,5 @@
 // src/features/shop/ShopSidebar.jsx
+
 import { useState, useEffect } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import useGetCategories from "../categories/useGetCategories";
@@ -11,7 +12,9 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
+
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -32,10 +35,16 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
   const [selectedCategories, setSelectedCategories] = useState(
     initialFilters?.categories || [],
   );
+
   const [selectedColors, setSelectedColors] = useState([]);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
+
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: 10000000,
+  });
 
   const { categories = [], isLoading } = useGetCategories();
+
   const { maxPrice = 10000000 } = useGetMaxPrice();
 
   useEffect(() => {
@@ -45,19 +54,11 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
   }, [initialFilters]);
 
   useEffect(() => {
-    setPriceRange({ min: 0, max: maxPrice });
-  }, [maxPrice]);
-
-  useEffect(() => {
-    onFilterChange({
-      categories: selectedCategories,
-      colors: selectedColors,
-      priceRange: {
-        min: priceRange.min,
-        max: priceRange.max,
-      },
+    setPriceRange({
+      min: 0,
+      max: maxPrice,
     });
-  }, [selectedCategories]);
+  }, [maxPrice]);
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
@@ -66,12 +67,31 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
     }));
   };
 
+  const updateFilters = (
+    categories = selectedCategories,
+    colors = selectedColors,
+    price = priceRange,
+  ) => {
+    onFilterChange({
+      categories,
+      colors,
+      priceRange: {
+        min: price.min,
+        max: price.max,
+      },
+    });
+  };
+
   const handleCategoryChange = (categoryId) => {
-    setSelectedCategories((prev) =>
-      prev.includes(categoryId)
+    setSelectedCategories((prev) => {
+      const updated = prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId],
-    );
+        : [...prev, categoryId];
+
+      updateFilters(updated, selectedColors, priceRange);
+
+      return updated;
+    });
   };
 
   const colors = [
@@ -81,52 +101,50 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
     { id: 4, name: "آبی", class: "bg-blue-600" },
     { id: 5, name: "قرمز", class: "bg-red-600" },
     { id: 6, name: "سبز", class: "bg-green-600" },
-    { id: 7, name: "طلایی", class: "bg-amber-400" },
+    { id: 7, name: "زرد", class: "bg-amber-400" },
     { id: 8, name: "نارنجی", class: "bg-orange-500" },
   ];
 
   const toggleColor = (colorId) => {
-    setSelectedColors((prev) =>
-      prev.includes(colorId)
+    setSelectedColors((prev) => {
+      const updated = prev.includes(colorId)
         ? prev.filter((id) => id !== colorId)
-        : [...prev, colorId],
-    );
+        : [...prev, colorId];
+
+      updateFilters(selectedCategories, updated, priceRange);
+
+      return updated;
+    });
   };
 
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
+
     const numValue = Number(value);
 
     setPriceRange((prev) => {
+      let updated;
+
       if (name === "min" && numValue > prev.max) {
-        return { min: prev.max, max: numValue };
+        updated = {
+          min: prev.max,
+          max: numValue,
+        };
+      } else if (name === "max" && numValue < prev.min) {
+        updated = {
+          min: numValue,
+          max: prev.min,
+        };
+      } else {
+        updated = {
+          ...prev,
+          [name]: numValue,
+        };
       }
-      if (name === "max" && numValue < prev.min) {
-        return { min: numValue, max: prev.min };
-      }
-      return { ...prev, [name]: numValue };
-    });
-  };
 
-  const applyPriceFilter = () => {
-    onFilterChange({
-      categories: selectedCategories,
-      colors: selectedColors,
-      priceRange: {
-        min: priceRange.min,
-        max: priceRange.max,
-      },
-    });
-  };
+      updateFilters(selectedCategories, selectedColors, updated);
 
-  const resetFilters = () => {
-    setSelectedCategories([]);
-    setSelectedColors([]);
-    setPriceRange({ min: 0, max: maxPrice });
-    onFilterChange({
-      categories: [],
-      colors: [],
-      priceRange: { min: null, max: null },
+      return updated;
     });
   };
 
@@ -136,21 +154,24 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
 
   return (
     <div className="bg-white rounded-xl shadow-md p-5 sticky top-20">
-      {/* دسته‌بندی */}
-      <div className="border-b border-gray-200 pb-4 mb-4">
+      {/* دسته بندی */}
+
+      <div className="border-b border-gray-200 pb-3 mb-3">
         <button
-          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-base"
+          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("categories")}
         >
-          <span className="font-sansBold">دسته‌بندی</span>
+          <span>دسته‌بندی</span>
+
           {openSections.categories ? (
-            <HiChevronUp size={20} />
+            <HiChevronUp size={18} />
           ) : (
-            <HiChevronDown size={20} />
+            <HiChevronDown size={18} />
           )}
         </button>
+
         {openSections.categories && (
-          <div className="mt-3 space-y-2">
+          <div className="mt-2 space-y-1.5">
             {isLoading ? (
               <div className="text-sm text-stone-400 font-sansMed">
                 در حال بارگذاری...
@@ -159,17 +180,19 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
               categories.map((cat) => (
                 <label
                   key={cat.id}
-                  className="flex items-center font-sansMed justify-between cursor-pointer text-sm text-stone-600 hover:text-stone-800"
+                  className="flex items-center justify-between cursor-pointer text-sm text-stone-600 hover:text-stone-800 font-sansMed"
                 >
                   <span className="flex items-center gap-2">
                     <input
                       type="checkbox"
                       checked={selectedCategories.includes(cat.id)}
                       onChange={() => handleCategoryChange(cat.id)}
-                      className="rounded border-gray-300 accent-stone-800"
+                      className="rounded border-gray-300 accent-stone-800 cursor-pointer"
                     />
+
                     {cat.name}
                   </span>
+
                   <span className="text-xs text-stone-400">
                     ({cat.productCount || 0})
                   </span>
@@ -180,38 +203,44 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
         )}
       </div>
 
-      {/* محدوده قیمت */}
-      <div className="border-b border-gray-200 pb-4 mb-4">
+      {/* قیمت */}
+
+      <div className="border-b border-gray-200 pb-3 mb-3">
         <button
-          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-base"
+          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("price")}
         >
           <span>محدوده قیمت</span>
+
           {openSections.price ? (
-            <HiChevronUp size={20} />
+            <HiChevronUp size={18} />
           ) : (
-            <HiChevronDown size={20} />
+            <HiChevronDown size={18} />
           )}
         </button>
+
         {openSections.price && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm mb-4">
+          <div className="mt-2">
+            <div className="flex justify-between items-center text-sm mb-2">
               <span className="font-sansMed text-stone-600">قیمت:</span>
-              <div className="flex items-center gap-2">
-                <span className="font-sansBold text-stone-800 bg-stone-100 px-3 py-1 rounded-lg">
+
+              <div className="flex gap-2">
+                <span className="bg-stone-100 px-2.5 py-0.5 rounded-lg font-sansBold text-stone-800">
                   {formatPrice(priceRange.min)}
                 </span>
-                <span className="text-stone-300">—</span>
-                <span className="font-sansBold text-stone-800 bg-stone-100 px-3 py-1 rounded-lg">
+
+                <span>—</span>
+
+                <span className="bg-stone-100 px-2.5 py-0.5 rounded-lg font-sansBold text-stone-800">
                   {formatPrice(priceRange.max)}
                 </span>
               </div>
             </div>
 
-            <div className="relative pt-3 pb-8 px-1">
-              <div className="relative h-2 bg-gray-200 rounded-full">
+            <div className="relative pt-2 pb-6 px-1">
+              <div className="h-1.5 bg-gray-200 rounded-full">
                 <div
-                  className="absolute h-2 bg-stone-800 rounded-full"
+                  className="absolute h-1.5 bg-stone-800 rounded-full"
                   style={{
                     right: `${(priceRange.min / maxPrice) * 100}%`,
                     left: `${100 - (priceRange.max / maxPrice) * 100}%`,
@@ -226,8 +255,9 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                 max={maxPrice}
                 value={priceRange.min}
                 onChange={handlePriceChange}
-                className="absolute top-3 w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-stone-800 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer"
+                className="absolute top-2 w-full h-1.5 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-stone-800 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md"
               />
+
               <input
                 type="range"
                 name="max"
@@ -235,56 +265,62 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                 max={maxPrice}
                 value={priceRange.max}
                 onChange={handlePriceChange}
-                className="absolute top-3 w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-stone-800 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer"
+                className="absolute top-2 w-full h-1.5 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-stone-800 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md"
               />
             </div>
-
-            <button
-              onClick={applyPriceFilter}
-              className="w-full mt-2 bg-stone-800 cursor-pointer text-white text-sm py-2.5 rounded-xl hover:bg-stone-700 transition-all duration-300 font-sansMed hover:shadow-lg hover:-translate-y-0.5"
-            >
-              اعمال فیلتر
-            </button>
           </div>
         )}
       </div>
 
       {/* رنگ */}
-      <div className="pb-2">
+
+      {/* رنگ */}
+
+      <div>
         <button
-          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-base"
+          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("colors")}
         >
           <span>رنگ</span>
+
           {openSections.colors ? (
-            <HiChevronUp size={20} />
+            <HiChevronUp size={18} />
           ) : (
-            <HiChevronDown size={20} />
+            <HiChevronDown size={18} />
           )}
         </button>
+
         {openSections.colors && (
-          <div className="mt-4">
-            <div className="grid grid-cols-4 gap-3">
+          <div className="mt-2">
+            <div className="grid grid-cols-4 gap-2.5">
               {colors.map((color) => {
-                const isSelected = selectedColors.includes(color.id);
+                const selected = selectedColors.includes(color.id);
+
                 return (
                   <button
                     key={color.id}
                     onClick={() => toggleColor(color.id)}
-                    className="group relative cursor-pointer flex flex-col items-center gap-1 transition-all duration-200"
+                    className="group relative cursor-pointer flex flex-col items-center gap-0.5 transition-all duration-200"
                   >
                     <div
-                      className={`w-10 h-10 rounded-full ${color.class} shadow-md transition-all duration-200 ${
-                        isSelected
-                          ? "ring-2 ring-stone-800 ring-offset-2 scale-110"
-                          : "hover:scale-105 hover:shadow-lg"
-                      }`}
-                      title={color.name}
+                      className={`
+                  w-8 h-8 rounded-full
+                  ${color.class}
+                  shadow-sm
+                  transition-all duration-200
+                  ${
+                    selected
+                      ? "ring-2 ring-stone-800 ring-offset-1 scale-110"
+                      : "hover:scale-105 hover:shadow-md"
+                  }
+                `}
                     />
+
                     <span
-                      className={`text-[10px] font-sansMed transition-colors ${
-                        isSelected ? "text-stone-800" : "text-stone-400"
-                      }`}
+                      className={`
+                  text-[9px] font-sansMed transition-colors
+                  ${selected ? "text-stone-800" : "text-stone-400"}
+                `}
                     >
                       {color.name}
                     </span>
@@ -292,14 +328,20 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                 );
               })}
             </div>
+
             {selectedColors.length > 0 && (
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-stone-500">
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-xs text-stone-500 font-sansMed">
                   {selectedColors.length} رنگ انتخاب شده
                 </span>
+
                 <button
-                  onClick={() => setSelectedColors([])}
-                  className="text-xs text-stone-400 hover:text-red-500 transition-colors"
+                  onClick={() => {
+                    setSelectedColors([]);
+
+                    updateFilters(selectedCategories, [], priceRange);
+                  }}
+                  className="text-xs text-stone-400 hover:text-stone-800 transition-colors font-sansMed cursor-pointer"
                 >
                   حذف همه
                 </button>
@@ -308,13 +350,6 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
           </div>
         )}
       </div>
-
-      <button
-        onClick={resetFilters}
-        className="w-full cursor-pointer mt-4 text-stone-500 text-sm hover:text-stone-800 transition-colors font-sansMed border-t border-gray-200 pt-4"
-      >
-        حذف همه فیلترها
-      </button>
     </div>
   );
 }
