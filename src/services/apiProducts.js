@@ -120,7 +120,7 @@ export async function getNewestProducts() {
         )
         .eq("categoryId", category)
         .order("created_at", { ascending: false })
-        .limit(3);
+        .limit(4);
 
       if (error) throw new Error(error.message);
 

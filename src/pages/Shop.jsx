@@ -1,6 +1,6 @@
 // src/pages/Shop.jsx
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams, useLocation } from "react-router";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import ShopSidebar from "../features/shop/ShopSidebar";
@@ -8,13 +8,14 @@ import ProductGrid from "../features/products/ProductGrid";
 
 function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [filters, setFilters] = useState({
     categories: [],
     colors: [],
     priceRange: { min: null, max: null },
   });
+  const mainRef = useRef(null);
 
-  // وقتی صفحه لود میشه، فیلتر رو از URL بخون
   useEffect(() => {
     const categoryId = searchParams.get("category");
     if (categoryId) {
@@ -25,27 +26,30 @@ function Shop() {
     }
   }, [searchParams]);
 
-  // اسکرول به بالای صفحه
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    // اسکرول به بالای صفحه با استفاده از ref
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "instant", block: "start" });
+    }
+    // یا روش دوم
+    window.scrollTo(0, 0);
+  }, [location.pathname, searchParams]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
 
-    // آپدیت URL
     const params = {};
     if (newFilters.categories.length > 0) {
       params.category = newFilters.categories[0];
     }
-    setSearchParams(params, { replace: true }); // ✅ اضافه کردن replace: true
+    setSearchParams(params, { replace: true });
   };
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
 
-      <div className="flex-1 bg-caffee-50 pt-8">
+      <div ref={mainRef} className="flex-1 bg-caffee-50 pt-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-2xl md:text-3xl font-sansBold text-stone-800 mb-6">
             همه محصولات

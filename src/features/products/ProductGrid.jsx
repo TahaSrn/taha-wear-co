@@ -1,5 +1,5 @@
 // src/features/shop/ProductGrid.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import ProductCard from "./ProductCard";
 import Pagination from "../../ui/Pagination";
@@ -10,20 +10,36 @@ function ProductGrid({ filters }) {
   const [sortBy, setSortBy] = useState("newest");
   const productsPerPage = 12;
 
+  const isFirstRender = useRef(true);
+
   const { products = [], isLoading } = useGetProducts({
     categoryIds: filters?.categories || [],
     colors: filters?.colors || [],
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
-    sortBy: sortBy,
+    sortBy,
   });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortBy]);
 
+  // فقط بعد از تغییر صفحه اسکرول کن
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentPage]);
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
   const currentProducts = products.slice(
     indexOfFirstProduct,
     indexOfLastProduct,
@@ -62,6 +78,7 @@ function ProductGrid({ filters }) {
           <div className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none">
             <HiOutlineSortAscending size={18} />
           </div>
+
           <select
             value={sortBy}
             onChange={handleSortChange}
@@ -71,6 +88,7 @@ function ProductGrid({ filters }) {
             <option value="price-asc">ارزان‌ترین</option>
             <option value="price-desc">گران‌ترین</option>
           </select>
+
           <HiChevronDown
             className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
             size={18}

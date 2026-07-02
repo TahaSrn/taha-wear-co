@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import useGetProduct from "../features/products/useGetProduct";
+import useGetProducts from "../features/products/useGetProducts";
 import { formatCurrency } from "../utils/helpers";
 import {
   HiOutlineShoppingCart,
@@ -13,6 +14,7 @@ import {
   HiOutlinePlus,
   HiOutlineMinus,
   HiOutlineTrash,
+  HiOutlineCollection,
 } from "react-icons/hi";
 import Spinner from "../ui/Spinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +25,8 @@ import {
   decreaseQuantity,
 } from "../features/cart/cartSlice";
 import toast from "react-hot-toast";
+import ProductCard from "../features/products/ProductCard";
+import CategorySubject from "../features/categories/CategorySubject";
 
 function ProductDetails() {
   const { productId } = useParams();
@@ -55,6 +59,12 @@ function ProductDetails() {
     sortedImages.push(images[0]);
   }
 
+  const { products: relatedProducts = [], isLoading: relatedLoading } =
+    useGetProducts({
+      categoryIds: product?.categoryId ? [product.categoryId] : [],
+      sortBy: "newest",
+    });
+
   const prefetchImage = (imageUrl) => {
     if (!imageUrl) return;
     queryClient.prefetchQuery({
@@ -69,7 +79,11 @@ function ProductDetails() {
       top: 0,
       behavior: "instant",
     });
-  }, []);
+  }, [productId]);
+
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [productId]);
 
   useEffect(() => {
     if (hasSingleColor && colors.length > 0) {
@@ -237,6 +251,10 @@ function ProductDetails() {
     (item) =>
       item.id === Number(productId) && item.colorId === selectedColor?.id,
   );
+
+  const relatedFiltered = relatedProducts
+    .filter((p) => p.id !== Number(productId))
+    .slice(0, 5);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -429,6 +447,28 @@ function ProductDetails() {
             </div>
           </div>
         </div>
+
+        {relatedFiltered.length > 0 && (
+          <div className="mt-20">
+            <CategorySubject icon={HiOutlineCollection} title="محصولات مشابه" />
+            {relatedLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-gray-200 rounded-xl h-80 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                {relatedFiltered.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </main>
       <Footer />
     </div>
