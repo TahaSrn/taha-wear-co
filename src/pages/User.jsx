@@ -15,6 +15,16 @@ function User() {
   const { user, loading: authLoading } = useAuth();
   const { orders, isLoading: ordersLoading } = useOrders(user?.id);
 
+  // اسکرول به بالای صفحه با تاخیر
+  useEffect(() => {
+    // تاخیر کوچک برای اطمینان از رندر شدن کامل صفحه
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     if (!authLoading && !user) {
       navigate("/login");
@@ -29,6 +39,7 @@ function User() {
           <Spinner />
         </main>
         <Footer />
+        <MobileTabs />
       </>
     );
   }

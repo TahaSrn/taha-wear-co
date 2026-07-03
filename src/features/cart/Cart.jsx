@@ -1,5 +1,6 @@
 // src/features/cart/Cart.jsx
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import EmptyCart from "../../ui/EmptyCart";
 import CartItem from "./CartItem";
@@ -11,6 +12,7 @@ import { useProfile } from "../user/useProfile";
 import { createOrder } from "../../services/apiOrders";
 import toast from "react-hot-toast";
 import { clearCart } from "./cartSlice";
+import MobileTabs from "../../ui/MobileTabs";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -21,13 +23,21 @@ function Cart() {
     (state) => state.cart,
   );
 
+  // اسکرول به بالای صفحه با تاخیر
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   if (items.length === 0) return <EmptyCart />;
 
   console.log(items);
 
   const handleCheckout = async () => {
     if (!user) {
-      // ارسال state برای مشخص کردن صفحه قبلی
       navigate("/login", { state: { from: { pathname: "/cart" } } });
       return;
     }
@@ -116,6 +126,7 @@ function Cart() {
         </div>
       </div>
       <Footer />
+      <MobileTabs />
     </div>
   );
 }

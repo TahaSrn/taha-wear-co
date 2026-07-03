@@ -5,6 +5,7 @@ import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import ShopSidebar from "../features/shop/ShopSidebar";
 import ProductGrid from "../features/products/ProductGrid";
+import MobileTabs from "../ui/MobileTabs";
 
 function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,6 +75,7 @@ function Shop() {
       </div>
 
       <Footer />
+      <MobileTabs />
     </div>
   );
 }
