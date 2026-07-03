@@ -143,7 +143,7 @@ function ProductCard({ product }) {
 
         <button
           onClick={handleAddToCart}
-          className="w-full mt-3 cursor-pointer flex items-center justify-center gap-2 bg-stone-800 text-white py-2 rounded-lg hover:bg-stone-700 transition-colors text-sm font-sansMed"
+          className="w-full mt-3 cursor-pointer flex items-center justify-center gap-2 bg-stone-800 text-white py-2 rounded-lg hover:bg-stone-700 transition-colors text-[12px] md:text-sm font-sansMed"
         >
           <HiOutlineShoppingCart size={18} />
           افزودن به سبد خرید
