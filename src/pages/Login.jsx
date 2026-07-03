@@ -26,12 +26,20 @@ function Login() {
         password,
       });
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        // چک کردن خطاهای مربوط به احراز هویت
+        if (error.message.includes("Invalid login credentials")) {
+          toast.error("ایمیل یا رمز عبور نادرست است");
+        } else {
+          toast.error(error.message);
+        }
+        return;
+      }
 
       toast.success("خوش آمدید!");
       navigate("/");
     } catch (error) {
-      toast.error(error.message);
+      toast.error("ایمیل یا رمز عبور نادرست است");
     } finally {
       setLoading(false);
     }
@@ -124,7 +132,7 @@ function Login() {
             حساب کاربری ندارید؟{" "}
             <Link
               to="/register"
-              className="text-stone-800 cursor-pointer  font-sansBold hover:underline transition-colors"
+              className="text-stone-800 cursor-pointer font-sansBold hover:underline transition-colors"
             >
               ثبت‌نام
             </Link>

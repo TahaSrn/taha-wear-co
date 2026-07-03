@@ -6,7 +6,7 @@ import Search from "./Search";
 
 function Header() {
   return (
-    <header className="bg-caffee-200 flex flex-col relative">
+    <header className="bg-caffee-200 flex flex-col relative z-100">
       <div className="block md:hidden absolute z-30 right-0 top-1/2 -translate-y-1/2">
         <Menu />
       </div>

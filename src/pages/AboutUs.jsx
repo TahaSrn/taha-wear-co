@@ -57,26 +57,28 @@ function AboutUs() {
       <Header />
 
       <main className="flex-1 bg-caffee-50">
-        {/* بخش Hero + Story با Ballpit */}
         <div className="relative">
-          {/* Ballpit Background - فقط تا بخش Story */}
           <div
             className="absolute inset-0 w-full"
             style={{ height: "calc(100% - 100px)" }}
           >
-            <Ballpit
-              count={80}
-              colors={[0xfdf6f0, 0xede0d7, 0xd4c5b2, 0xc4b09c, 0x78716c]}
-              ambientColor={0xfdf6f0}
-              ambientIntensity={1.2}
-              lightIntensity={160}
-              minSize={0.35}
-              maxSize={0.8}
-              size0={1}
-              gravity={0.3}
-              followCursor={false}
-            />
-            <div className="absolute inset-0 bg-caffee-50/70 backdrop-blur-[2px]" />
+            <div className="relative w-full h-full">
+              <div className="absolute inset-0 -top-20 z-1">
+                <Ballpit
+                  count={80}
+                  colors={[0xfdf6f0, 0xede0d7, 0xd4c5b2, 0xc4b09c, 0x78716c]}
+                  ambientColor={0xfdf6f0}
+                  ambientIntensity={1.2}
+                  lightIntensity={160}
+                  minSize={0.35}
+                  maxSize={0.8}
+                  size0={1}
+                  gravity={0.3}
+                  followCursor={false}
+                />
+              </div>
+              <div className="absolute inset-0 bg-caffee-50/70 backdrop-blur-[2px]" />
+            </div>
           </div>
 
           {/* Hero */}
@@ -103,12 +105,12 @@ function AboutUs() {
           {/* Story */}
           <section className="relative z-10 max-w-7xl mx-auto px-4 pb-14 md:pb-20">
             <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-              <div className="relative order-2 md:order-1">
-                <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl bg-white/80 backdrop-blur-sm">
+              <div className="relative order-2 md:order-1 z-0">
+                <div className="rounded-3xl overflow-hidden shadow-xl bg-white p-1 max-h-[600px]">
                   <img
-                    src="/logo1.png"
+                    src="/shop.png"
                     alt="Taha Wear"
-                    className="w-full h-full object-contain p-8 md:p-12"
+                    className="w-full h-full object-cover rounded-2xl"
                   />
                 </div>
                 <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-stone-800 text-white rounded-2xl px-6 py-4 shadow-lg">

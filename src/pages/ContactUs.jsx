@@ -19,19 +19,19 @@ const contactInfo = [
   {
     icon: HiOutlinePhone,
     title: "تلفن",
-    value: "۰۲۱-۱۲۳۴-۵۶۷۸",
-    href: "tel:+982112345678",
+    value: "09304130229",
+    href: "tel:+989304130229",
   },
   {
     icon: HiOutlineMail,
     title: "ایمیل",
     value: "tahaahmadi0403@gmail.com",
-    href: "mailto:info@tahawear.com",
+    href: "mailto:tahaahmadi0403@gmail.com",
   },
   {
     icon: HiOutlineLocationMarker,
     title: "آدرس",
-    value: "تهران، خیابان ولیعصر",
+    value: "مازندران ، نور",
     href: null,
   },
   {

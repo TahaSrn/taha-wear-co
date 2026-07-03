@@ -272,16 +272,16 @@ function S(e) {
         document.body.addEventListener("click", C);
 
         document.body.addEventListener("touchstart", TouchStart, {
-          passive: false,
+          passive: true,
         });
         document.body.addEventListener("touchmove", TouchMove, {
-          passive: false,
+          passive: true,
         });
         document.body.addEventListener("touchend", TouchEnd, {
-          passive: false,
+          passive: true,
         });
         document.body.addEventListener("touchcancel", TouchEnd, {
-          passive: false,
+          passive: true,
         });
 
         R = true;
@@ -372,7 +372,6 @@ function TouchStart(e) {
 
 function TouchMove(e) {
   if (e.touches.length > 0) {
-    e.preventDefault();
     A.x = e.touches[0].clientX;
     A.y = e.touches[0].clientY;
 
