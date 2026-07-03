@@ -1,7 +1,9 @@
+// src/pages/AboutUs.jsx
 import { useEffect } from "react";
 import { Link } from "react-router";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
+import Ballpit from "../ui/Ballpit";
 import CategorySubject from "../features/categories/CategorySubject";
 import {
   HiOutlineSparkles,
@@ -35,8 +37,7 @@ const values = [
   {
     icon: HiOutlineLightningBolt,
     title: "ارسال سریع",
-    description:
-      "سفارش شما در کوتاه‌ترین زمان آماده و به دستتان می‌رسد.",
+    description: "سفارش شما در کوتاه‌ترین زمان آماده و به دستتان می‌رسد.",
   },
 ];
 
@@ -56,77 +57,98 @@ function AboutUs() {
       <Header />
 
       <main className="flex-1 bg-caffee-50">
-        {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-caffee-200 via-caffee-100 to-caffee-50">
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-caffee-300 blur-3xl" />
-            <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-white blur-3xl" />
+        {/* بخش Hero + Story با Ballpit */}
+        <div className="relative">
+          {/* Ballpit Background - فقط تا بخش Story */}
+          <div
+            className="absolute inset-0 w-full"
+            style={{ height: "calc(100% - 100px)" }}
+          >
+            <Ballpit
+              count={80}
+              colors={[0xfdf6f0, 0xede0d7, 0xd4c5b2, 0xc4b09c, 0x78716c]}
+              ambientColor={0xfdf6f0}
+              ambientIntensity={1.2}
+              lightIntensity={160}
+              minSize={0.35}
+              maxSize={0.8}
+              size0={1}
+              gravity={0.3}
+              followCursor={false}
+            />
+            <div className="absolute inset-0 bg-caffee-50/70 backdrop-blur-[2px]" />
           </div>
 
-          <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-white/70 text-stone-600 text-sm font-sansMed mb-6 border border-caffee-300/50">
-                داستان Taha Wear
-              </span>
-              <h1 className="text-3xl md:text-5xl font-sansBold text-stone-800 leading-tight mb-6">
-                مد را با اصالت و
-                <span className="text-stone-600"> راحتی </span>
-                تجربه کنید
-              </h1>
-              <p className="text-stone-600 font-sansMed text-base md:text-lg leading-relaxed">
-                Taha Wear از یک ایده ساده شروع شد: لباسی که هم زیبا باشد، هم
-                راحت، و هم در طول زمان کیفیت خود را حفظ کند. امروز با افتخار
-                مجموعه‌ای از استایل‌های روز را برای شما گردآوری کرده‌ایم.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Story */}
-        <section className="max-w-7xl mx-auto px-4 py-14 md:py-20">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-            <div className="relative order-2 md:order-1">
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl bg-caffee-200">
-                <img
-                  src="/logo1.png"
-                  alt="Taha Wear"
-                  className="w-full h-full object-contain p-8 md:p-12 bg-gradient-to-br from-caffee-100 to-caffee-200"
-                />
-              </div>
-              <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-stone-800 text-white rounded-2xl px-6 py-4 shadow-lg">
-                <p className="text-2xl font-sansBold">+۳ سال</p>
-                <p className="text-sm text-stone-400 font-sansMed">
-                  در کنار شما
+          {/* Hero */}
+          <section className="relative z-10 py-16 md:py-24">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="max-w-3xl mx-auto text-center">
+                <span className="inline-block px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm text-stone-600 text-sm font-sansMed mb-6 border border-caffee-300/50 shadow-sm">
+                  داستان Taha Wear
+                </span>
+                <h1 className="text-3xl md:text-5xl font-sansBold text-stone-800 leading-tight mb-6">
+                  مد را با اصالت و
+                  <span className="text-stone-600"> راحتی </span>
+                  تجربه کنید
+                </h1>
+                <p className="text-stone-600 font-sansMed text-base md:text-lg leading-relaxed">
+                  Taha Wear از یک ایده ساده شروع شد: لباسی که هم زیبا باشد، هم
+                  راحت، و هم در طول زمان کیفیت خود را حفظ کند. امروز با افتخار
+                  مجموعه‌ای از استایل‌های روز را برای شما گردآوری کرده‌ایم.
                 </p>
               </div>
             </div>
+          </section>
 
-            <div className="order-1 md:order-2 space-y-6">
-              <CategorySubject icon={HiOutlineHeart} title="ما کی هستیم؟" />
-              <p className="text-stone-700 font-sansMed leading-relaxed text-base md:text-lg text-right">
-                Taha Wear یک فروشگاه آنلاین پوشاک است که بر سبک زندگی مدرن،
-                کیفیت بالا و قیمت منصفانه تمرکز دارد. ما معتقدیم هر فردی
-                شایسته لباسی است که هم شخصیتش را نشان دهد و هم در استفاده
-                روزمره راحت باشد.
-              </p>
-              <p className="text-stone-600 font-sansMed leading-relaxed text-base">
-                تیم ما هر روز در جستجوی بهترین پارچه‌ها، جدیدترین مدل‌ها و
-                راه‌هایی برای بهبود تجربه خرید شماست — از انتخاب محصول تا
-                تحویل درب منزل.
-              </p>
-              <Link
-                to="/shop"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-stone-800 text-white font-sansBold text-sm hover:bg-stone-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-              >
-                <HiOutlineShoppingBag size={18} />
-                مشاهده فروشگاه
-              </Link>
+          {/* Story */}
+          <section className="relative z-10 max-w-7xl mx-auto px-4 pb-14 md:pb-20">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+              <div className="relative order-2 md:order-1">
+                <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl bg-white/80 backdrop-blur-sm">
+                  <img
+                    src="/logo1.png"
+                    alt="Taha Wear"
+                    className="w-full h-full object-contain p-8 md:p-12"
+                  />
+                </div>
+                <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-stone-800 text-white rounded-2xl px-6 py-4 shadow-lg">
+                  <p className="text-2xl font-sansBold">+۳ سال</p>
+                  <p className="text-sm text-stone-400 font-sansMed">
+                    در کنار شما
+                  </p>
+                </div>
+              </div>
+
+              <div className="order-1 md:order-2 space-y-6">
+                <CategorySubject icon={HiOutlineHeart} title="ما کی هستیم؟" />
+                <p className="text-stone-700 font-sansMed leading-relaxed text-base md:text-lg text-right">
+                  Taha Wear یک فروشگاه آنلاین پوشاک است که بر سبک زندگی مدرن،
+                  کیفیت بالا و قیمت منصفانه تمرکز دارد. ما معتقدیم هر فردی
+                  شایسته لباسی است که هم شخصیتش را نشان دهد و هم در استفاده
+                  روزمره راحت باشد.
+                </p>
+                <p className="text-stone-600 font-sansMed leading-relaxed text-base">
+                  تیم ما هر روز در جستجوی بهترین پارچه‌ها، جدیدترین مدل‌ها و
+                  راه‌هایی برای بهبود تجربه خرید شماست — از انتخاب محصول تا
+                  تحویل درب منزل.
+                </p>
+                <Link
+                  to="/shop"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-stone-800 text-white font-sansBold text-sm hover:bg-stone-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                >
+                  <HiOutlineShoppingBag size={18} />
+                  مشاهده فروشگاه
+                </Link>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Gradient transition */}
+          <div className="relative z-10 h-24 bg-gradient-to-b from-transparent to-caffee-50" />
+        </div>
 
         {/* Stats */}
-        <section className="bg-caffee-200/60 py-12 md:py-16">
+        <section className="relative z-10 bg-caffee-50 py-12 md:py-16">
           <div className="max-w-4xl mx-auto px-4">
             <div className="grid grid-cols-3 gap-4 md:gap-8">
               {stats.map(({ icon: Icon, value, label }) => (
@@ -148,7 +170,7 @@ function AboutUs() {
         </section>
 
         {/* Values */}
-        <section className="max-w-7xl mx-auto px-4 py-14 md:py-20">
+        <section className="relative z-10 max-w-7xl mx-auto px-4 py-14 md:py-20 bg-caffee-50">
           <div className="mb-10 md:mb-14">
             <CategorySubject icon={HiOutlineSparkles} title="ارزش‌های ما" />
           </div>
@@ -157,7 +179,7 @@ function AboutUs() {
             {values.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="group bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-caffee-100"
+                className="group bg-white/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-caffee-100"
               >
                 <div className="w-14 h-14 rounded-2xl bg-caffee-100 flex items-center justify-center mb-5 group-hover:bg-caffee-200 transition-colors">
                   <Icon className="text-2xl text-stone-700" />
@@ -174,7 +196,7 @@ function AboutUs() {
         </section>
 
         {/* Mission banner */}
-        <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-24">
+        <section className="relative z-10 max-w-7xl mx-auto px-4 pb-16 md:pb-24 bg-caffee-50">
           <div className="relative overflow-hidden rounded-3xl bg-stone-800 text-white px-6 py-12 md:px-16 md:py-16 text-center">
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-caffee-300 blur-3xl" />

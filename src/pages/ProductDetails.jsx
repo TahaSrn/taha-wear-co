@@ -74,6 +74,15 @@ function ProductDetails() {
     });
   };
 
+  // Prefetch کردن همه عکس‌های محصول
+  useEffect(() => {
+    if (sortedImages.length > 0) {
+      sortedImages.forEach((image) => {
+        prefetchImage(image);
+      });
+    }
+  }, [productId, sortedImages]);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -90,16 +99,6 @@ function ProductDetails() {
       setSelectedColor(colors[0]);
     }
   }, [hasSingleColor, colors]);
-
-  useEffect(() => {
-    if (sortedImages.length > 0) {
-      const nextIndex = (currentImageIndex + 1) % sortedImages.length;
-      const nextImage = sortedImages[nextIndex];
-      if (nextImage) {
-        prefetchImage(nextImage);
-      }
-    }
-  }, [currentImageIndex, sortedImages]);
 
   const handleAddToCart = () => {
     if (!product) return;
