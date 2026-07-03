@@ -1,8 +1,9 @@
+// src/features/categories/Categories.jsx
 import Category from "./Category";
 import useGetCategories from "./useGetCategories";
 import Spinner from "../../ui/Spinner";
 
-function Categories() {
+function Categories({ onCloseMenu }) {
   const { categories = [], isLoading } = useGetCategories();
 
   return (
@@ -17,7 +18,11 @@ function Categories() {
             </div>
           ))
         : categories.map((category) => (
-            <Category category={category} key={category.id} />
+            <Category
+              key={category.id}
+              category={category}
+              onCloseMenu={onCloseMenu}
+            />
           ))}
     </div>
   );

@@ -8,6 +8,7 @@ import Footer from "../ui/Footer";
 import UserProfile from "../features/user/UserProfile";
 import UserOrders from "../features/user/UserOrders";
 import Spinner from "../ui/Spinner";
+import MobileTabs from "../ui/MobileTabs";
 
 function User() {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ function User() {
         </div>
       </main>
       <Footer />
+      <MobileTabs />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export async function getProducts({
   minPrice,
   maxPrice,
   sortBy,
+  search,
 } = {}) {
   let query = supabase.from("products").select(`
       *,
@@ -37,6 +38,11 @@ export async function getProducts({
         )
       )
     `);
+
+  // جستجو بر اساس نام محصول
+  if (search && search.trim()) {
+    query = query.ilike("name", `%${search.trim()}%`);
+  }
 
   // فیلتر بر اساس دسته‌بندی
   if (categoryIds && categoryIds.length > 0) {

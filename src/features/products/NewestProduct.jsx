@@ -1,3 +1,4 @@
+// src/features/products/NewestProduct.jsx
 import { useState } from "react";
 import { Link } from "react-router";
 import {
@@ -26,7 +27,7 @@ function NewestProduct({ product }) {
     آبی: "bg-[#5C6BC0]",
     قرمز: "bg-[#A0524B]",
     سبز: "bg-[#6B8E6B]",
-    طلایی: "bg-[#C9A96E]",
+    زرد: "bg-[#C9A96E]",
     نارنجی: "bg-[#D4896B]",
   };
 
@@ -77,15 +78,17 @@ function NewestProduct({ product }) {
   };
 
   return (
-    <div className="rounded-xl bg-white w-full flex flex-col items-center justify-start pt-1 font-sansMed relative overflow-hidden shadow-md">
-      <Link to={`/product/${product.id}`} className="block relative w-full">
+    <div className="rounded-xl bg-white w-full flex flex-col items-center justify-start pt-1 font-sansMed relative overflow-hidden shadow-md h-full">
+      <Link
+        to={`/product/${product.id}`}
+        className="block relative w-full flex-shrink-0"
+      >
         <img
           className="w-[98%] h-65 object-cover rounded-xl transition-transform duration-300 cursor-pointer mx-auto"
           src={product.productImages[0]?.image}
           alt={product.productImages[0]?.image}
         />
 
-        {/* رنگ‌ها - بالا سمت راست روی عکس */}
         {colors.length > 0 && (
           <div className="absolute top-3 right-3 flex flex-col gap-1.5">
             {colors.map((color) => (
@@ -99,15 +102,22 @@ function NewestProduct({ product }) {
         )}
       </Link>
 
-      <div className="text-stone-800 flex flex-col justify-center right-3 top-75 text-md md:text-lg text-right gap-3 w-[90%] mt-3">
-        <span className="flex items-center gap-1">
-          <HiOutlineCube />
-          {product.name}
-        </span>
-        <span className="flex items-center gap-1">
-          <HiOutlineTag />
-          {formatCurrency(product.price)} تومان
-        </span>
+      <div className="text-stone-800 flex flex-col right-3 top-75 text-md md:text-lg text-right gap-2 w-[90%] mt-3 flex-1 pb-3">
+        {/* نام محصول - ارتفاع ثابت برای ۲ خط */}
+        <div className="min-h-[3rem]">
+          <span className="flex items-center gap-1">
+            <HiOutlineCube className="flex-shrink-0" />
+            <span className="line-clamp-2">{product.name}</span>
+          </span>
+        </div>
+
+        {/* قیمت - ارتفاع ثابت */}
+        <div className="min-h-[2rem]">
+          <span className="flex items-center gap-1">
+            <HiOutlineTag className="flex-shrink-0" />
+            {formatCurrency(product.price)} تومان
+          </span>
+        </div>
 
         {showColorPicker && colors.length > 1 && (
           <div className="flex flex-wrap gap-2 justify-center mt-2 p-3 bg-stone-50 rounded-lg border border-stone-200">
@@ -133,7 +143,7 @@ function NewestProduct({ product }) {
           </div>
         )}
 
-        <div className="flex justify-center pb-3">
+        <div className="flex justify-center pb-1 mt-auto">
           <Button type="primary" size="medium" onClick={handleAddToCart}>
             <span>افزودن به سبد خرید</span>
             <HiOutlineShoppingCart size={20} />

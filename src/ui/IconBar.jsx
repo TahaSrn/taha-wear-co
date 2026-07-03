@@ -1,18 +1,20 @@
 // src/ui/IconBar.jsx
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { HiOutlineUser } from "react-icons/hi";
 import CartIcon from "./CartIcon";
 import { useAuth } from "../features/authentication/useAuth";
 
 function IconBar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
 
   const handleUserClick = () => {
     if (user) {
       navigate("/user");
     } else {
-      navigate("/login");
+      // ارسال state برای مشخص کردن صفحه قبلی
+      navigate("/login", { state: { from: { pathname: location.pathname } } });
     }
   };
 

@@ -1,3 +1,4 @@
+// src/ui/Menu.jsx (اصلاح شده)
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,14 +7,26 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import MenuSearch from "./MenuSearch";
 import MenuItems from "./MenuItems";
 
-function Menu() {
+function Menu({ onCategoryClick }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const handleCategoryClick = () => {
+    setIsOpenMenu(false);
+    if (onCategoryClick) {
+      onCategoryClick();
+    }
+  };
 
   const menuItems = [
     { id: 1, component: <MenuSearch />, label: "جستجو" },
     {
       id: 2,
-      component: <MenuItems onClose={() => setIsOpenMenu(false)} />,
+      component: (
+        <MenuItems
+          onClose={() => setIsOpenMenu(false)}
+          onCategoryClick={handleCategoryClick}
+        />
+      ),
       label: "آیتم ها",
     },
   ];

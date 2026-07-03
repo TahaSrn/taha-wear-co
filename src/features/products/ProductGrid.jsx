@@ -17,14 +17,14 @@ function ProductGrid({ filters }) {
     colors: filters?.colors || [],
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
-    sortBy,
+    sortBy: sortBy,
+    search: filters?.search || "", // اضافه شد
   });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortBy]);
 
-  // فقط بعد از تغییر صفحه اسکرول کن
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;

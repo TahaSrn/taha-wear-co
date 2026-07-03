@@ -27,11 +27,11 @@ function Cart() {
 
   const handleCheckout = async () => {
     if (!user) {
-      navigate("/login");
+      // ارسال state برای مشخص کردن صفحه قبلی
+      navigate("/login", { state: { from: { pathname: "/cart" } } });
       return;
     }
 
-    // اگر اطلاعات پروفایل ناقص بود → به صفحه پروفایل با پیام
     if (!profile?.name || !profile?.phone || !profile?.address) {
       toast.error("لطفاً ابتدا اطلاعات خود را تکمیل کنید");
       navigate("/user");

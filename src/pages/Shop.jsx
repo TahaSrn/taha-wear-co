@@ -13,25 +13,25 @@ function Shop() {
     categories: [],
     colors: [],
     priceRange: { min: null, max: null },
+    search: "", // اضافه شد
   });
   const mainRef = useRef(null);
 
   useEffect(() => {
     const categoryId = searchParams.get("category");
-    if (categoryId) {
-      setFilters((prev) => ({
-        ...prev,
-        categories: [Number(categoryId)],
-      }));
-    }
+    const search = searchParams.get("search");
+
+    setFilters((prev) => ({
+      ...prev,
+      categories: categoryId ? [Number(categoryId)] : [],
+      search: search || "",
+    }));
   }, [searchParams]);
 
   useEffect(() => {
-    // اسکرول به بالای صفحه با استفاده از ref
     if (mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: "instant", block: "start" });
     }
-    // یا روش دوم
     window.scrollTo(0, 0);
   }, [location.pathname, searchParams]);
 
@@ -41,6 +41,9 @@ function Shop() {
     const params = {};
     if (newFilters.categories.length > 0) {
       params.category = newFilters.categories[0];
+    }
+    if (newFilters.search) {
+      params.search = newFilters.search;
     }
     setSearchParams(params, { replace: true });
   };

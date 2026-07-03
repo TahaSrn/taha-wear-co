@@ -1,6 +1,6 @@
 // src/pages/Login.jsx
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useLocation } from "react-router";
 import supabase from "../services/supabase";
 import toast from "react-hot-toast";
 import {
@@ -15,6 +15,10 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // گرفتن آدرس بازگشت از query parameter
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +31,6 @@ function Login() {
       });
 
       if (error) {
-        // چک کردن خطاهای مربوط به احراز هویت
         if (error.message.includes("Invalid login credentials")) {
           toast.error("ایمیل یا رمز عبور نادرست است");
         } else {
@@ -37,7 +40,7 @@ function Login() {
       }
 
       toast.success("خوش آمدید!");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {
       toast.error("ایمیل یا رمز عبور نادرست است");
     } finally {
