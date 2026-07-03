@@ -7,11 +7,16 @@ import Header from "../../ui/Header";
 import { formatCurrency } from "../../utils/helpers";
 import Footer from "../../ui/Footer";
 import { useAuth } from "../authentication/useAuth";
+import { useProfile } from "../user/useProfile";
+import { createOrder } from "../../services/apiOrders";
+import toast from "react-hot-toast";
+import { clearCart } from "./cartSlice";
 
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { profile, isLoading: profileLoading } = useProfile(user?.id);
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
   );
@@ -20,12 +25,32 @@ function Cart() {
 
   console.log(items);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!user) {
       navigate("/login");
-    } else {
-      // اگه کاربر لاگین هست، به صفحه پرداخت برو
-      navigate("/checkout");
+      return;
+    }
+
+    // اگر اطلاعات پروفایل ناقص بود → به صفحه پروفایل با پیام
+    if (!profile?.name || !profile?.phone || !profile?.address) {
+      toast.error("لطفاً ابتدا اطلاعات خود را تکمیل کنید");
+      navigate("/user");
+      return;
+    }
+
+    try {
+      const cartId = items[0]?.cartId;
+
+      const order = await createOrder(user.id, items, totalPrice);
+
+      toast.success("سفارش شما با موفقیت ثبت شد! ✅");
+
+      dispatch(clearCart());
+
+      navigate("/user");
+    } catch (error) {
+      toast.error("خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.");
+      console.error("Order error:", error);
     }
   };
 

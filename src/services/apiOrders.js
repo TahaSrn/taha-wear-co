@@ -1,7 +1,7 @@
+// src/services/apiOrders.js
 import supabase from "./supabase";
 
 export async function createOrder(userId, cartItems, totalPrice) {
-  // ۱. ایجاد سفارش جدید
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
@@ -14,11 +14,10 @@ export async function createOrder(userId, cartItems, totalPrice) {
 
   if (orderError) throw new Error(orderError.message);
 
-  // ۲. تبدیل آیتم‌های سبد خرید به آیتم‌های سفارش
   const orderItems = cartItems.map((item) => ({
     order_id: order.id,
     product_id: item.id,
-    color_id: item.colorId,
+    color_id: item.colorId || null,
     quantity: item.quantity,
     price: item.price,
   }));
@@ -29,13 +28,14 @@ export async function createOrder(userId, cartItems, totalPrice) {
 
   if (itemsError) throw new Error(itemsError.message);
 
-  // ۳. خالی کردن سبد خرید
-  const { error: clearError } = await supabase
-    .from("cart_items")
-    .delete()
-    .eq("cart_id", cartItems[0]?.cartId);
-
-  if (clearError) throw new Error(clearError.message);
+  const cartId = cartItems[0]?.cartId;
+  if (cartId) {
+    const { error: clearError } = await supabase
+      .from("cart_items")
+      .delete()
+      .eq("cart_id", cartId);
+    if (clearError) throw new Error(clearError.message);
+  }
 
   return order;
 }
