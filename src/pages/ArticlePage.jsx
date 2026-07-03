@@ -1,4 +1,6 @@
+// src/pages/ArticlePage.jsx
 import { useParams, useNavigate } from "react-router";
+import { useEffect } from "react";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import useGetArticle from "../features/knowledge/useGetArticle";
@@ -9,10 +11,13 @@ function ArticlePage() {
   const navigate = useNavigate();
   const { article, isLoading } = useGetArticle(slug);
 
-  // src/pages/ArticlePage.jsx
+  // اسکرول به بالای صفحه هنگام ورود
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+
   const handleShopRedirect = () => {
     if (article) {
-      // اگه category_id برابر 0 یا null یا undefined باشه، همه محصولات رو نشون بده
       if (!article.category_id || article.category_id === 0) {
         navigate("/shop");
       } else {

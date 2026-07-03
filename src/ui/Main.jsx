@@ -9,10 +9,9 @@ import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 function Main() {
   const categoriesRef = useRef(null);
 
-  // تابع برای اسکرول به بخش دسته‌بندی
   const scrollToCategories = () => {
     if (categoriesRef.current) {
-      const offset = 80; // فاصله از بالا (برای هدر)
+      const offset = 80;
       const elementPosition = categoriesRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -23,7 +22,6 @@ function Main() {
     }
   };
 
-  // expose کردن تابع به window تا از خارج قابل دسترس باشه
   window.scrollToCategories = scrollToCategories;
 
   return (

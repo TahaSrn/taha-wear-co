@@ -1,5 +1,5 @@
 // src/ui/Header.jsx
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import CategoriesSelect from "../features/categories/CategoriesSelect";
 import IconBar from "./IconBar";
@@ -9,15 +9,14 @@ import Search from "./Search";
 
 function Header() {
   const location = useLocation();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleCategoryClick = () => {
-    // فقط در صفحه اصلی اسکرول کن
     if (location.pathname === "/") {
-      // از تابع exposed شده در Main استفاده کن
       if (typeof window.scrollToCategories === "function") {
         window.scrollToCategories();
       } else {
-        // Fallback: پیدا کردن المنت با id
         const categoriesSection = document.getElementById("categories-section");
         if (categoriesSection) {
           const offset = 80;
@@ -32,8 +31,43 @@ function Header() {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // اگر به بالای صفحه رسیدیم، هدر رو نشون بده
+      if (currentScrollY === 0) {
+        setIsVisible(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+
+      // اگر پایین‌تر از هدر هستیم
+      if (currentScrollY > lastScrollY) {
+        // اسکرول به پایین → هدر مخفی
+        setIsVisible(false);
+      } else {
+        // اسکرول به بالا → هدر نمایش داده میشه
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
   return (
-    <header className="bg-caffee-200 flex flex-col relative z-100">
+    <header
+      className={`bg-caffee-200 flex flex-col relative z-100 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+      style={{ position: "sticky", top: 0 }}
+    >
       <div className="block md:hidden absolute z-30 right-0 top-1/2 -translate-y-1/2">
         <Menu onCategoryClick={handleCategoryClick} />
       </div>

@@ -1,3 +1,4 @@
+// src/features/categories/CategoriesSelect.jsx
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useNavigate } from "react-router";
 import useGetCategories from "./useGetCategories";
@@ -11,6 +12,21 @@ function CategoriesSelect() {
       navigate(`/shop?category=${categoryId}`);
     } else {
       navigate("/shop");
+    }
+  };
+
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    // اگر در صفحه اصلی هستیم، اسکرول به بالا
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // اگر در صفحه دیگه‌ای هستیم، به صفحه اصلی برو
+      navigate("/");
+      // بعد از نیم ثانیه اسکرول به بالا (صبر برای رندر شدن صفحه)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
     }
   };
 
@@ -89,7 +105,11 @@ function CategoriesSelect() {
         </div>
 
         <div className="flex gap-4 text-gray-600 text-sm relative z-1">
-          <Link className="hover:text-gray-900" to="/">
+          <Link
+            className="hover:text-gray-900 cursor-pointer"
+            to="/"
+            onClick={handleHomeClick}
+          >
             خانه
           </Link>
           <Link className="hover:text-gray-900" to="/shop">
