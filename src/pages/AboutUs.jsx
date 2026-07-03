@@ -1,5 +1,5 @@
 // src/pages/AboutUs.jsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
@@ -48,8 +48,18 @@ const stats = [
 ];
 
 function AboutUs() {
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return (
@@ -58,6 +68,7 @@ function AboutUs() {
 
       <main className="flex-1 bg-caffee-50">
         <div className="relative">
+          {/* Ballpit - با تنظیمات بهینه برای موبایل */}
           <div
             className="absolute inset-0 w-full"
             style={{ height: "calc(100% - 100px)" }}
@@ -65,13 +76,13 @@ function AboutUs() {
             <div className="relative w-full h-full">
               <div className="absolute inset-0 -top-20 z-1">
                 <Ballpit
-                  count={80}
+                  count={isMobile ? 25 : 40} // موبایل: ۲۵، دسکتاپ: ۴۰
                   colors={[0xfdf6f0, 0xede0d7, 0xd4c5b2, 0xc4b09c, 0x78716c]}
                   ambientColor={0xfdf6f0}
                   ambientIntensity={1.2}
                   lightIntensity={160}
-                  minSize={0.35}
-                  maxSize={0.8}
+                  minSize={isMobile ? 0.3 : 0.35} // موبایل: کوچکتر
+                  maxSize={isMobile ? 0.6 : 0.8} // موبایل: کوچکتر
                   size0={1}
                   gravity={0.3}
                   followCursor={false}

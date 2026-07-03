@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import useGetNewestProducts from "../products/useGetNewestProducts";
 import NewestProduct from "./NewestProduct";
@@ -7,7 +7,23 @@ import Spinner from "../../ui/Spinner";
 function NewestProducts() {
   const { newestProducts, isLoading } = useGetNewestProducts();
   const [visibleCount, setVisibleCount] = useState(8);
-  const loadMoreCount = 8;
+  const [loadMoreCount, setLoadMoreCount] = useState(8);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setVisibleCount(6);
+        setLoadMoreCount(6);
+      } else {
+        setVisibleCount(8);
+        setLoadMoreCount(8);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (isLoading) {
     return (
