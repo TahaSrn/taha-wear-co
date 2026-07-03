@@ -59,7 +59,7 @@ function Login() {
             className="group-hover:-translate-x-1 transition-transform"
             size={20}
           />
-          <span className="text-sm font-sansMed">بازگشت</span>
+          <span className="text-sm font-sansMed cursor-pointer">بازگشت</span>
         </button>
 
         <div className="text-center mb-8">

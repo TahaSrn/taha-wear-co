@@ -1,6 +1,6 @@
 // src/features/cart/Cart.jsx
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import EmptyCart from "../../ui/EmptyCart";
 import CartItem from "./CartItem";
@@ -22,8 +22,8 @@ function Cart() {
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // اسکرول به بالای صفحه با تاخیر
   useEffect(() => {
     const timer = setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "instant" });
@@ -37,6 +37,9 @@ function Cart() {
   console.log(items);
 
   const handleCheckout = async () => {
+    // جلوگیری از کلیک چندباره
+    if (isSubmitting) return;
+
     if (!user) {
       navigate("/login", { state: { from: { pathname: "/cart" } } });
       return;
@@ -47,6 +50,8 @@ function Cart() {
       navigate("/user");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const cartId = items[0]?.cartId;
@@ -61,6 +66,7 @@ function Cart() {
     } catch (error) {
       toast.error("خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.");
       console.error("Order error:", error);
+      setIsSubmitting(false);
     }
   };
 
@@ -118,9 +124,18 @@ function Cart() {
             </div>
             <button
               onClick={handleCheckout}
-              className="w-full font-sansMed mt-4 bg-stone-800 text-white py-2.5 md:py-3 rounded-lg hover:bg-stone-700 transition-colors cursor-pointer text-sm md:text-base"
+              disabled={isSubmitting}
+              className={`w-full font-sansMed mt-4 py-2.5 md:py-3 rounded-lg transition-colors cursor-pointer text-sm md:text-base ${
+                isSubmitting
+                  ? "bg-stone-400 cursor-not-allowed text-white"
+                  : "bg-stone-800 hover:bg-stone-700 text-white"
+              }`}
             >
-              {!user ? "ورود برای ثبت سفارش" : "ثبت سفارش"}
+              {isSubmitting
+                ? "در حال ثبت..."
+                : !user
+                  ? "ورود برای ثبت سفارش"
+                  : "ثبت سفارش"}
             </button>
           </div>
         </div>

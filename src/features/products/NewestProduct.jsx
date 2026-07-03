@@ -94,7 +94,7 @@ function NewestProduct({ product }) {
             {colors.map((color) => (
               <div
                 key={color.id}
-                className={`w-3.5 h-3.5 rounded-full ${colorClassMap[color.name] || "bg-gray-400"} shadow-md ring-2 ring-white/80`}
+                className={`w-3.5 h-3.5 rounded-full ${colorClassMap[color.name] || "bg-gray-400"} shadow-md ring-2 ring-white/80 font-sansMed`}
                 title={color.name}
               />
             ))}
@@ -103,7 +103,6 @@ function NewestProduct({ product }) {
       </Link>
 
       <div className="text-stone-800 flex flex-col right-3 top-75 text-md md:text-lg text-right gap-2 w-[90%] mt-3 flex-1 pb-3">
-        {/* نام محصول - ارتفاع ثابت برای ۲ خط */}
         <div className="min-h-[3rem]">
           <span className="flex items-center gap-1">
             <HiOutlineCube className="flex-shrink-0" />
@@ -111,7 +110,6 @@ function NewestProduct({ product }) {
           </span>
         </div>
 
-        {/* قیمت - ارتفاع ثابت */}
         <div className="min-h-[2rem]">
           <span className="flex items-center gap-1">
             <HiOutlineTag className="flex-shrink-0" />
