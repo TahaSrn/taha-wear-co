@@ -68,11 +68,13 @@ function Menu({ onCategoryClick }) {
                 exit={{ x: "100%" }}
                 transition={{
                   type: "spring",
-                  damping: 25,
-                  stiffness: 200,
-                  duration: 0.4,
+                  stiffness: 320,
+                  damping: 32,
                 }}
-                className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-[10000] overflow-y-auto border"
+                style={{
+                  willChange: "transform",
+                }}
+                className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-10000 overflow-y-auto border transform-gpu"
               >
                 <nav className="mt-2">
                   <div className="space-y-4">

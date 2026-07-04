@@ -1,5 +1,5 @@
 // src/ui/Header.jsx
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import CategoriesSelect from "../features/categories/CategoriesSelect";
 import IconBar from "./IconBar";
@@ -44,10 +44,8 @@ function Header() {
 
       // اگر پایین‌تر از هدر هستیم
       if (currentScrollY > lastScrollY) {
-        // اسکرول به پایین → هدر مخفی
         setIsVisible(false);
       } else {
-        // اسکرول به بالا → هدر نمایش داده میشه
         setIsVisible(true);
       }
 
