@@ -13,7 +13,6 @@ function Search() {
 
   const { products, isLoading } = useSearchProducts(searchTerm);
 
-  // بستن dropdown با کلیک خارج از اون
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -45,10 +44,10 @@ function Search() {
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full max-w-4xl mr-[19%] my-5">
+    <div ref={wrapperRef} className="relative w-full">
       <form
         onSubmit={handleSubmit}
-        className="flex items-center border-[1.7px] pr-4 gap-2 border-stone-500/40 h-[46px] rounded-full overflow-hidden w-full focus-within:border-stone-800"
+        className="flex items-center gap-2 w-full h-12 rounded-full border border-stone-400/40 bg-white px-4 transition-colors focus-within:border-stone-800"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,13 +72,14 @@ function Search() {
           }}
           onFocus={handleFocus}
           placeholder="جستجوی محصولات"
-          className="w-full h-full pr-3 outline-none text-gray-500 bg-transparent placeholder-gray-500 text-sm font-sansMed"
+          className="flex-1 pr-3 outline-none bg-transparent text-sm font-sansMed placeholder-gray-500
+"
         />
       </form>
 
       {/* Dropdown نتایج جستجو */}
       {isOpen && searchTerm.trim().length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-stone-100 max-h-96 overflow-y-auto z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-stone-100 overflow-hidden max-h-96 overflow-y-auto z-50">
           {isLoading ? (
             <div className="p-4 text-center text-stone-500 font-sansMed">
               در حال جستجو...

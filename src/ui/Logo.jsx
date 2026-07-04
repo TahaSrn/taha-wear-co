@@ -1,9 +1,15 @@
-function Logo() {
+function Logo({ mobile = false }) {
   return (
     <img
-      className="h-56 object-contain absolute z-0 mt-3"
       src="/logo1.png"
       alt="Taha Wear logo"
+      className={`
+        object-contain
+        shrink-0
+        select-none
+
+        ${mobile ? "h-13 scale-[300%]" : "h-8 scale-[700%] mr-28 mt-4"}
+      `}
     />
   );
 }

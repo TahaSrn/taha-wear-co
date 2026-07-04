@@ -1,6 +1,7 @@
 // src/ui/Header.jsx
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
+
 import CategoriesSelect from "../features/categories/CategoriesSelect";
 import IconBar from "./IconBar";
 import Logo from "./Logo";
@@ -10,76 +11,89 @@ import Search from "./Search";
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleCategoryClick = () => {
-    // اگر در صفحه اصلی نیستیم، به صفحه اصلی برو با state
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollToCategories: true } });
-    } else {
-      // اگر در صفحه اصلی هستیم، اسکرول کن
-      if (typeof window.scrollToCategories === "function") {
-        window.scrollToCategories();
-      } else {
-        const categoriesSection = document.getElementById("categories-section");
-        if (categoriesSection) {
-          const offset = 80;
-          const elementPosition = categoriesSection.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }
-      }
+      return;
+    }
+
+    if (typeof window.scrollToCategories === "function") {
+      window.scrollToCategories();
+      return;
+    }
+
+    const categoriesSection = document.getElementById("categories-section");
+
+    if (categoriesSection) {
+      const offset = 80;
+
+      const top =
+        categoriesSection.getBoundingClientRect().top +
+        window.pageYOffset -
+        offset;
+
+      window.scrollTo({
+        top,
+        behavior: "smooth",
+      });
     }
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      const current = window.scrollY;
 
-      if (currentScrollY === 0) {
+      if (current === 0) {
         setIsVisible(true);
-        setLastScrollY(currentScrollY);
+        setLastScrollY(current);
         return;
       }
 
-      if (currentScrollY > lastScrollY) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
+      setIsVisible(current < lastScrollY);
 
-      setLastScrollY(currentScrollY);
+      setLastScrollY(current);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
   return (
     <header
-      className={`bg-gradient-to-b from-caffee-200 to-caffee-100 border-b border-caffee-300/40 flex flex-col relative z-100 transition-transform duration-300 shadow-sm ${
+      className={`sticky top-0 z-50 bg-gradient-to-b from-caffee-200 to-caffee-100 border-b border-caffee-300/40 shadow-sm transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
-      style={{ position: "sticky", top: 0 }}
     >
-      <div className="block md:hidden absolute z-30 right-0 top-1/2 -translate-y-1/2">
+      {/* Mobile Menu */}
+      <div className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 z-30">
         <Menu onCategoryClick={handleCategoryClick} />
       </div>
-      <div className="flex items-center justify-center md:justify-start relative mt-4 md:mt-1 pb-4 md:pb-0">
+
+      {/* Top Row */}
+      <div className="hidden md:flex items-center gap-8 px-8 py-3">
         <Logo />
-        <div className="w-[75%] h-full mr-10 hidden md:block">
+
+        <div className="flex-1 min-w-0 pr-10">
           <Search />
         </div>
+
         <IconBar />
       </div>
 
+      {/* Mobile */}
+      <div className="flex md:hidden items-center justify-center py-4">
+        <Logo mobile />
+        <IconBar mobile />
+      </div>
+
+      {/* Bottom Row */}
       <div className="hidden md:block">
         <CategoriesSelect />
       </div>

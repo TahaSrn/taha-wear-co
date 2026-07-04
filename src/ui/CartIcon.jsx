@@ -10,7 +10,7 @@ function CartIcon({ size }) {
 
   const sizes = {
     medium: "w-12 h-12 p-2 px-0 md:px-7",
-    small: "p-1",
+    small: "p-2",
   };
 
   return (

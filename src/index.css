@@ -86,12 +86,11 @@
     color-scheme: light only;
   }
 
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+  input,
   textarea,
   select {
-    background-color: var(--app-surface) !important;
-    color: var(--app-text) !important;
-    border-color: var(--app-border);
+    background: white;
+    color: #2e2724;
   }
 
   input::placeholder,

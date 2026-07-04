@@ -149,7 +149,7 @@ function CategoriesSelect() {
         </div>
       </div>
 
-      <div className="hidden md:block bg-slate-100 px-4 py-2.5 text-gray-600 text-[12px] ml-21 rounded-full">
+      <div className="hidden md:block bg-slate-100 px-4 py-2.5 text-gray-600 text-[12px] ml-8 rounded-full">
         مدت زمان ارسال برای تمامی سفارشات 5 روز کاری میباشد
       </div>
     </div>
