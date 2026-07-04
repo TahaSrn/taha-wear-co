@@ -1,6 +1,6 @@
 // src/ui/Header.jsx
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import CategoriesSelect from "../features/categories/CategoriesSelect";
 import IconBar from "./IconBar";
 import Logo from "./Logo";
@@ -9,11 +9,16 @@ import Search from "./Search";
 
 function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleCategoryClick = () => {
-    if (location.pathname === "/") {
+    // اگر در صفحه اصلی نیستیم، به صفحه اصلی برو با state
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollToCategories: true } });
+    } else {
+      // اگر در صفحه اصلی هستیم، اسکرول کن
       if (typeof window.scrollToCategories === "function") {
         window.scrollToCategories();
       } else {
@@ -35,14 +40,12 @@ function Header() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // اگر به بالای صفحه رسیدیم، هدر رو نشون بده
       if (currentScrollY === 0) {
         setIsVisible(true);
         setLastScrollY(currentScrollY);
         return;
       }
 
-      // اگر پایین‌تر از هدر هستیم
       if (currentScrollY > lastScrollY) {
         setIsVisible(false);
       } else {

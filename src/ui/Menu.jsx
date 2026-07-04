@@ -1,19 +1,28 @@
-// src/ui/Menu.jsx (اصلاح شده)
+// src/ui/Menu.jsx
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { useNavigate } from "react-router";
 
 import MenuSearch from "./MenuSearch";
 import MenuItems from "./MenuItems";
 
 function Menu({ onCategoryClick }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const navigate = useNavigate();
 
   const handleCategoryClick = () => {
     setIsOpenMenu(false);
-    if (onCategoryClick) {
-      onCategoryClick();
+
+    // اگر در صفحه اصلی نیستیم، به صفحه اصلی برو با state
+    if (window.location.pathname !== "/") {
+      navigate("/", { state: { scrollToCategories: true } });
+    } else {
+      // اگر در صفحه اصلی هستیم، فقط اسکرول کن
+      if (onCategoryClick) {
+        onCategoryClick();
+      }
     }
   };
 
@@ -74,7 +83,7 @@ function Menu({ onCategoryClick }) {
                 style={{
                   willChange: "transform",
                 }}
-                className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-10000 overflow-y-auto border transform-gpu"
+                className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-[10000] overflow-y-auto border transform-gpu"
               >
                 <nav className="mt-2">
                   <div className="space-y-4">

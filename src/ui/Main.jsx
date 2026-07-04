@@ -1,5 +1,6 @@
 // src/pages/Main.jsx (یا Homepage.jsx)
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useLocation } from "react-router";
 import Categories from "../features/categories/Categories";
 import { HiOutlineFolderOpen, HiOutlineSparkles } from "react-icons/hi";
 import CategorySubject from "../features/categories/CategorySubject";
@@ -8,6 +9,7 @@ import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 
 function Main() {
   const categoriesRef = useRef(null);
+  const location = useLocation();
 
   const scrollToCategories = () => {
     if (categoriesRef.current) {
@@ -21,6 +23,17 @@ function Main() {
       });
     }
   };
+
+  // وقتی از منو به صفحه اصلی میایم و state.scrollToCategories=true هست، اسکرول کن
+  useEffect(() => {
+    if (location.state?.scrollToCategories) {
+      setTimeout(() => {
+        scrollToCategories();
+        // پاک کردن state بعد از اسکرول
+        window.history.replaceState({}, document.title);
+      }, 150);
+    }
+  }, [location]);
 
   window.scrollToCategories = scrollToCategories;
 
