@@ -2,6 +2,9 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import useGetProduct from "../features/products/useGetProduct";
@@ -34,6 +37,8 @@ function ProductDetails() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -254,6 +259,18 @@ function ProductDetails() {
     .filter((p) => p.id !== Number(productId))
     .slice(0, 5);
 
+  const nextImage = () => {
+    if (selectedImage < images.length - 1) {
+      setSelectedImage(selectedImage + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedImage > 0) {
+      setSelectedImage(selectedImage - 1);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -267,8 +284,9 @@ function ProductDetails() {
               <img
                 src={currentImage}
                 alt={product.name}
-                className="w-full h-full object-cover transition-opacity duration-200"
+                className="w-full h-full object-cover transition-opacity duration-200 cursor-pointer"
                 style={{ opacity: isTransitioning ? 0.7 : 1 }}
+                onClick={() => setIsLightboxOpen(true)}
               />
 
               {sortedImages.length > 1 && (
@@ -471,6 +489,18 @@ function ProductDetails() {
           </div>
         )}
       </main>
+
+      {isLightboxOpen && (
+        <Lightbox
+          open={isLightboxOpen}
+          close={() => setIsLightboxOpen(false)}
+          slides={sortedImages.map((src) => ({ src }))}
+          index={photoIndex}
+          on={{ view: ({ index }) => setPhotoIndex(index) }}
+          plugins={[Zoom]}
+        />
+      )}
+
       <Footer />
     </div>
   );
