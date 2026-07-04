@@ -4,6 +4,7 @@ import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import ProductCard from "./ProductCard";
 import Pagination from "../../ui/Pagination";
 import useGetProducts from "../products/useGetProducts";
+import ProductSkeleton from "./ProductSkeleton";
 
 function ProductGrid({ filters }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +19,7 @@ function ProductGrid({ filters }) {
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
     sortBy: sortBy,
-    search: filters?.search || "", // اضافه شد
+    search: filters?.search || "",
   });
 
   useEffect(() => {
@@ -51,10 +52,25 @@ function ProductGrid({ filters }) {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="bg-gray-200 rounded-xl h-80 animate-pulse" />
-        ))}
+      <div>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <span className="text-sm text-stone-500 font-sansMed bg-stone-100 px-4 py-1.5 rounded-full animate-pulse w-24 h-6"></span>
+          <div className="relative w-full sm:w-56">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none">
+              <HiOutlineSortAscending size={18} />
+            </div>
+            <div className="w-full h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+            <HiChevronDown
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
+              size={18}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={50} />
+          ))}
+        </div>
       </div>
     );
   }
