@@ -14,6 +14,8 @@ import Register from "./pages/Register";
 import ArticlePage from "./pages/ArticlePage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./ui/ErrorFallback";
 
 function App() {
   return (
@@ -46,24 +48,31 @@ function App() {
         }}
       />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AppLayout />} />
-          <Route index element={<Homepage />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/user" element={<User />} />
-          <Route path="product/:productId" element={<ProductDetails />} />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => {
+            window.location.reload();
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<AppLayout />} />
+            <Route index element={<Homepage />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/user" element={<User />} />
+            <Route path="product/:productId" element={<ProductDetails />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          <Route path="/article/:slug" element={<ArticlePage />} />
+            <Route path="/article/:slug" element={<ArticlePage />} />
 
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-        </Routes>
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+          </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
     </>
   );
