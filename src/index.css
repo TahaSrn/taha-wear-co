@@ -1,10 +1,36 @@
 @import "tailwindcss";
 
+/* ---------- Base ---------- */
+
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: light !important;
+  }
+
+  html {
+    color-scheme: light !important;
+    background: #fdf6f0 !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+
+    background: #fdf6f0 !important;
+    color: #292524 !important;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: #fdf6f0 !important;
   }
 }
+
+/* ---------- Fonts ---------- */
 
 @font-face {
   font-family: "IranSansM";
@@ -16,26 +42,14 @@
   src: url("./assets/fonts/IRANSansBold.woff2");
 }
 
+/* ---------- Tailwind Theme ---------- */
+
 @theme {
   --font-sansMed: "IranSansM", sans-serif;
   --font-sansBold: "IranSansB", sans-serif;
+
   --color-caffee-50: #fdf6f0;
   --color-caffee-100: #ede0d7;
   --color-caffee-200: #d4c5b2;
   --color-caffee-300: #c4b09c;
-}
-
-html {
-  background: #fdf6f0 !important;
-  color-scheme: light;
-}
-
-body {
-  background: #fdf6f0 !important;
-  color: #292524 !important;
-}
-
-#root {
-  background: #fdf6f0 !important;
-  min-height: 100vh;
 }
