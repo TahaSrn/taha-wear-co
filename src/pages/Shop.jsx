@@ -14,12 +14,13 @@ function Shop() {
     categories: [],
     colors: [],
     priceRange: { min: null, max: null },
-    search: "", // اضافه شد
+    search: "",
   });
   const mainRef = useRef(null);
 
+  const categoryId = searchParams.get("category");
+
   useEffect(() => {
-    const categoryId = searchParams.get("category");
     const search = searchParams.get("search");
 
     setFilters((prev) => ({
@@ -49,6 +50,8 @@ function Shop() {
     setSearchParams(params, { replace: true });
   };
 
+  const isOpenFromCategory = !!categoryId;
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -64,6 +67,7 @@ function Shop() {
               <ShopSidebar
                 onFilterChange={handleFilterChange}
                 initialFilters={filters}
+                isOpenFromCategory={isOpenFromCategory}
               />
             </aside>
 

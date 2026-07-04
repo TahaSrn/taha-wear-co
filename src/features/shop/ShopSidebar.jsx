@@ -1,50 +1,53 @@
 // src/features/shop/ShopSidebar.jsx
-
 import { useState, useEffect } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import useGetCategories from "../categories/useGetCategories";
 import useGetMaxPrice from "./useGetMaxPrice";
 
-function ShopSidebar({ onFilterChange, initialFilters }) {
+function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const [openSections, setOpenSections] = useState({
-    categories: !isMobile,
+    categories: !isMobile || isOpenFromCategory,
     price: !isMobile,
     colors: !isMobile,
   });
 
   useEffect(() => {
+    if (isOpenFromCategory) {
+      setOpenSections((prev) => ({
+        ...prev,
+        categories: true,
+      }));
+    }
+  }, [isOpenFromCategory]);
+
+  useEffect(() => {
     setOpenSections({
-      categories: !isMobile,
+      categories: !isMobile || isOpenFromCategory,
       price: !isMobile,
       colors: !isMobile,
     });
-  }, [isMobile]);
+  }, [isMobile, isOpenFromCategory]);
 
   const [selectedCategories, setSelectedCategories] = useState(
     initialFilters?.categories || [],
   );
-
   const [selectedColors, setSelectedColors] = useState([]);
-
   const [priceRange, setPriceRange] = useState({
     min: 0,
     max: 10000000,
   });
 
   const { categories = [], isLoading } = useGetCategories();
-
   const { maxPrice = 10000000 } = useGetMaxPrice();
 
   useEffect(() => {
@@ -119,7 +122,6 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
 
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
-
     const numValue = Number(value);
 
     setPriceRange((prev) => {
@@ -154,15 +156,12 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
 
   return (
     <div className="bg-white rounded-xl shadow-md p-5 sticky top-20">
-      {/* دسته بندی */}
-
       <div className="border-b border-gray-200 pb-3 mb-3">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("categories")}
         >
           <span>دسته‌بندی</span>
-
           {openSections.categories ? (
             <HiChevronUp size={18} />
           ) : (
@@ -189,10 +188,8 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                       onChange={() => handleCategoryChange(cat.id)}
                       className="rounded border-gray-300 accent-stone-800 cursor-pointer"
                     />
-
                     {cat.name}
                   </span>
-
                   <span className="text-xs text-stone-400">
                     ({cat.productCount || 0})
                   </span>
@@ -203,15 +200,12 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
         )}
       </div>
 
-      {/* قیمت */}
-
       <div className="border-b border-gray-200 pb-3 mb-3">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("price")}
         >
           <span>محدوده قیمت</span>
-
           {openSections.price ? (
             <HiChevronUp size={18} />
           ) : (
@@ -223,14 +217,11 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
           <div className="mt-2">
             <div className="flex justify-between items-center text-sm mb-2">
               <span className="font-sansMed text-stone-600">قیمت:</span>
-
               <div className="flex gap-2">
                 <span className="bg-stone-100 px-2.5 py-0.5 rounded-lg font-sansBold text-stone-800">
                   {formatPrice(priceRange.min)}
                 </span>
-
                 <span>—</span>
-
                 <span className="bg-stone-100 px-2.5 py-0.5 rounded-lg font-sansBold text-stone-800">
                   {formatPrice(priceRange.max)}
                 </span>
@@ -272,17 +263,12 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
         )}
       </div>
 
-      {/* رنگ */}
-
-      {/* رنگ */}
-
       <div>
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("colors")}
         >
           <span>رنگ</span>
-
           {openSections.colors ? (
             <HiChevronUp size={18} />
           ) : (
@@ -304,23 +290,23 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                   >
                     <div
                       className={`
-                  w-8 h-8 rounded-full
-                  ${color.class}
-                  shadow-sm
-                  transition-all duration-200
-                  ${
-                    selected
-                      ? "ring-2 ring-stone-800 ring-offset-1 scale-110"
-                      : "hover:scale-105 hover:shadow-md"
-                  }
-                `}
+                      w-8 h-8 rounded-full
+                      ${color.class}
+                      shadow-sm
+                      transition-all duration-200
+                      ${
+                        selected
+                          ? "ring-2 ring-stone-800 ring-offset-1 scale-110"
+                          : "hover:scale-105 hover:shadow-md"
+                      }
+                    `}
                     />
 
                     <span
                       className={`
-                  text-[9px] font-sansMed transition-colors
-                  ${selected ? "text-stone-800" : "text-stone-400"}
-                `}
+                      text-[9px] font-sansMed transition-colors
+                      ${selected ? "text-stone-800" : "text-stone-400"}
+                    `}
                     >
                       {color.name}
                     </span>
@@ -338,7 +324,6 @@ function ShopSidebar({ onFilterChange, initialFilters }) {
                 <button
                   onClick={() => {
                     setSelectedColors([]);
-
                     updateFilters(selectedCategories, [], priceRange);
                   }}
                   className="text-xs text-stone-400 hover:text-stone-800 transition-colors font-sansMed cursor-pointer"
