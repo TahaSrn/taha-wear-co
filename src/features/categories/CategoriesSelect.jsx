@@ -1,10 +1,11 @@
 // src/features/categories/CategoriesSelect.jsx
 import { IoIosArrowDown } from "react-icons/io";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import useGetCategories from "./useGetCategories";
 
 function CategoriesSelect() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { categories = [], isLoading } = useGetCategories();
 
   const handleCategoryClick = (categoryId) => {
@@ -17,17 +18,18 @@ function CategoriesSelect() {
 
   const handleHomeClick = (e) => {
     e.preventDefault();
-    // اگر در صفحه اصلی هستیم، اسکرول به بالا
     if (window.location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      // اگر در صفحه دیگه‌ای هستیم، به صفحه اصلی برو
       navigate("/");
-      // بعد از نیم ثانیه اسکرول به بالا (صبر برای رندر شدن صفحه)
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 100);
     }
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
@@ -104,21 +106,44 @@ function CategoriesSelect() {
           </div>
         </div>
 
-        <div className="flex gap-4 text-gray-600 text-sm relative z-1">
+        <div className="flex gap-4 text-sm relative z-1">
           <Link
-            className="hover:text-gray-900 cursor-pointer"
+            className={`hover:text-stone-800 transition-colors cursor-pointer ${
+              isActive("/") ? "text-stone-800 font-sansBold" : "text-gray-600"
+            }`}
             to="/"
             onClick={handleHomeClick}
           >
             خانه
           </Link>
-          <Link className="hover:text-gray-900" to="/shop">
+          <Link
+            className={`hover:text-stone-800 transition-colors ${
+              isActive("/shop")
+                ? "text-stone-800 font-sansBold"
+                : "text-gray-600"
+            }`}
+            to="/shop"
+          >
             فروشگاه
           </Link>
-          <Link className="hover:text-gray-900" to="/about-us">
+          <Link
+            className={`hover:text-stone-800 transition-colors ${
+              isActive("/about-us")
+                ? "text-stone-800 font-sansBold"
+                : "text-gray-600"
+            }`}
+            to="/about-us"
+          >
             درباره ما
           </Link>
-          <Link className="hover:text-gray-900" to="/contact-us">
+          <Link
+            className={`hover:text-stone-800 transition-colors ${
+              isActive("/contact-us")
+                ? "text-stone-800 font-sansBold"
+                : "text-gray-600"
+            }`}
+            to="/contact-us"
+          >
             تماس با ما
           </Link>
         </div>
