@@ -1,4 +1,3 @@
-// src/pages/Main.jsx (یا Homepage.jsx)
 import { useRef, useEffect } from "react";
 import { useLocation } from "react-router";
 import Categories from "../features/categories/Categories";
@@ -6,6 +5,7 @@ import { HiOutlineFolderOpen, HiOutlineSparkles } from "react-icons/hi";
 import CategorySubject from "../features/categories/CategorySubject";
 import NewestProducts from "../features/products/NewestProducts";
 import KnowledgeSection from "../features/knowledge/KnowledgeSection";
+import Banner from "./Banner";
 
 function Main() {
   const categoriesRef = useRef(null);
@@ -24,12 +24,10 @@ function Main() {
     }
   };
 
-  // وقتی از منو به صفحه اصلی میایم و state.scrollToCategories=true هست، اسکرول کن
   useEffect(() => {
     if (location.state?.scrollToCategories) {
       setTimeout(() => {
         scrollToCategories();
-        // پاک کردن state بعد از اسکرول
         window.history.replaceState({}, document.title);
       }, 150);
     }
@@ -39,6 +37,7 @@ function Main() {
 
   return (
     <main className="bg-caffee-50 text-center">
+      <Banner />
       <div className="py-12">
         <CategorySubject icon={HiOutlineSparkles} title="جدید ترین محصولات" />
         <NewestProducts />
