@@ -14,6 +14,7 @@ import {
   HiOutlinePaperAirplane,
 } from "react-icons/hi";
 import { FaLinkedin, FaGithub, FaTelegramPlane } from "react-icons/fa";
+import MobileTabs from "../ui/MobileTabs";
 
 const contactInfo = [
   {
@@ -286,6 +287,7 @@ function ContactUs() {
       </main>
 
       <Footer />
+      <MobileTabs />
     </div>
   );
 }

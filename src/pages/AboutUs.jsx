@@ -14,6 +14,7 @@ import {
   HiOutlineUsers,
   HiOutlineStar,
 } from "react-icons/hi";
+import MobileTabs from "../ui/MobileTabs";
 
 const values = [
   {
@@ -235,6 +236,7 @@ function AboutUs() {
       </main>
 
       <Footer />
+      <MobileTabs />
     </div>
   );
 }
