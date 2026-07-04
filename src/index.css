@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+}
+
 @font-face {
   font-family: "IranSansM";
   src: url("./assets/fonts/IRANSansMedium.woff2");
