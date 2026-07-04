@@ -31,7 +31,7 @@ function NewestProducts() {
         {Array.from({ length: visibleCount }).map((_, i) => (
           <ProductSkeleton
             key={i}
-            contentSpaces={2.5}
+            contentSpaces={2}
             imageHeight={65}
             imageDivPadding={1}
             imageRounded="xl"
