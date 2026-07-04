@@ -122,7 +122,7 @@ function CartItem({ item }) {
             }
             className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
-            <HiOutlineMinus size={16} className="lg:size-[18px]" />
+            <HiOutlineMinus size={16} className="lg:size-4.5" />
           </button>
 
           <span className="font-bold w-5 lg:w-6 text-center text-sm lg:text-base">
