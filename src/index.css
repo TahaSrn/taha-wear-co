@@ -24,3 +24,18 @@
   --color-caffee-200: #d4c5b2;
   --color-caffee-300: #c4b09c;
 }
+
+html {
+  background: #fdf6f0 !important;
+  color-scheme: light;
+}
+
+body {
+  background: #fdf6f0 !important;
+  color: #292524 !important;
+}
+
+#root {
+  background: #fdf6f0 !important;
+  min-height: 100vh;
+}
