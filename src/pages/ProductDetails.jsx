@@ -104,6 +104,11 @@ function ProductDetails() {
     }
   }, [hasSingleColor, colors]);
 
+  const handleOpenLightbox = () => {
+    setPhotoIndex(currentImageIndex);
+    setIsLightboxOpen(true);
+  };
+
   const handleAddToCart = () => {
     if (!product) return;
 
@@ -259,18 +264,6 @@ function ProductDetails() {
     .filter((p) => p.id !== Number(productId))
     .slice(0, 5);
 
-  const nextImage = () => {
-    if (selectedImage < images.length - 1) {
-      setSelectedImage(selectedImage + 1);
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedImage > 0) {
-      setSelectedImage(selectedImage - 1);
-    }
-  };
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -286,7 +279,7 @@ function ProductDetails() {
                 alt={product.name}
                 className="w-full h-full object-cover transition-opacity duration-200 cursor-pointer"
                 style={{ opacity: isTransitioning ? 0.7 : 1 }}
-                onClick={() => setIsLightboxOpen(true)}
+                onClick={handleOpenLightbox}
               />
 
               {sortedImages.length > 1 && (
@@ -496,7 +489,9 @@ function ProductDetails() {
           close={() => setIsLightboxOpen(false)}
           slides={sortedImages.map((src) => ({ src }))}
           index={photoIndex}
-          on={{ view: ({ index }) => setPhotoIndex(index) }}
+          on={{
+            view: ({ index }) => setPhotoIndex(index),
+          }}
           plugins={[Zoom]}
         />
       )}
