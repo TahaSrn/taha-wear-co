@@ -1,9 +1,9 @@
 // src/ui/Button.jsx
 function Button({ children, type, onClick, size, disabled = false }) {
   const styles = {
-    primary: "bg-caffee-100",
-    secondary: "bg-caffee-200",
-    tertiary: "bg-stone-800 text-white hover:bg-stone-700",
+    primary: "bg-caffee-100 hover:bg-caffee-200 border border-caffee-300/50",
+    secondary: "bg-caffee-200 hover:bg-caffee-300 border border-caffee-300/50",
+    tertiary: "bg-stone-800 text-white hover:bg-stone-700 border border-stone-700",
   };
 
   const sizes = {

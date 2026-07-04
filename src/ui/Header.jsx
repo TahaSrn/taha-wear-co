@@ -64,7 +64,7 @@ function Header() {
 
   return (
     <header
-      className={`bg-caffee-200 flex flex-col relative z-100 transition-transform duration-300 ${
+      className={`bg-gradient-to-b from-caffee-200 to-caffee-100 border-b border-caffee-300/40 flex flex-col relative z-100 transition-transform duration-300 shadow-sm ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
       style={{ position: "sticky", top: 0 }}

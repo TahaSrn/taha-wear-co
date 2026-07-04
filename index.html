@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" style="color-scheme: light only; background-color: #fbf8f5;">
 
 <head>
   <meta charset="UTF-8" />
@@ -9,14 +9,25 @@
   <meta name="color-scheme" content="light only" />
   <meta name="supported-color-schemes" content="light" />
 
-  <meta name="theme-color" content="#fdf6f0" />
+  <!-- Same theme-color for both schemes — prevents Samsung dark UI chrome -->
+  <meta name="theme-color" content="#fbf8f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#fbf8f5" media="(prefers-color-scheme: dark)" />
+
+  <style>
+    html,
+    body {
+      color-scheme: light only !important;
+      background-color: #fbf8f5 !important;
+      color: #2e2724 !important;
+    }
+  </style>
 
   <link rel="icon" type="image/png" href="/miniLogo.png" />
 
   <title>Taha Wear Co.</title>
 </head>
 
-<body>
+<body style="background-color: #fbf8f5; color: #2e2724;">
   <div id="root"></div>
 
   <script type="module" src="/src/main.jsx"></script>

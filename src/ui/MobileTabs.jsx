@@ -31,7 +31,7 @@ function MobileTabs() {
   };
 
   return (
-    <div className="block md:hidden bg-stone-50 w-full fixed bottom-0 flex justify-around items-center pt-2 pb-2 font-sansMed z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+    <div className="block md:hidden bg-white/95 backdrop-blur-md border-t border-caffee-200 w-full fixed bottom-0 flex justify-around items-center pt-2 pb-2 font-sansMed z-50 shadow-[0_-4px_20px_rgba(46,39,36,0.08)]">
       <div className="flex flex-col items-center justify-center gap-0.5">
         <button
           onClick={handleHomeClick}

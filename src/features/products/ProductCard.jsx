@@ -77,7 +77,7 @@ function ProductCard({ product }) {
   const imageUrl = product.productImages?.[0]?.image || "";
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+    <div className="group surface-card surface-card-hover rounded-xl overflow-hidden hover:-translate-y-1 flex flex-col h-full">
       <Link
         to={`/product/${product.id}`}
         className="block relative overflow-hidden flex-shrink-0"
@@ -143,7 +143,7 @@ function ProductCard({ product }) {
 
         <button
           onClick={handleAddToCart}
-          className="w-full mt-3 cursor-pointer flex items-center justify-center gap-2 bg-stone-800 text-white py-2 rounded-lg hover:bg-stone-700 transition-colors text-[12px] md:text-sm font-sansMed"
+          className="w-full mt-3 cursor-pointer flex items-center justify-center gap-2 bg-stone-800 text-white py-2 rounded-lg hover:bg-stone-700 transition-all duration-300 text-[12px] md:text-sm font-sansMed hover:shadow-md"
         >
           <HiOutlineShoppingCart size={18} />
           افزودن به سبد خرید

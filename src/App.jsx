@@ -25,6 +25,24 @@ function App() {
         toastOptions={{
           duration: 3000,
           className: "font-sansBold",
+          style: {
+            background: "#ffffff",
+            color: "#2e2724",
+            border: "1px solid #e8ddd2",
+            boxShadow: "0 4px 16px rgba(46, 39, 36, 0.12)",
+          },
+          success: {
+            iconTheme: {
+              primary: "#6b8e6b",
+              secondary: "#ffffff",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#a0524b",
+              secondary: "#ffffff",
+            },
+          },
         }}
       />
       <BrowserRouter>
