@@ -1,5 +1,5 @@
 // src/pages/ProductDetails.jsx
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import Lightbox from "yet-another-react-lightbox";
@@ -18,6 +18,7 @@ import {
   HiOutlineMinus,
   HiOutlineTrash,
   HiOutlineCollection,
+  HiOutlineArrowNarrowRight,
 } from "react-icons/hi";
 import Spinner from "../ui/Spinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +34,7 @@ import CategorySubject from "../features/categories/CategorySubject";
 
 function ProductDetails() {
   const { productId } = useParams();
+  const navigate = useNavigate();
   const { product, isLoading } = useGetProduct(productId);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -107,6 +109,10 @@ function ProductDetails() {
   const handleOpenLightbox = () => {
     setPhotoIndex(currentImageIndex);
     setIsLightboxOpen(true);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   const handleAddToCart = () => {
@@ -274,6 +280,21 @@ function ProductDetails() {
               className="relative bg-gray-100 rounded-2xl overflow-hidden group"
               style={{ height: "750px" }}
             >
+              {/* دکمه بازگشت */}
+              <button
+                onClick={handleBack}
+                className="absolute top-4 right-4 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 hover:bg-white shadow-lg transition-all duration-200 hover:scale-105 border border-stone-200/50 cursor-pointer group"
+                aria-label="بازگشت"
+              >
+                <HiOutlineArrowNarrowRight
+                  size={18}
+                  className="text-stone-700 group-hover:-translate-x-1 transition-transform"
+                />
+                <span className="text-sm font-sansMed text-stone-700">
+                  بازگشت
+                </span>
+              </button>
+
               <img
                 src={currentImage}
                 alt={product.name}
