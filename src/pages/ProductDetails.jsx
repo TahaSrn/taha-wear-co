@@ -74,7 +74,6 @@ function ProductDetails() {
     });
   };
 
-  // Prefetch کردن همه عکس‌های محصول
   useEffect(() => {
     if (sortedImages.length > 0) {
       sortedImages.forEach((image) => {
@@ -450,22 +449,25 @@ function ProductDetails() {
         {relatedFiltered.length > 0 && (
           <div className="mt-20">
             <CategorySubject icon={HiOutlineCollection} title="محصولات مشابه" />
-            {relatedLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-gray-200 rounded-xl h-80 animate-pulse"
-                  />
-                ))}
+            <div className="overflow-x-auto pb-4 scrollbar-hide">
+              <div className="flex gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-6 min-w-max md:min-w-0">
+                {relatedLoading
+                  ? Array.from({ length: 5 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-[160px] md:w-auto flex-shrink-0 bg-gray-200 rounded-xl h-80 animate-pulse"
+                      />
+                    ))
+                  : relatedFiltered.map((product) => (
+                      <div
+                        key={product.id}
+                        className="w-[160px] md:w-auto flex-shrink-0 md:flex-shrink"
+                      >
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
               </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-                {relatedFiltered.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            )}
+            </div>
           </div>
         )}
       </main>
