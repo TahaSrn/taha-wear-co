@@ -120,7 +120,7 @@ function CartItem({ item }) {
             onClick={() =>
               dispatch(decreaseQuantity({ id: item.id, colorId: item.colorId }))
             }
-            className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
+            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
             <HiOutlineMinus size={16} className="lg:size-4.5" />
           </button>
@@ -133,7 +133,7 @@ function CartItem({ item }) {
             onClick={() =>
               dispatch(increaseQuantity({ id: item.id, colorId: item.colorId }))
             }
-            className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
+            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
             <HiOutlinePlus size={16} className="lg:size-[18px]" />
           </button>

@@ -73,7 +73,7 @@ function Search() {
           }}
           onFocus={handleFocus}
           placeholder="جستجوی محصولات"
-          className="w-full h-full outline-none text-gray-500 bg-transparent placeholder-gray-500 text-sm font-sansMed"
+          className="w-full h-full pr-3 outline-none text-gray-500 bg-transparent placeholder-gray-500 text-sm font-sansMed"
         />
       </form>
 

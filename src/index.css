@@ -65,6 +65,7 @@
 
   /* Samsung / system dark mode — force light appearance */
   @media (prefers-color-scheme: dark) {
+
     :root,
     html,
     body,
@@ -72,53 +73,6 @@
       color-scheme: light only !important;
       background-color: var(--app-bg) !important;
       color: var(--app-text) !important;
-    }
-
-    .bg-white,
-    .bg-white\/80,
-    .bg-white\/95 {
-      background-color: #ffffff !important;
-    }
-
-    .bg-caffee-50 {
-      background-color: #fbf8f5 !important;
-    }
-
-    .bg-caffee-100 {
-      background-color: #f3ebe3 !important;
-    }
-
-    .bg-caffee-200 {
-      background-color: #e8ddd2 !important;
-    }
-
-    .bg-stone-50 {
-      background-color: #fbf8f5 !important;
-    }
-
-    .bg-stone-800,
-    .bg-stone-900 {
-      background-color: #2e2724 !important;
-    }
-
-    .text-stone-800 {
-      color: #2e2724 !important;
-    }
-
-    .text-stone-700 {
-      color: #4a403a !important;
-    }
-
-    .text-stone-600 {
-      color: #6b5e58 !important;
-    }
-
-    .text-stone-500 {
-      color: #8a7870 !important;
-    }
-
-    .text-white {
-      color: #ffffff !important;
     }
   }
 
@@ -132,9 +86,7 @@
     color-scheme: light only;
   }
 
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
-      [type="color"]
-    ):not([type="file"]),
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
   textarea,
   select {
     background-color: var(--app-surface) !important;
@@ -248,12 +200,10 @@
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent);
   animation: shimmer 1.3s infinite;
 }
 
