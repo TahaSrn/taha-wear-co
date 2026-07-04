@@ -1,18 +1,13 @@
-// services/apiProducts.js
 import supabase from "./supabase";
 
-// مرتب‌سازی عکس‌ها: اول P، بعد M
 const sortProductImages = (images) => {
   if (!images || images.length === 0) return images;
 
-  // پیدا کردن عکس P
   const pImages = images.filter((img) => img.image && img.image.includes("/P"));
-  // گرفتن عکس‌های M
   const mImages = images.filter(
     (img) => img.image && !img.image.includes("/P"),
   );
 
-  // اول Pها (بر اساس id مرتب)
   pImages.sort((a, b) => a.id - b.id);
   mImages.sort((a, b) => a.id - b.id);
 
@@ -26,8 +21,11 @@ export async function getProducts({
   maxPrice,
   sortBy,
   search,
+  page = 1,
+  limit = 12,
 } = {}) {
-  let query = supabase.from("products").select(`
+  let query = supabase.from("products").select(
+    `
       *,
       productImages (*),
       product_colors (
@@ -37,19 +35,18 @@ export async function getProducts({
           name
         )
       )
-    `);
+    `,
+    { count: "exact" },
+  );
 
-  // جستجو بر اساس نام محصول
   if (search && search.trim()) {
     query = query.ilike("name", `%${search.trim()}%`);
   }
 
-  // فیلتر بر اساس دسته‌بندی
   if (categoryIds && categoryIds.length > 0) {
     query = query.in("categoryId", categoryIds);
   }
 
-  // فیلتر بر اساس قیمت
   if (minPrice) {
     query = query.gte("price", minPrice);
   }
@@ -57,7 +54,6 @@ export async function getProducts({
     query = query.lte("price", maxPrice);
   }
 
-  // فیلتر بر اساس رنگ
   if (colors && colors.length > 0) {
     const { data: productColors } = await supabase
       .from("product_colors")
@@ -67,13 +63,12 @@ export async function getProducts({
     const productIds = productColors?.map((p) => p.product_id) || [];
 
     if (productIds.length === 0) {
-      return [];
+      return { products: [], count: 0 };
     }
 
     query = query.in("id", productIds);
   }
 
-  // مرتب‌سازی
   if (sortBy === "newest") {
     query = query.order("created_at", { ascending: false });
   } else if (sortBy === "price-asc") {
@@ -81,18 +76,20 @@ export async function getProducts({
   } else if (sortBy === "price-desc") {
     query = query.order("price", { ascending: false });
   } else {
-    // پیش‌فرض: جدیدترین
     query = query.order("created_at", { ascending: false });
   }
 
-  const { data: products, error } = await query;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+  query = query.range(from, to);
+
+  const { data: products, error, count } = await query;
 
   if (error) {
     console.error("Error fetching products:", error);
     throw new Error(error.message);
   }
 
-  // مرتب‌سازی عکس‌ها برای هر محصول
   if (products) {
     products.forEach((product) => {
       if (product.productImages) {
@@ -101,7 +98,7 @@ export async function getProducts({
     });
   }
 
-  return products;
+  return { products: products || [], count: count || 0 };
 }
 
 export async function getNewestProducts() {
@@ -130,7 +127,6 @@ export async function getNewestProducts() {
 
       if (error) throw new Error(error.message);
 
-      // مرتب‌سازی عکس‌ها برای هر محصول
       if (data) {
         data.forEach((product) => {
           if (product.productImages) {
@@ -192,7 +188,6 @@ export async function getProduct(productId) {
     throw new Error(error.message);
   }
 
-  // مرتب‌سازی عکس‌ها
   if (data && data.productImages) {
     data.productImages = sortProductImages(data.productImages);
   }

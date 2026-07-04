@@ -1,6 +1,6 @@
-// src/features/shop/ProductGrid.jsx
 import { useState, useEffect, useRef } from "react";
 import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
+import { useQueryClient } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
 import Pagination from "../../ui/Pagination";
 import useGetProducts from "../products/useGetProducts";
@@ -10,16 +10,23 @@ function ProductGrid({ filters }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
   const productsPerPage = 12;
+  const queryClient = useQueryClient();
 
   const isFirstRender = useRef(true);
 
-  const { products = [], isLoading } = useGetProducts({
+  const {
+    products = [],
+    count = 0,
+    isLoading,
+  } = useGetProducts({
     categoryIds: filters?.categories || [],
     colors: filters?.colors || [],
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
     sortBy: sortBy,
     search: filters?.search || "",
+    page: currentPage,
+    limit: productsPerPage,
   });
 
   useEffect(() => {
@@ -38,13 +45,37 @@ function ProductGrid({ filters }) {
     });
   }, [currentPage]);
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  useEffect(() => {
+    const nextPage = currentPage + 1;
+    const totalPages = Math.ceil(count / productsPerPage);
 
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct,
-  );
+    if (nextPage <= totalPages) {
+      queryClient.prefetchQuery({
+        queryKey: [
+          "products",
+          filters?.categories || [],
+          filters?.colors || [],
+          filters?.priceRange?.min || null,
+          filters?.priceRange?.max || null,
+          sortBy,
+          filters?.search || "",
+          nextPage,
+          productsPerPage,
+        ],
+        queryFn: () =>
+          getProducts({
+            categoryIds: filters?.categories || [],
+            colors: filters?.colors || [],
+            minPrice: filters?.priceRange?.min || null,
+            maxPrice: filters?.priceRange?.max || null,
+            sortBy: sortBy,
+            search: filters?.search || "",
+            page: nextPage,
+            limit: productsPerPage,
+          }),
+      });
+    }
+  }, [currentPage, filters, sortBy, count, productsPerPage, queryClient]);
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
@@ -68,7 +99,7 @@ function ProductGrid({ filters }) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {Array.from({ length: 12 }).map((_, i) => (
-            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={50} />
+            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={55} />
           ))}
         </div>
       </div>
@@ -87,7 +118,7 @@ function ProductGrid({ filters }) {
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
         <span className="text-sm text-stone-500 font-sansMed bg-stone-100 px-4 py-1.5 rounded-full">
-          {products.length} محصول
+          {count} محصول
         </span>
 
         <div className="relative w-full sm:w-56">
@@ -113,14 +144,14 @@ function ProductGrid({ filters }) {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {currentProducts.map((product) => (
+        {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
       <div className="mt-8">
         <Pagination
-          totalProducts={products.length}
+          totalProducts={count}
           productsPerPage={productsPerPage}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

@@ -1,4 +1,3 @@
-// src/features/products/useGetProducts.js
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../services/apiProducts";
 
@@ -9,9 +8,11 @@ export default function useGetProducts({
   maxPrice,
   sortBy,
   search,
+  page = 1,
+  limit = 12,
 } = {}) {
   const {
-    data: products = [],
+    data = { products: [], count: 0 },
     isLoading,
     error,
   } = useQuery({
@@ -23,6 +24,8 @@ export default function useGetProducts({
       maxPrice,
       sortBy,
       search,
+      page,
+      limit,
     ],
     queryFn: () =>
       getProducts({
@@ -32,10 +35,17 @@ export default function useGetProducts({
         maxPrice,
         sortBy,
         search,
+        page,
+        limit,
       }),
-    // اگر search خالی باشه، کوئری رو اجرا نکن
     enabled: true,
+    staleTime: 1000 * 60 * 5,
   });
 
-  return { products, isLoading, error };
+  return {
+    products: data.products || [],
+    count: data.count || 0,
+    isLoading,
+    error,
+  };
 }
