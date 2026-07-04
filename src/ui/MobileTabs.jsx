@@ -83,7 +83,7 @@ function MobileTabs() {
               : "text-stone-600 hover:text-stone-900"
           }`}
         >
-          <CartIcon size="small" />
+          <CartIcon size="xsmall" />
           <span className="text-[10px]">سبد خرید</span>
         </Link>
       </TabItem>
