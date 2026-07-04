@@ -77,7 +77,7 @@ function ProductCard({ product }) {
   const imageUrl = product.productImages?.[0]?.image || "";
 
   return (
-    <div className="group surface-card surface-card-hover rounded-xl overflow-hidden hover:-translate-y-1 flex flex-col h-full">
+    <div className="group surface-card surface-card-hover rounded-xl overflow-hidden flex flex-col h-full">
       <Link
         to={`/product/${product.id}`}
         className="block relative overflow-hidden flex-shrink-0"
