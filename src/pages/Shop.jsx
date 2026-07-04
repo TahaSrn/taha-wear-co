@@ -19,6 +19,7 @@ function Shop() {
   const mainRef = useRef(null);
 
   const categoryId = searchParams.get("category");
+  const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
     const search = searchParams.get("search");
@@ -68,6 +69,7 @@ function Shop() {
                 onFilterChange={handleFilterChange}
                 initialFilters={filters}
                 isOpenFromCategory={isOpenFromCategory}
+                searchQuery={searchQuery}
               />
             </aside>
 

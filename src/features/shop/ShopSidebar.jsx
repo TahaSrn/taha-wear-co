@@ -1,11 +1,19 @@
 // src/features/shop/ShopSidebar.jsx
 import { useState, useEffect } from "react";
-import { HiChevronDown, HiChevronUp } from "react-icons/hi";
+import { HiChevronDown, HiChevronUp, HiOutlineSearch } from "react-icons/hi";
 import useGetCategories from "../categories/useGetCategories";
 import useGetMaxPrice from "./useGetMaxPrice";
 
-function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
+function ShopSidebar({
+  onFilterChange,
+  initialFilters,
+  isOpenFromCategory,
+  searchQuery,
+}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [searchTerm, setSearchTerm] = useState(searchQuery || "");
+
+  const isSearchActive = searchTerm && searchTerm.trim().length > 0;
 
   useEffect(() => {
     const handleResize = () => {
@@ -16,6 +24,7 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
   }, []);
 
   const [openSections, setOpenSections] = useState({
+    search: isSearchActive || false,
     categories: !isMobile || isOpenFromCategory,
     price: !isMobile,
     colors: !isMobile,
@@ -31,12 +40,22 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
   }, [isOpenFromCategory]);
 
   useEffect(() => {
+    if (isSearchActive) {
+      setOpenSections((prev) => ({
+        ...prev,
+        search: true,
+      }));
+    }
+  }, [isSearchActive]);
+
+  useEffect(() => {
     setOpenSections({
+      search: isSearchActive || false,
       categories: !isMobile || isOpenFromCategory,
       price: !isMobile,
       colors: !isMobile,
     });
-  }, [isMobile, isOpenFromCategory]);
+  }, [isMobile, isOpenFromCategory, isSearchActive]);
 
   const [selectedCategories, setSelectedCategories] = useState(
     initialFilters?.categories || [],
@@ -74,6 +93,7 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
     categories = selectedCategories,
     colors = selectedColors,
     price = priceRange,
+    search = searchTerm,
   ) => {
     onFilterChange({
       categories,
@@ -82,7 +102,14 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
         min: price.min,
         max: price.max,
       },
+      search,
     });
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    updateFilters(selectedCategories, selectedColors, priceRange, value);
   };
 
   const handleCategoryChange = (categoryId) => {
@@ -91,7 +118,7 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
         ? prev.filter((id) => id !== categoryId)
         : [...prev, categoryId];
 
-      updateFilters(updated, selectedColors, priceRange);
+      updateFilters(updated, selectedColors, priceRange, searchTerm);
 
       return updated;
     });
@@ -114,7 +141,7 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
         ? prev.filter((id) => id !== colorId)
         : [...prev, colorId];
 
-      updateFilters(selectedCategories, updated, priceRange);
+      updateFilters(selectedCategories, updated, priceRange, searchTerm);
 
       return updated;
     });
@@ -144,7 +171,7 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
         };
       }
 
-      updateFilters(selectedCategories, selectedColors, updated);
+      updateFilters(selectedCategories, selectedColors, updated, searchTerm);
 
       return updated;
     });
@@ -156,6 +183,39 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
 
   return (
     <div className="bg-white rounded-xl shadow-md p-5 sticky top-20">
+      {/* بخش جستجو */}
+      <div className="border-b border-gray-200 pb-3 mb-3">
+        <button
+          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
+          onClick={() => toggleSection("search")}
+        >
+          <span>جستجو</span>
+          {openSections.search ? (
+            <HiChevronUp size={18} />
+          ) : (
+            <HiChevronDown size={18} />
+          )}
+        </button>
+
+        {openSections.search && (
+          <div className="mt-2">
+            <div className="relative">
+              <HiOutlineSearch
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
+                size={18}
+              />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="جستجوی محصولات..."
+                className="w-full pr-10 pl-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-stone-400 focus:border-stone-400 focus:outline-none text-sm font-sansMed"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="border-b border-gray-200 pb-3 mb-3">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -324,7 +384,12 @@ function ShopSidebar({ onFilterChange, initialFilters, isOpenFromCategory }) {
                 <button
                   onClick={() => {
                     setSelectedColors([]);
-                    updateFilters(selectedCategories, [], priceRange);
+                    updateFilters(
+                      selectedCategories,
+                      [],
+                      priceRange,
+                      searchTerm,
+                    );
                   }}
                   className="text-xs text-stone-400 hover:text-stone-800 transition-colors font-sansMed cursor-pointer"
                 >
