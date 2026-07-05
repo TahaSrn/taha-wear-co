@@ -71,12 +71,12 @@ function NewestProduct({ product }) {
   };
 
   return (
-    <div className="rounded-xl bg-white flex flex-col overflow-hidden shadow-md h-full font-sansMed">
-      <Link to={`/product/${product.id}`} className="relative block">
+    <div className="w-full min-w-0 rounded-xl bg-white flex flex-col overflow-hidden shadow-md h-full font-sansMed">
+      <Link to={`/product/${product.id}`} className="relative block w-full">
         <img
           src={product.productImages[0]?.image}
           alt={product.name}
-          className="w-full h-36 md:h-65 object-cover rounded-xl p-1 md:p-1.5 transition-transform duration-300"
+          className="w-full h-36 md:h-65 object-cover rounded-xl p-1 md:p-1.5"
         />
 
         {colors.length > 0 && (
@@ -94,17 +94,21 @@ function NewestProduct({ product }) {
         )}
       </Link>
 
-      <div className="flex flex-col flex-1 px-2 md:px-3 pb-2 md:pb-3 pt-2 gap-2 text-stone-800">
-        <div className="text-[11px] md:text-base">
-          <span className="flex gap-1 items-center">
-            <HiOutlineCube className="shrink-0 text-xs md:text-base" />
-            <span className="truncate">{product.name}</span>
+      <div className="flex flex-col flex-1 px-2 md:px-3 pt-2 pb-2 md:pb-3 gap-2 text-stone-800">
+        {/* نام محصول */}
+        <div className="flex items-center w-full text-[11px] md:text-base">
+          <HiOutlineCube className="shrink-0 text-xs md:text-base ml-1" />
+
+          <span className="min-w-0 overflow-hidden whitespace-nowrap text-ellipsis">
+            {product.name}
           </span>
         </div>
 
-        <div className="text-[11px] md:text-base">
-          <span className="flex gap-1 items-center">
-            <HiOutlineTag className="shrink-0 text-xs md:text-base" />
+        {/* قیمت */}
+        <div className="flex items-center gap-1 text-[11px] md:text-base">
+          <HiOutlineTag className="shrink-0 text-xs md:text-base" />
+
+          <span className="truncate">
             {formatCurrency(product.price)} تومان
           </span>
         </div>
