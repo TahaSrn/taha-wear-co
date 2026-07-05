@@ -1,9 +1,11 @@
+// src/features/products/useGetProducts.js
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../services/apiProducts";
 
 export default function useGetProducts({
   categoryIds,
   colors,
+  collections, // اضافه شد
   minPrice,
   maxPrice,
   sortBy,
@@ -20,6 +22,7 @@ export default function useGetProducts({
       "products",
       categoryIds,
       colors,
+      collections, // اضافه شد
       minPrice,
       maxPrice,
       sortBy,
@@ -31,6 +34,7 @@ export default function useGetProducts({
       getProducts({
         categoryIds,
         colors,
+        collections, // اضافه شد
         minPrice,
         maxPrice,
         sortBy,

@@ -1,3 +1,4 @@
+// src/features/shop/ProductGrid.jsx
 import { useState, useEffect, useRef } from "react";
 import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,6 +22,7 @@ function ProductGrid({ filters }) {
   } = useGetProducts({
     categoryIds: filters?.categories || [],
     colors: filters?.colors || [],
+    collections: filters?.collections || [], // اضافه شد
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
     sortBy: sortBy,
@@ -55,6 +57,7 @@ function ProductGrid({ filters }) {
           "products",
           filters?.categories || [],
           filters?.colors || [],
+          filters?.collections || [], // اضافه شد
           filters?.priceRange?.min || null,
           filters?.priceRange?.max || null,
           sortBy,
@@ -66,6 +69,7 @@ function ProductGrid({ filters }) {
           getProducts({
             categoryIds: filters?.categories || [],
             colors: filters?.colors || [],
+            collections: filters?.collections || [], // اضافه شد
             minPrice: filters?.priceRange?.min || null,
             maxPrice: filters?.priceRange?.max || null,
             sortBy: sortBy,
@@ -99,7 +103,14 @@ function ProductGrid({ filters }) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {Array.from({ length: 12 }).map((_, i) => (
-            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={56} />
+            <ProductSkeleton
+              key={i}
+              contentSpaces={2}
+              desktopImageHeight={224}
+              mobileImageHeight={160}
+              imageDivPadding={4}
+              imageRounded="12px"
+            />
           ))}
         </div>
       </div>

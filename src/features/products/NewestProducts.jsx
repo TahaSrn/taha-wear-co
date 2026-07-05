@@ -85,10 +85,10 @@ function NewestProducts() {
                   {isLoading ? (
                     <ProductSkeleton
                       contentSpaces={3}
-                      desktopImageHeight={64}
-                      mobileImageHeight={32}
-                      imageDivPadding={1}
-                      imageRounded="xl"
+                      desktopImageHeight={260}
+                      mobileImageHeight={130}
+                      imageDivPadding={4}
+                      imageRounded="12px"
                       hasButton={false}
                     />
                   ) : (

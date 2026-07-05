@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { HiChevronDown, HiChevronUp, HiOutlineSearch } from "react-icons/hi";
 import useGetCategories from "../categories/useGetCategories";
 import useGetMaxPrice from "./useGetMaxPrice";
+import useGetCollections from "../collections/useGetCollections";
 
 function ShopSidebar({
   onFilterChange,
@@ -14,6 +15,7 @@ function ShopSidebar({
   const [searchTerm, setSearchTerm] = useState(searchQuery || "");
 
   const isSearchActive = searchTerm && searchTerm.trim().length > 0;
+  const isCollectionActive = initialFilters?.collections?.length > 0;
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,6 +30,7 @@ function ShopSidebar({
     categories: !isMobile || isOpenFromCategory,
     price: !isMobile,
     colors: !isMobile,
+    collections: !isMobile || isCollectionActive,
   });
 
   useEffect(() => {
@@ -49,18 +52,31 @@ function ShopSidebar({
   }, [isSearchActive]);
 
   useEffect(() => {
+    if (isCollectionActive) {
+      setOpenSections((prev) => ({
+        ...prev,
+        collections: true,
+      }));
+    }
+  }, [isCollectionActive]);
+
+  useEffect(() => {
     setOpenSections({
       search: isSearchActive || false,
       categories: !isMobile || isOpenFromCategory,
       price: !isMobile,
       colors: !isMobile,
+      collections: !isMobile || isCollectionActive,
     });
-  }, [isMobile, isOpenFromCategory, isSearchActive]);
+  }, [isMobile, isOpenFromCategory, isSearchActive, isCollectionActive]);
 
   const [selectedCategories, setSelectedCategories] = useState(
     initialFilters?.categories || [],
   );
   const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState(
+    initialFilters?.collections || [],
+  );
   const [priceRange, setPriceRange] = useState({
     min: 0,
     max: 10000000,
@@ -68,10 +84,15 @@ function ShopSidebar({
 
   const { categories = [], isLoading } = useGetCategories();
   const { maxPrice = 10000000 } = useGetMaxPrice();
+  const { collections = [], isLoading: collectionsLoading } =
+    useGetCollections();
 
   useEffect(() => {
     if (initialFilters?.categories) {
       setSelectedCategories(initialFilters.categories);
+    }
+    if (initialFilters?.collections) {
+      setSelectedCollections(initialFilters.collections);
     }
   }, [initialFilters]);
 
@@ -94,6 +115,7 @@ function ShopSidebar({
     colors = selectedColors,
     price = priceRange,
     search = searchTerm,
+    collections = selectedCollections,
   ) => {
     onFilterChange({
       categories,
@@ -103,13 +125,20 @@ function ShopSidebar({
         max: price.max,
       },
       search,
+      collections,
     });
   };
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    updateFilters(selectedCategories, selectedColors, priceRange, value);
+    updateFilters(
+      selectedCategories,
+      selectedColors,
+      priceRange,
+      value,
+      selectedCollections,
+    );
   };
 
   const handleCategoryChange = (categoryId) => {
@@ -118,7 +147,31 @@ function ShopSidebar({
         ? prev.filter((id) => id !== categoryId)
         : [...prev, categoryId];
 
-      updateFilters(updated, selectedColors, priceRange, searchTerm);
+      updateFilters(
+        updated,
+        selectedColors,
+        priceRange,
+        searchTerm,
+        selectedCollections,
+      );
+
+      return updated;
+    });
+  };
+
+  const handleCollectionChange = (collectionId) => {
+    setSelectedCollections((prev) => {
+      const updated = prev.includes(collectionId)
+        ? prev.filter((id) => id !== collectionId)
+        : [...prev, collectionId];
+
+      updateFilters(
+        selectedCategories,
+        selectedColors,
+        priceRange,
+        searchTerm,
+        updated,
+      );
 
       return updated;
     });
@@ -141,7 +194,13 @@ function ShopSidebar({
         ? prev.filter((id) => id !== colorId)
         : [...prev, colorId];
 
-      updateFilters(selectedCategories, updated, priceRange, searchTerm);
+      updateFilters(
+        selectedCategories,
+        updated,
+        priceRange,
+        searchTerm,
+        selectedCollections,
+      );
 
       return updated;
     });
@@ -171,7 +230,13 @@ function ShopSidebar({
         };
       }
 
-      updateFilters(selectedCategories, selectedColors, updated, searchTerm);
+      updateFilters(
+        selectedCategories,
+        selectedColors,
+        updated,
+        searchTerm,
+        selectedCollections,
+      );
 
       return updated;
     });
@@ -182,9 +247,9 @@ function ShopSidebar({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-5 sticky top-20">
+    <div className="bg-white rounded-xl shadow-md p-4 sticky top-5">
       {/* بخش جستجو */}
-      <div className="border-b border-gray-200 pb-3 mb-3">
+      <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("search")}
@@ -216,7 +281,8 @@ function ShopSidebar({
         )}
       </div>
 
-      <div className="border-b border-gray-200 pb-3 mb-3">
+      {/* دسته‌بندی */}
+      <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("categories")}
@@ -260,7 +326,8 @@ function ShopSidebar({
         )}
       </div>
 
-      <div className="border-b border-gray-200 pb-3 mb-3">
+      {/* قیمت */}
+      <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("price")}
@@ -323,7 +390,8 @@ function ShopSidebar({
         )}
       </div>
 
-      <div>
+      {/* رنگ */}
+      <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
           onClick={() => toggleSection("colors")}
@@ -389,6 +457,7 @@ function ShopSidebar({
                       [],
                       priceRange,
                       searchTerm,
+                      selectedCollections,
                     );
                   }}
                   className="text-xs text-stone-400 hover:text-stone-800 transition-colors font-sansMed cursor-pointer"
@@ -396,6 +465,46 @@ function ShopSidebar({
                   حذف همه
                 </button>
               </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* کالکشن - بدون border بالا */}
+      <div className="pt-2.5 mt-2.5">
+        <button
+          className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
+          onClick={() => toggleSection("collections")}
+        >
+          <span>فصل</span>
+          {openSections.collections ? (
+            <HiChevronUp size={18} />
+          ) : (
+            <HiChevronDown size={18} />
+          )}
+        </button>
+
+        {openSections.collections && (
+          <div className="mt-2 space-y-1.5">
+            {collectionsLoading ? (
+              <div className="text-sm text-stone-400 font-sansMed">
+                در حال بارگذاری...
+              </div>
+            ) : (
+              collections.map((col) => (
+                <label
+                  key={col.id}
+                  className="flex items-center gap-2 cursor-pointer text-sm text-stone-600 hover:text-stone-800 font-sansMed"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCollections.includes(col.id)}
+                    onChange={() => handleCollectionChange(col.id)}
+                    className="rounded border-gray-300 accent-stone-800 cursor-pointer"
+                  />
+                  {col.name}
+                </label>
+              ))
             )}
           </div>
         )}

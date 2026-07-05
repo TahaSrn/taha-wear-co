@@ -13,12 +13,14 @@ function Shop() {
   const [filters, setFilters] = useState({
     categories: [],
     colors: [],
+    collections: [],
     priceRange: { min: null, max: null },
     search: "",
   });
   const mainRef = useRef(null);
 
   const categoryId = searchParams.get("category");
+  const collectionId = searchParams.get("collection");
   const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
@@ -27,6 +29,7 @@ function Shop() {
     setFilters((prev) => ({
       ...prev,
       categories: categoryId ? [Number(categoryId)] : [],
+      collections: collectionId ? [Number(collectionId)] : [],
       search: search || "",
     }));
   }, [searchParams]);
@@ -45,6 +48,9 @@ function Shop() {
     if (newFilters.categories.length > 0) {
       params.category = newFilters.categories[0];
     }
+    if (newFilters.collections.length > 0) {
+      params.collection = newFilters.collections[0];
+    }
     if (newFilters.search) {
       params.search = newFilters.search;
     }
@@ -59,10 +65,6 @@ function Shop() {
 
       <div ref={mainRef} className="flex-1 bg-caffee-50 pt-8">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-sansBold text-stone-800 mb-6">
-            همه محصولات
-          </h1>
-
           <div className="flex flex-col md:flex-row gap-6">
             <aside className="w-full md:w-72 lg:w-80 flex-shrink-0">
               <ShopSidebar

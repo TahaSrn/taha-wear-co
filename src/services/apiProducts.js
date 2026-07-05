@@ -17,6 +17,7 @@ const sortProductImages = (images) => {
 export async function getProducts({
   categoryIds,
   colors,
+  collections, // اضافه شد
   minPrice,
   maxPrice,
   sortBy,
@@ -61,6 +62,22 @@ export async function getProducts({
       .in("color_id", colors);
 
     const productIds = productColors?.map((p) => p.product_id) || [];
+
+    if (productIds.length === 0) {
+      return { products: [], count: 0 };
+    }
+
+    query = query.in("id", productIds);
+  }
+
+  // کالکشن (جدید)
+  if (collections && collections.length > 0) {
+    const { data: collectionProducts } = await supabase
+      .from("collection_products")
+      .select("product_id")
+      .in("collection_id", collections);
+
+    const productIds = collectionProducts?.map((p) => p.product_id) || [];
 
     if (productIds.length === 0) {
       return { products: [], count: 0 };

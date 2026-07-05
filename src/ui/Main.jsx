@@ -7,6 +7,7 @@ import CategorySubject from "../features/categories/CategorySubject";
 import NewestProducts from "../features/products/NewestProducts";
 import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 import Banner from "../ui/Banner";
+import Banners from "./Banners";
 
 function Main() {
   const categoriesRef = useRef(null);
@@ -43,7 +44,9 @@ function Main() {
         <NewestProducts />
       </div>
 
-      <div ref={categoriesRef} id="categories-section">
+      <Banners />
+
+      <div ref={categoriesRef} id="categories-section" className="pt-8">
         <CategorySubject icon={HiOutlineFolderOpen} title="دسته بندی محصولات" />
         <Categories />
       </div>
