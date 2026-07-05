@@ -1,12 +1,6 @@
-// src/features/products/NewestProduct.jsx
 import { useState } from "react";
 import { Link } from "react-router";
-import {
-  HiOutlineCube,
-  HiOutlineShoppingCart,
-  HiOutlineTag,
-} from "react-icons/hi";
-import Button from "../../ui/Button";
+import { HiOutlineCube, HiOutlineTag } from "react-icons/hi";
 import { formatCurrency } from "../../utils/helpers";
 import { useDispatch } from "react-redux";
 import { addItem } from "../cart/cartSlice";
@@ -18,7 +12,6 @@ function NewestProduct({ product }) {
   const [selectedColor, setSelectedColor] = useState(null);
 
   const colors = product.product_colors?.map((pc) => pc.colors) || [];
-  const hasSingleColor = colors.length === 1;
 
   const colorClassMap = {
     مشکی: "bg-[#2C2C2C]",
@@ -56,7 +49,6 @@ function NewestProduct({ product }) {
   };
 
   const handleColorSelect = (color) => {
-    setSelectedColor(color);
     dispatch(
       addItem({
         id: product.id,
@@ -67,6 +59,7 @@ function NewestProduct({ product }) {
         colorName: color.name,
       }),
     );
+
     toast.success("محصول با موفقیت به سبد خرید اضافه شد");
     setShowColorPicker(false);
     setSelectedColor(null);
@@ -78,75 +71,68 @@ function NewestProduct({ product }) {
   };
 
   return (
-    <div className="rounded-xl bg-white w-full flex flex-col items-center justify-start pt-1 font-sansMed relative overflow-hidden shadow-md h-full">
-      <Link
-        to={`/product/${product.id}`}
-        className="block relative w-full flex-shrink-0"
-      >
+    <div className="rounded-xl bg-white flex flex-col overflow-hidden shadow-md h-full font-sansMed">
+      <Link to={`/product/${product.id}`} className="relative block">
         <img
-          className="w-[98%] h-65 object-cover rounded-xl transition-transform duration-300 cursor-pointer mx-auto"
           src={product.productImages[0]?.image}
-          alt={product.productImages[0]?.image}
+          alt={product.name}
+          className="w-full h-36 md:h-65 object-cover rounded-xl p-1 md:p-1.5 transition-transform duration-300"
         />
 
         {colors.length > 0 && (
-          <div className="absolute top-3 right-3 flex flex-col gap-1.5">
+          <div className="absolute top-2 right-2 md:top-3 md:right-3 flex flex-col gap-1">
             {colors.map((color) => (
               <div
                 key={color.id}
-                className={`w-3.5 h-3.5 rounded-full ${colorClassMap[color.name] || "bg-gray-400"} shadow-md ring-2 ring-white/80 font-sansMed`}
                 title={color.name}
+                className={`w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full ${
+                  colorClassMap[color.name] || "bg-gray-400"
+                } ring-2 ring-white`}
               />
             ))}
           </div>
         )}
       </Link>
 
-      <div className="text-stone-800 flex flex-col right-3 top-75 text-md md:text-lg text-right gap-2 w-[90%] mt-3 flex-1 pb-3">
-        <div className="min-h-[3rem]">
-          <span className="flex items-center gap-1">
-            <HiOutlineCube className="flex-shrink-0" />
-            <span className="line-clamp-2">{product.name}</span>
+      <div className="flex flex-col flex-1 px-2 md:px-3 pb-2 md:pb-3 pt-2 gap-2 text-stone-800">
+        <div className="text-[11px] md:text-base">
+          <span className="flex gap-1 items-center">
+            <HiOutlineCube className="shrink-0 text-xs md:text-base" />
+            <span className="truncate">{product.name}</span>
           </span>
         </div>
 
-        <div className="min-h-[2rem]">
-          <span className="flex items-center gap-1">
-            <HiOutlineTag className="flex-shrink-0" />
+        <div className="text-[11px] md:text-base">
+          <span className="flex gap-1 items-center">
+            <HiOutlineTag className="shrink-0 text-xs md:text-base" />
             {formatCurrency(product.price)} تومان
           </span>
         </div>
 
         {showColorPicker && colors.length > 1 && (
-          <div className="flex flex-wrap gap-2 justify-center mt-2 p-3 bg-stone-50 rounded-lg border border-stone-200">
-            <span className="text-xs text-stone-600 w-full text-center mb-1">
-              لطفاً یک رنگ انتخاب کنید:
+          <div className="flex flex-wrap gap-2 justify-center mt-2 p-2 bg-stone-50 rounded-lg border">
+            <span className="w-full text-center text-[10px] md:text-xs text-stone-600">
+              لطفاً یک رنگ انتخاب کنید
             </span>
+
             {colors.map((color) => (
               <div
                 key={color.id}
                 onClick={() => handleColorSelect(color)}
-                className={`w-8 h-8 rounded-full ${colorClassMap[color.name] || "bg-gray-400"} ring-2 ring-offset-2 ring-transparent hover:ring-stone-800 transition-all cursor-pointer ${
-                  selectedColor?.id === color.id ? "ring-stone-800" : ""
-                }`}
-                title={color.name}
+                className={`w-6 h-6 md:w-8 md:h-8 rounded-full ${
+                  colorClassMap[color.name] || "bg-gray-400"
+                } ring-2 ring-offset-2 cursor-pointer`}
               />
             ))}
+
             <button
               onClick={handleCancel}
-              className="text-xs text-stone-500 hover:text-stone-800 w-full mt-2 transition-colors cursor-pointer"
+              className="w-full text-[10px] md:text-xs mt-1 text-stone-500 hover:text-stone-800"
             >
               انصراف
             </button>
           </div>
         )}
-
-        <div className="flex justify-center pb-1 mt-auto">
-          <Button type="primary" size="medium" onClick={handleAddToCart}>
-            <span>افزودن به سبد خرید</span>
-            <HiOutlineShoppingCart size={20} />
-          </Button>
-        </div>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
+// src/pages/Main.jsx (یا Homepage.jsx)
 import { useRef, useEffect } from "react";
 import { useLocation } from "react-router";
 import Categories from "../features/categories/Categories";
-import { HiOutlineFolderOpen, HiOutlineSparkles } from "react-icons/hi";
+import { HiOutlineFolderOpen } from "react-icons/hi";
 import CategorySubject from "../features/categories/CategorySubject";
 import NewestProducts from "../features/products/NewestProducts";
 import KnowledgeSection from "../features/knowledge/KnowledgeSection";
-import Banner from "./Banner";
+import Banner from "../ui/Banner";
 
 function Main() {
   const categoriesRef = useRef(null);
@@ -38,8 +39,7 @@ function Main() {
   return (
     <main className="bg-caffee-50 text-center">
       <Banner />
-      <div className="py-12">
-        <CategorySubject icon={HiOutlineSparkles} title="جدید ترین محصولات" />
+      <div className="py-8 md:py-12">
         <NewestProducts />
       </div>
 
