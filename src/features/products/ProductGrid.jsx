@@ -1,10 +1,10 @@
-// src/features/shop/ProductGrid.jsx
+// src/features/products/ProductGrid.jsx
 import { useState, useEffect, useRef } from "react";
 import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import { useQueryClient } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
 import Pagination from "../../ui/Pagination";
-import useGetProducts from "../products/useGetProducts";
+import useGetProducts from "./useGetProducts";
 import ProductSkeleton from "./ProductSkeleton";
 
 function ProductGrid({ filters }) {
@@ -22,11 +22,12 @@ function ProductGrid({ filters }) {
   } = useGetProducts({
     categoryIds: filters?.categories || [],
     colors: filters?.colors || [],
-    collections: filters?.collections || [], // اضافه شد
+    collections: filters?.collections || [],
     minPrice: filters?.priceRange?.min || null,
     maxPrice: filters?.priceRange?.max || null,
     sortBy: sortBy,
     search: filters?.search || "",
+    discount: filters?.discount || false,
     page: currentPage,
     limit: productsPerPage,
   });
@@ -57,11 +58,12 @@ function ProductGrid({ filters }) {
           "products",
           filters?.categories || [],
           filters?.colors || [],
-          filters?.collections || [], // اضافه شد
+          filters?.collections || [],
           filters?.priceRange?.min || null,
           filters?.priceRange?.max || null,
           sortBy,
           filters?.search || "",
+          filters?.discount || false,
           nextPage,
           productsPerPage,
         ],
@@ -69,11 +71,12 @@ function ProductGrid({ filters }) {
           getProducts({
             categoryIds: filters?.categories || [],
             colors: filters?.colors || [],
-            collections: filters?.collections || [], // اضافه شد
+            collections: filters?.collections || [],
             minPrice: filters?.priceRange?.min || null,
             maxPrice: filters?.priceRange?.max || null,
             sortBy: sortBy,
             search: filters?.search || "",
+            discount: filters?.discount || false,
             page: nextPage,
             limit: productsPerPage,
           }),
@@ -103,14 +106,7 @@ function ProductGrid({ filters }) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {Array.from({ length: 12 }).map((_, i) => (
-            <ProductSkeleton
-              key={i}
-              contentSpaces={2}
-              desktopImageHeight={224}
-              mobileImageHeight={160}
-              imageDivPadding={4}
-              imageRounded="12px"
-            />
+            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={56} />
           ))}
         </div>
       </div>

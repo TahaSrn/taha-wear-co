@@ -72,7 +72,7 @@ function DiscountProducts() {
       <section className="px-4 max-w-7xl mx-auto">
         <div className="bg-stone-800 rounded-3xl p-4 md:p-8">
           <div className="flex items-center gap-3 mb-4 md:mb-6">
-            <div className="w-8 h-8 rounded-full bg-amber-500/20 animate-pulse" />
+            <div className="w-8 h-8 rounded-full bg-red-500/20 animate-pulse" />
             <div className="h-6 w-48 bg-stone-600 rounded animate-pulse" />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
@@ -80,7 +80,7 @@ function DiscountProducts() {
               <ProductSkeleton
                 key={i}
                 contentSpaces={2}
-                desktopImageHeight={56}
+                desktopImageHeight={"200px"}
                 mobileImageHeight={28}
                 imageDivPadding={1}
                 imageRounded="xl"
@@ -100,7 +100,7 @@ function DiscountProducts() {
     <section className="px-4 max-w-7xl mx-auto">
       <div className="relative bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl p-4 md:p-8 shadow-xl shadow-stone-900/20 overflow-hidden">
         <svg
-          className="absolute -top-4 -left-4 w-40 h-40 text-amber-400/[0.07] pointer-events-none"
+          className="absolute -top-4 -left-4 w-40 h-40 text-red-400/[0.07] pointer-events-none"
           viewBox="0 0 40 40"
         >
           <defs>
@@ -135,14 +135,14 @@ function DiscountProducts() {
           <div className="flex items-center gap-2 md:gap-3">
             <div className="relative w-10 h-10 md:w-12 md:h-12 shrink-0">
               <div
-                className="absolute inset-0 bg-amber-400/20"
+                className="absolute inset-0 bg-red-500/20"
                 style={{ clipPath: octagonClip }}
               />
               <div
-                className="absolute inset-[3px] bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30"
+                className="absolute inset-[3px] bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-600/30"
                 style={{ clipPath: octagonClip }}
               >
-                <HiOutlineFire className="text-stone-900 text-base md:text-lg" />
+                <HiOutlineFire className="text-white text-base md:text-lg" />
               </div>
             </div>
             <div>
@@ -154,9 +154,10 @@ function DiscountProducts() {
               </p>
             </div>
           </div>
+
           <Link
-            to="/shop"
-            className="hidden sm:flex items-center gap-1 text-amber-400 hover:text-amber-300 font-sansMed text-sm transition-colors"
+            to="/shop?discount=true"
+            className="hidden sm:flex items-center gap-1 text-red-400 hover:text-red-300 font-sansMed text-sm transition-colors"
           >
             مشاهده همه
             <HiOutlineChevronLeft className="text-lg" />
@@ -166,7 +167,7 @@ function DiscountProducts() {
         <div className="relative">
           <button
             onClick={scrollLeft}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-stone-950/50 hover:bg-stone-950/70 backdrop-blur-sm border border-amber-400/20 hover:border-amber-400/40 text-amber-300 transition-all duration-300 hover:scale-105 ${
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-stone-950/50 hover:bg-stone-950/70 backdrop-blur-sm border border-red-400/20 hover:border-red-400/40 text-red-300 transition-all duration-300 hover:scale-105 ${
               showLeftArrow
                 ? "opacity-100 pointer-events-auto"
                 : "opacity-0 pointer-events-none"
@@ -177,7 +178,7 @@ function DiscountProducts() {
 
           <button
             onClick={scrollRight}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-stone-950/50 hover:bg-stone-950/70 backdrop-blur-sm border border-amber-400/20 hover:border-amber-400/40 text-amber-300 transition-all duration-300 hover:scale-105 ${
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-stone-950/50 hover:bg-stone-950/70 backdrop-blur-sm border border-red-400/20 hover:border-red-400/40 text-red-300 transition-all duration-300 hover:scale-105 ${
               showRightArrow
                 ? "opacity-100 pointer-events-auto"
                 : "opacity-0 pointer-events-none"
@@ -203,8 +204,8 @@ function DiscountProducts() {
         </div>
 
         <Link
-          to="/shop"
-          className="relative sm:hidden flex items-center justify-center gap-1 mt-4 text-amber-400 hover:text-amber-300 font-sansMed text-sm transition-colors border-t border-stone-700 pt-3"
+          to="/shop?discount=true"
+          className="relative sm:hidden flex items-center justify-center gap-1 mt-4 text-red-400 hover:text-red-300 font-sansMed text-sm transition-colors border-t border-stone-700 pt-3"
         >
           مشاهده همه محصولات تخفیف‌دار
           <HiOutlineChevronLeft className="text-lg" />

@@ -5,11 +5,12 @@ import { getProducts } from "../../services/apiProducts";
 export default function useGetProducts({
   categoryIds,
   colors,
-  collections, // اضافه شد
+  collections,
   minPrice,
   maxPrice,
   sortBy,
   search,
+  discount,
   page = 1,
   limit = 12,
 } = {}) {
@@ -22,11 +23,12 @@ export default function useGetProducts({
       "products",
       categoryIds,
       colors,
-      collections, // اضافه شد
+      collections,
       minPrice,
       maxPrice,
       sortBy,
       search,
+      discount,
       page,
       limit,
     ],
@@ -34,11 +36,12 @@ export default function useGetProducts({
       getProducts({
         categoryIds,
         colors,
-        collections, // اضافه شد
+        collections,
         minPrice,
         maxPrice,
         sortBy,
         search,
+        discount,
         page,
         limit,
       }),

@@ -16,22 +16,24 @@ function Shop() {
     collections: [],
     priceRange: { min: null, max: null },
     search: "",
+    discount: false,
   });
   const mainRef = useRef(null);
 
-  const categoryId = searchParams.get("category");
-  const collectionId = searchParams.get("collection");
-  const searchQuery = searchParams.get("search") || "";
-
   useEffect(() => {
-    const search = searchParams.get("search");
+    const categoryIds = searchParams.getAll("category");
+    const collectionIds = searchParams.getAll("collection");
+    const searchQuery = searchParams.get("search") || "";
+    const discountParam = searchParams.get("discount") === "true";
 
-    setFilters((prev) => ({
-      ...prev,
-      categories: categoryId ? [Number(categoryId)] : [],
-      collections: collectionId ? [Number(collectionId)] : [],
-      search: search || "",
-    }));
+    setFilters({
+      categories: categoryIds.length > 0 ? categoryIds.map(Number) : [],
+      colors: [],
+      collections: collectionIds.length > 0 ? collectionIds.map(Number) : [],
+      priceRange: { min: null, max: null },
+      search: searchQuery,
+      discount: discountParam,
+    });
   }, [searchParams]);
 
   useEffect(() => {
@@ -44,20 +46,29 @@ function Shop() {
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
 
-    const params = {};
-    if (newFilters.categories.length > 0) {
-      params.category = newFilters.categories[0];
+    const params = new URLSearchParams();
+
+    if (newFilters.categories && newFilters.categories.length > 0) {
+      newFilters.categories.forEach((catId) => {
+        params.append("category", catId);
+      });
     }
-    if (newFilters.collections.length > 0) {
-      params.collection = newFilters.collections[0];
+    if (newFilters.collections && newFilters.collections.length > 0) {
+      newFilters.collections.forEach((colId) => {
+        params.append("collection", colId);
+      });
     }
     if (newFilters.search) {
-      params.search = newFilters.search;
+      params.set("search", newFilters.search);
     }
+    if (newFilters.discount) {
+      params.set("discount", "true");
+    }
+
     setSearchParams(params, { replace: true });
   };
 
-  const isOpenFromCategory = !!categoryId;
+  const isOpenFromCategory = !!searchParams.get("category");
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -71,7 +82,7 @@ function Shop() {
                 onFilterChange={handleFilterChange}
                 initialFilters={filters}
                 isOpenFromCategory={isOpenFromCategory}
-                searchQuery={searchQuery}
+                searchQuery={searchParams.get("search") || ""}
               />
             </aside>
 

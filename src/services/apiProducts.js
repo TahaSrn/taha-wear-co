@@ -17,11 +17,12 @@ const sortProductImages = (images) => {
 export async function getProducts({
   categoryIds,
   colors,
-  collections, // اضافه شد
+  collections,
   minPrice,
   maxPrice,
   sortBy,
   search,
+  discount,
   page = 1,
   limit = 12,
 } = {}) {
@@ -39,6 +40,11 @@ export async function getProducts({
     `,
     { count: "exact" },
   );
+
+  // فیلتر تخفیف - این باید اول اعمال بشه
+  if (discount) {
+    query = query.gt("discount", 0);
+  }
 
   if (search && search.trim()) {
     query = query.ilike("name", `%${search.trim()}%`);
@@ -70,7 +76,6 @@ export async function getProducts({
     query = query.in("id", productIds);
   }
 
-  // کالکشن (جدید)
   if (collections && collections.length > 0) {
     const { data: collectionProducts } = await supabase
       .from("collection_products")
