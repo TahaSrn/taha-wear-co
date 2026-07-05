@@ -1,21 +1,17 @@
+// src/features/products/useGetNewestProducts.js
 import { useQuery } from "@tanstack/react-query";
 import { getNewestProducts } from "../../services/apiProducts";
 
 export default function useGetNewestProducts() {
   const {
-    data: newestProducts,
+    data: newestProducts = [],
     isLoading,
     error,
   } = useQuery({
     queryKey: ["newestProducts"],
     queryFn: getNewestProducts,
+    staleTime: 1000 * 60 * 5,
   });
 
-  if (error) throw new Error(error.message);
-
-  return {
-    newestProducts,
-    isLoading,
-    error,
-  };
+  return { newestProducts, isLoading, error };
 }

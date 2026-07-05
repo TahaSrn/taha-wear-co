@@ -1,3 +1,4 @@
+// src/features/products/NewestProduct.jsx
 import { useState } from "react";
 import { Link } from "react-router";
 import { HiOutlineCube, HiOutlineTag } from "react-icons/hi";
@@ -24,6 +25,12 @@ function NewestProduct({ product }) {
     نارنجی: "bg-[#D4896B]",
   };
 
+  const discount = product.discount || 0;
+  const hasDiscount = discount > 0;
+  const discountedPrice = hasDiscount
+    ? product.price * (1 - discount / 100)
+    : product.price;
+
   const handleAddToCart = () => {
     if (colors.length > 1 && !selectedColor) {
       setShowColorPicker(true);
@@ -36,7 +43,7 @@ function NewestProduct({ product }) {
       addItem({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: discountedPrice,
         image: product.productImages[0]?.image || "",
         colorId: colorToUse?.id || null,
         colorName: colorToUse?.name || null,
@@ -53,7 +60,7 @@ function NewestProduct({ product }) {
       addItem({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: discountedPrice,
         image: product.productImages[0]?.image || "",
         colorId: color.id,
         colorName: color.name,
@@ -78,6 +85,13 @@ function NewestProduct({ product }) {
           alt={product.name}
           className="w-full h-36 md:h-65 object-cover rounded-xl p-1 md:p-1.5"
         />
+
+        {/* برچسب تخفیف */}
+        {hasDiscount && (
+          <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-red-500 text-white text-[10px] md:text-xs font-sansBold px-2 py-0.5 md:px-2.5 md:py-1 rounded-full shadow-md">
+            {discount}٪
+          </div>
+        )}
 
         {colors.length > 0 && (
           <div className="absolute top-2 right-2 md:top-3 md:right-3 flex flex-col gap-1">
@@ -104,13 +118,19 @@ function NewestProduct({ product }) {
           </span>
         </div>
 
-        {/* قیمت */}
-        <div className="flex items-center gap-1 text-[11px] md:text-base">
+        {/* قیمت با تخفیف */}
+        <div className="flex items-center gap-1 text-[11px] md:text-base min-w-0">
           <HiOutlineTag className="shrink-0 text-xs md:text-base" />
 
-          <span className="truncate">
-            {formatCurrency(product.price)} تومان
+          <span className="font-sansBold whitespace-nowrap">
+            {formatCurrency(discountedPrice)} تومان
           </span>
+
+          {hasDiscount && (
+            <span className="text-stone-400 text-[10px] md:text-sm line-through mr-1 whitespace-nowrap">
+              {formatCurrency(product.price)} تومان
+            </span>
+          )}
         </div>
 
         {showColorPicker && colors.length > 1 && (

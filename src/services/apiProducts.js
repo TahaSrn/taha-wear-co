@@ -118,6 +118,7 @@ export async function getProducts({
   return { products: products || [], count: count || 0 };
 }
 
+// src/services/apiProducts.js
 export async function getNewestProducts() {
   const categories = [1, 2, 3, 4, 5, 6];
 
@@ -139,6 +140,7 @@ export async function getNewestProducts() {
     `,
         )
         .eq("categoryId", category)
+        .eq("discount", 0) // فقط محصولاتی که تخفیف ندارن
         .order("created_at", { ascending: false })
         .limit(4);
 
@@ -207,6 +209,43 @@ export async function getProduct(productId) {
 
   if (data && data.productImages) {
     data.productImages = sortProductImages(data.productImages);
+  }
+
+  return data;
+}
+
+// src/services/apiProducts.js
+export async function getDiscountedProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      `
+      *,
+      productImages (*),
+      product_colors (
+        color_id,
+        colors (
+          id,
+          name
+        )
+      )
+    `,
+    )
+    .gt("discount", 0)
+    .order("discount", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Error fetching discounted products:", error);
+    throw new Error(error.message);
+  }
+
+  if (data) {
+    data.forEach((product) => {
+      if (product.productImages) {
+        product.productImages = sortProductImages(product.productImages);
+      }
+    });
   }
 
   return data;

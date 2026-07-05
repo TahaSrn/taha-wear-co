@@ -1,8 +1,13 @@
+// src/features/products/NewestProducts.jsx
 import { useRef, useState, useEffect } from "react";
 import useGetNewestProducts from "../products/useGetNewestProducts";
 import NewestProduct from "./NewestProduct";
 import ProductSkeleton from "./ProductSkeleton";
-import { HiOutlineChevronLeft, HiOutlineSparkles } from "react-icons/hi";
+import {
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+  HiOutlineSparkles,
+} from "react-icons/hi";
 import CategorySubject from "../categories/CategorySubject";
 
 function NewestProducts() {
@@ -10,7 +15,8 @@ function NewestProducts() {
 
   const scrollContainerRef = useRef(null);
 
-  const [showRightArrow, setShowRightArrow] = useState(true);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
 
   const checkScroll = () => {
     const container = scrollContainerRef.current;
@@ -19,7 +25,18 @@ function NewestProducts() {
 
     const maxScroll = container.scrollWidth - container.clientWidth;
 
-    setShowRightArrow(Math.abs(container.scrollLeft) < maxScroll - 20);
+    if (maxScroll <= 0) {
+      setShowLeftArrow(false);
+      setShowRightArrow(false);
+      return;
+    }
+
+    const currentScroll = Math.abs(container.scrollLeft);
+    const distanceFromStart = currentScroll;
+    const distanceFromEnd = maxScroll - currentScroll;
+
+    setShowLeftArrow(distanceFromEnd > 20);
+    setShowRightArrow(distanceFromStart > 20);
   };
 
   useEffect(() => {
@@ -27,11 +44,9 @@ function NewestProducts() {
 
     if (!container) return;
 
-    requestAnimationFrame(() => {
-      container.scrollLeft = 0;
-      setShowRightArrow(true);
-      checkScroll();
-    });
+    // اسکرول به ابتدا (سمت راست در RTL)
+    container.scrollLeft = 0;
+    checkScroll();
 
     container.addEventListener("scroll", checkScroll);
     window.addEventListener("resize", checkScroll);
@@ -49,6 +64,13 @@ function NewestProducts() {
     });
   };
 
+  const scrollRight = () => {
+    scrollContainerRef.current?.scrollBy({
+      left: 300,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="px-4 max-w-7xl mx-auto">
       <div className="bg-stone-700 rounded-2xl p-3 md:p-8 relative overflow-hidden">
@@ -59,20 +81,28 @@ function NewestProducts() {
         />
 
         <div className="relative mt-3 md:mt-5">
-          <div className="absolute left-0 top-0 h-full w-12 md:w-16 bg-gradient-to-r from-stone-700 via-stone-700/80 to-transparent pointer-events-none z-10" />
-
+          {/* دکمه چپ */}
           <button
             onClick={scrollLeft}
             className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 shadow-xl transition-all duration-200 cursor-pointer ${
-              showRightArrow ? "opacity-100" : "opacity-0 pointer-events-none"
+              showLeftArrow ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
             <HiOutlineChevronLeft className="text-white text-xl md:text-2xl" />
           </button>
 
+          {/* دکمه راست */}
+          <button
+            onClick={scrollRight}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 shadow-xl transition-all duration-200 cursor-pointer ${
+              showRightArrow ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+          >
+            <HiOutlineChevronRight className="text-white text-xl md:text-2xl" />
+          </button>
+
           <div
             ref={scrollContainerRef}
-            dir="rtl"
             className="flex overflow-x-auto gap-1 md:gap-4 scrollbar-hide snap-x snap-mandatory pb-2"
             style={{ scrollBehavior: "smooth" }}
           >

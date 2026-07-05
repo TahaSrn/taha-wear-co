@@ -5,6 +5,7 @@ import Categories from "../features/categories/Categories";
 import { HiOutlineFolderOpen } from "react-icons/hi";
 import CategorySubject from "../features/categories/CategorySubject";
 import NewestProducts from "../features/products/NewestProducts";
+import DiscountProducts from "../features/products/DiscountProducts";
 import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 import Banner from "../ui/Banner";
 import Banners from "./Banners";
@@ -45,6 +46,10 @@ function Main() {
       </div>
 
       <Banners />
+
+      <div className="py-8 md:py-12">
+        <DiscountProducts />
+      </div>
 
       <div ref={categoriesRef} id="categories-section" className="pt-8">
         <CategorySubject icon={HiOutlineFolderOpen} title="دسته بندی محصولات" />
