@@ -44,7 +44,6 @@ function NewestProducts() {
 
     if (!container) return;
 
-    // اسکرول به ابتدا (سمت راست در RTL)
     container.scrollLeft = 0;
     checkScroll();
 
@@ -81,7 +80,6 @@ function NewestProducts() {
         />
 
         <div className="relative mt-3 md:mt-5">
-          {/* دکمه چپ */}
           <button
             onClick={scrollLeft}
             className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 shadow-xl transition-all duration-200 cursor-pointer ${
@@ -91,7 +89,6 @@ function NewestProducts() {
             <HiOutlineChevronLeft className="text-white text-xl md:text-2xl" />
           </button>
 
-          {/* دکمه راست */}
           <button
             onClick={scrollRight}
             className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 shadow-xl transition-all duration-200 cursor-pointer ${
@@ -110,7 +107,7 @@ function NewestProducts() {
               (item, index) => (
                 <div
                   key={isLoading ? index : item.id}
-                  className="flex-none w-[31.5%] md:w-[19%] snap-start"
+                  className="flex-none w-[36%] md:w-[22%] snap-start"
                 >
                   {isLoading ? (
                     <ProductSkeleton

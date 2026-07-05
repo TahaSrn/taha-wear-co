@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 
 function NewestProduct({ product }) {
   const dispatch = useDispatch();
-  const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
 
   const colors = product.product_colors?.map((pc) => pc.colors) || [];
@@ -32,11 +31,6 @@ function NewestProduct({ product }) {
     : product.price;
 
   const handleAddToCart = () => {
-    if (colors.length > 1 && !selectedColor) {
-      setShowColorPicker(true);
-      return;
-    }
-
     const colorToUse = selectedColor || colors[0];
 
     dispatch(
@@ -51,30 +45,10 @@ function NewestProduct({ product }) {
     );
 
     toast.success("محصول با موفقیت به سبد خرید اضافه شد");
-    setShowColorPicker(false);
-    setSelectedColor(null);
   };
 
   const handleColorSelect = (color) => {
-    dispatch(
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: discountedPrice,
-        image: product.productImages[0]?.image || "",
-        colorId: color.id,
-        colorName: color.name,
-      }),
-    );
-
-    toast.success("محصول با موفقیت به سبد خرید اضافه شد");
-    setShowColorPicker(false);
-    setSelectedColor(null);
-  };
-
-  const handleCancel = () => {
-    setShowColorPicker(false);
-    setSelectedColor(null);
+    setSelectedColor(color);
   };
 
   return (
@@ -83,10 +57,9 @@ function NewestProduct({ product }) {
         <img
           src={product.productImages[0]?.image}
           alt={product.name}
-          className="w-full h-36 md:h-65 object-cover rounded-xl p-1 md:p-1.5"
+          className="w-full h-44 md:h-72 object-cover rounded-xl p-1 md:p-1.5"
         />
 
-        {/* برچسب تخفیف */}
         {hasDiscount && (
           <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-red-500 text-white text-[10px] md:text-xs font-sansBold px-2 py-0.5 md:px-2.5 md:py-1 rounded-full shadow-md">
             {discount}٪
@@ -109,54 +82,24 @@ function NewestProduct({ product }) {
       </Link>
 
       <div className="flex flex-col flex-1 px-2 md:px-3 pt-2 pb-2 md:pb-3 gap-2 text-stone-800">
-        {/* نام محصول */}
-        <div className="flex items-center w-full text-[11px] md:text-base">
+        <div className="flex items-center w-full text-[12px] md:text-base">
           <HiOutlineCube className="shrink-0 text-xs md:text-base ml-1" />
-
           <span className="min-w-0 overflow-hidden whitespace-nowrap text-ellipsis">
             {product.name}
           </span>
         </div>
 
-        {/* قیمت با تخفیف */}
         <div className="flex items-center gap-1 text-[11px] md:text-base min-w-0">
           <HiOutlineTag className="shrink-0 text-xs md:text-base" />
-
           <span className="font-sansBold whitespace-nowrap">
             {formatCurrency(discountedPrice)} تومان
           </span>
-
           {hasDiscount && (
-            <span className="text-stone-400 text-[10px] md:text-sm line-through mr-1 whitespace-nowrap">
+            <span className="text-stone-400 text-[12px] font-bold md:text-sm line-through mr-1 whitespace-nowrap">
               {formatCurrency(product.price)} تومان
             </span>
           )}
         </div>
-
-        {showColorPicker && colors.length > 1 && (
-          <div className="flex flex-wrap gap-2 justify-center mt-2 p-2 bg-stone-50 rounded-lg border">
-            <span className="w-full text-center text-[10px] md:text-xs text-stone-600">
-              لطفاً یک رنگ انتخاب کنید
-            </span>
-
-            {colors.map((color) => (
-              <div
-                key={color.id}
-                onClick={() => handleColorSelect(color)}
-                className={`w-6 h-6 md:w-8 md:h-8 rounded-full ${
-                  colorClassMap[color.name] || "bg-gray-400"
-                } ring-2 ring-offset-2 cursor-pointer`}
-              />
-            ))}
-
-            <button
-              onClick={handleCancel}
-              className="w-full text-[10px] md:text-xs mt-1 text-stone-500 hover:text-stone-800"
-            >
-              انصراف
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
