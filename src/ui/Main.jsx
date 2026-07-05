@@ -9,6 +9,7 @@ import DiscountProducts from "../features/products/DiscountProducts";
 import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 import Banner from "../ui/Banner";
 import Banners from "./Banners";
+import News from "./News";
 
 function Main() {
   const categoriesRef = useRef(null);
@@ -57,6 +58,8 @@ function Main() {
       </div>
 
       <KnowledgeSection />
+
+      <News />
     </main>
   );
 }
