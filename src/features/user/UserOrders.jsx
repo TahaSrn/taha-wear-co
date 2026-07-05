@@ -110,16 +110,26 @@ function UserOrders({ orders }) {
                   key={item.id}
                   className="flex items-center justify-between text-sm"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-sansMed text-stone-700">
                       {item.products?.name || "محصول"}
                     </span>
+
+                    {/* نمایش رنگ */}
                     {item.colors?.name && (
                       <span className="text-xs font-sansMed text-stone-400">
                         رنگ: {item.colors.name}
                       </span>
                     )}
+
+                    {/* نمایش سایز - از فیلد size_name */}
+                    {item.size_name && (
+                      <span className="text-xs font-sansMed text-stone-400">
+                        سایز: {item.size_name}
+                      </span>
+                    )}
                   </div>
+
                   <div className="flex items-center gap-4">
                     <span className="text-stone-500">×{item.quantity}</span>
                     <span className="font-sansMed text-stone-700">

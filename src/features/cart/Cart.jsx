@@ -34,10 +34,7 @@ function Cart() {
 
   if (items.length === 0) return <EmptyCart />;
 
-  console.log(items);
-
   const handleCheckout = async () => {
-    // جلوگیری از کلیک چندباره
     if (isSubmitting) return;
 
     if (!user) {
@@ -54,8 +51,6 @@ function Cart() {
     setIsSubmitting(true);
 
     try {
-      const cartId = items[0]?.cartId;
-
       const order = await createOrder(user.id, items, totalPrice);
 
       toast.success("سفارش شما با موفقیت ثبت شد! ✅");
@@ -86,8 +81,11 @@ function Cart() {
             </div>
 
             <div className="mt-4 space-y-4 pb-10">
-              {items.map((item) => (
-                <CartItem key={item.id} item={item} />
+              {items.map((item, index) => (
+                <CartItem
+                  key={`${item.id}-${item.colorId}-${item.sizeId || "no-size"}-${index}`}
+                  item={item}
+                />
               ))}
             </div>
           </div>

@@ -18,6 +18,8 @@ export async function createOrder(userId, cartItems, totalPrice) {
     order_id: order.id,
     product_id: item.id,
     color_id: item.colorId || null,
+    size_id: item.sizeId || null,
+    size_name: item.sizeName || null,
     quantity: item.quantity,
     price: item.price,
   }));
@@ -41,6 +43,7 @@ export async function createOrder(userId, cartItems, totalPrice) {
 }
 
 export async function getUserOrders(userId) {
+  // بدون JOIN با sizes چون ممکنه RLS مشکل داشته باشه
   const { data, error } = await supabase
     .from("orders")
     .select(
@@ -56,6 +59,10 @@ export async function getUserOrders(userId) {
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Error fetching user orders:", error);
+    throw new Error(error.message);
+  }
+
   return data;
 }

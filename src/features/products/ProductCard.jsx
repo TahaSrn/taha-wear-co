@@ -1,20 +1,47 @@
 // src/features/shop/ProductCard.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { formatCurrency } from "../../utils/helpers";
 import { useDispatch } from "react-redux";
 import { addItem } from "../cart/cartSlice";
 import toast from "react-hot-toast";
+import { getProductSizes } from "../../services/apiProducts";
 
 function ProductCard({ product }) {
   const dispatch = useDispatch();
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showSizePicker, setShowSizePicker] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [productSizes, setProductSizes] = useState([]);
+  const [isLoadingSizes, setIsLoadingSizes] = useState(false);
 
   if (!product) return null;
 
   const productColors = product.product_colors?.map((pc) => pc.colors) || [];
+
+  // دریافت سایزهای محصول
+  useEffect(() => {
+    const fetchSizes = async () => {
+      if (product.id) {
+        setIsLoadingSizes(true);
+        try {
+          const sizes = await getProductSizes(product.id);
+          setProductSizes(sizes);
+          // اگر فقط یک سایز وجود داشت، به‌طور خودکار انتخابش کن
+          if (sizes.length === 1) {
+            setSelectedSize(sizes[0]);
+          }
+        } catch (error) {
+          console.error("Error fetching sizes:", error);
+        } finally {
+          setIsLoadingSizes(false);
+        }
+      }
+    };
+    fetchSizes();
+  }, [product.id]);
 
   const colorClassMap = {
     مشکی: "bg-[#2C2C2C]",
@@ -28,12 +55,24 @@ function ProductCard({ product }) {
   };
 
   const handleAddToCart = () => {
-    if (productColors.length > 1 && !selectedColor) {
+    const hasMultipleColors = productColors.length > 1;
+    const hasSizes = productSizes.length > 0;
+
+    // بررسی رنگ
+    if (hasMultipleColors && !selectedColor) {
       setShowColorPicker(true);
       return;
     }
 
-    const colorToUse = selectedColor || productColors[0];
+    // بررسی سایز
+    if (hasSizes && !selectedSize) {
+      setShowSizePicker(true);
+      return;
+    }
+
+    // اگر همه چیز انتخاب شده، اضافه کن
+    const colorToUse = selectedColor || productColors[0] || null;
+    const sizeToUse = selectedSize || null;
 
     dispatch(
       addItem({
@@ -46,17 +85,30 @@ function ProductCard({ product }) {
         image: product.productImages?.[0]?.image || "",
         colorId: colorToUse?.id || null,
         colorName: colorToUse?.name || null,
+        sizeId: sizeToUse?.id || null,
+        sizeName: sizeToUse?.name || null,
       }),
     );
 
     toast.success("به سبد خرید اضافه شد");
     setShowColorPicker(false);
+    setShowSizePicker(false);
     setSelectedColor(null);
+    setSelectedSize(null);
   };
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
+    setShowColorPicker(false);
 
+    // بعد از انتخاب رنگ، اگر سایز وجود داره و انتخاب نشده، پیکر سایز رو نمایش بده
+    if (productSizes.length > 0 && !selectedSize) {
+      setShowSizePicker(true);
+      return;
+    }
+
+    // اگر سایز هم انتخاب شده یا نیازی نیست، مستقیم اضافه کن
+    const sizeToUse = selectedSize || null;
     dispatch(
       addItem({
         id: product.id,
@@ -68,17 +120,53 @@ function ProductCard({ product }) {
         image: product.productImages?.[0]?.image || "",
         colorId: color.id,
         colorName: color.name,
+        sizeId: sizeToUse?.id || null,
+        sizeName: sizeToUse?.name || null,
       }),
     );
 
     toast.success("به سبد خرید اضافه شد");
     setShowColorPicker(false);
+    setShowSizePicker(false);
     setSelectedColor(null);
+    setSelectedSize(null);
+  };
+
+  const handleSizeSelect = (size) => {
+    setSelectedSize(size);
+    setShowSizePicker(false);
+
+    // اگر رنگ هم انتخاب شده یا فقط یک رنگ داره، مستقیم اضافه کن
+    const colorToUse = selectedColor || productColors[0] || null;
+
+    dispatch(
+      addItem({
+        id: product.id,
+        name: product.name,
+        price:
+          product.discount > 0
+            ? product.price * (1 - product.discount / 100)
+            : product.price,
+        image: product.productImages?.[0]?.image || "",
+        colorId: colorToUse?.id || null,
+        colorName: colorToUse?.name || null,
+        sizeId: size.id,
+        sizeName: size.name,
+      }),
+    );
+
+    toast.success("به سبد خرید اضافه شد");
+    setShowColorPicker(false);
+    setShowSizePicker(false);
+    setSelectedColor(null);
+    setSelectedSize(null);
   };
 
   const handleCancel = () => {
     setShowColorPicker(false);
+    setShowSizePicker(false);
     setSelectedColor(null);
+    setSelectedSize(null);
   };
 
   const imageUrl = product.productImages?.[0]?.image || "";
@@ -88,6 +176,9 @@ function ProductCard({ product }) {
   const discountedPrice = hasDiscount
     ? product.price * (1 - discount / 100)
     : product.price;
+
+  const hasMultipleColors = productColors.length > 1;
+  const hasSizes = productSizes.length > 0;
 
   return (
     <div className="group surface-card surface-card-hover rounded-xl overflow-hidden flex flex-col h-full">
@@ -149,30 +240,61 @@ function ProductCard({ product }) {
           )}
         </div>
 
-        {showColorPicker && productColors.length > 1 && (
-          <div className="flex flex-wrap gap-2 justify-center mt-3 p-3 bg-stone-50 rounded-lg border border-stone-200">
-            <span className="w-full text-center text-xs font-sansMed text-stone-600">
-              لطفاً یک رنگ انتخاب کنید:
-            </span>
+        {/* پیکر رنگ و سایز - با هم */}
+        {(showColorPicker || showSizePicker) && (
+          <div className="mt-3 p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-3">
+            {/* انتخاب رنگ */}
+            {showColorPicker && hasMultipleColors && (
+              <div>
+                <span className="block text-center text-xs font-sansMed text-stone-600 mb-2">
+                  لطفاً یک رنگ انتخاب کنید:
+                </span>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {productColors.map((color) => (
+                    <div
+                      key={color.id}
+                      onClick={() => handleColorSelect(color)}
+                      title={color.name}
+                      className={`w-8 h-8 rounded-full ${
+                        colorClassMap[color.name] || "bg-gray-400"
+                      } ring-2 ring-offset-2 cursor-pointer transition-all ${
+                        selectedColor?.id === color.id
+                          ? "ring-stone-800"
+                          : "ring-transparent hover:ring-stone-400"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
-            {productColors.map((color) => (
-              <div
-                key={color.id}
-                onClick={() => handleColorSelect(color)}
-                title={color.name}
-                className={`w-8 h-8 rounded-full ${
-                  colorClassMap[color.name] || "bg-gray-400"
-                } ring-2 ring-offset-2 cursor-pointer transition-all ${
-                  selectedColor?.id === color.id
-                    ? "ring-stone-800"
-                    : "ring-transparent hover:ring-stone-400"
-                }`}
-              />
-            ))}
+            {/* انتخاب سایز */}
+            {showSizePicker && hasSizes && (
+              <div>
+                <span className="block text-center text-xs font-sansMed text-stone-600 mb-2">
+                  لطفاً یک سایز انتخاب کنید:
+                </span>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {productSizes.map((size) => (
+                    <button
+                      key={size.id}
+                      onClick={() => handleSizeSelect(size)}
+                      className={`w-10 h-10 rounded-lg border-2 transition-all duration-200 font-sansMed text-sm ${
+                        selectedSize?.id === size.id
+                          ? "border-stone-800 bg-stone-800 text-white"
+                          : "border-stone-300 bg-white text-stone-700 hover:border-stone-500"
+                      }`}
+                    >
+                      {size.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <button
               onClick={handleCancel}
-              className="w-full mt-2 text-xs text-stone-500 font-sansMed hover:text-stone-800 transition-colors cursor-pointer"
+              className="w-full mt-1 text-xs text-stone-500 font-sansMed hover:text-stone-800 transition-colors cursor-pointer"
             >
               انصراف
             </button>

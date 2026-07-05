@@ -9,6 +9,7 @@ import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import useGetProduct from "../features/products/useGetProduct";
 import useGetProducts from "../features/products/useGetProducts";
+import useGetProductSizes from "../features/products/useGetProductSizes";
 import { formatCurrency } from "../utils/helpers";
 import {
   HiOutlineShoppingCart,
@@ -31,14 +32,17 @@ import {
 import toast from "react-hot-toast";
 import ProductCard from "../features/products/ProductCard";
 import CategorySubject from "../features/categories/CategorySubject";
+import SizeSelector from "../features/products/SizeSelector";
 
 function ProductDetails() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const { product, isLoading } = useGetProduct(productId);
+  const { sizes: productSizes } = useGetProductSizes(productId);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const dispatch = useDispatch();
@@ -48,12 +52,15 @@ function ProductDetails() {
 
   const cartItem = cartItems.find(
     (item) =>
-      item.id === Number(productId) && item.colorId === selectedColor?.id,
+      item.id === Number(productId) &&
+      item.colorId === selectedColor?.id &&
+      item.sizeId === selectedSize?.id,
   );
   const quantity = cartItem?.quantity || 0;
 
   const colors = product?.product_colors?.map((pc) => pc.colors) || [];
   const hasSingleColor = colors.length === 1;
+  const hasSizes = productSizes.length > 0;
 
   const images = product?.productImages?.map((img) => img.image) || [];
 
@@ -106,6 +113,13 @@ function ProductDetails() {
     }
   }, [hasSingleColor, colors]);
 
+  // اگر سایز وجود داشت و قبلاً سایزی انتخاب نشده، اولین سایز رو انتخاب کن
+  useEffect(() => {
+    if (hasSizes && productSizes.length > 0 && !selectedSize) {
+      setSelectedSize(productSizes[0]);
+    }
+  }, [hasSizes, productSizes, selectedSize]);
+
   const handleOpenLightbox = () => {
     setPhotoIndex(currentImageIndex);
     setIsLightboxOpen(true);
@@ -123,16 +137,33 @@ function ProductDetails() {
       return;
     }
 
+    if (hasSizes && !selectedSize) {
+      toast.error("لطفاً یک سایز را انتخاب کنید");
+      return;
+    }
+
     const colorId = selectedColor?.id || colors[0]?.id;
     const colorName = selectedColor?.name || colors[0]?.name;
+    const sizeId = selectedSize?.id || null;
+    const sizeName = selectedSize?.name || null;
 
     const existingItem = cartItems.find(
-      (item) => item.id === product.id && item.colorId === colorId,
+      (item) =>
+        item.id === product.id &&
+        item.colorId === colorId &&
+        item.sizeId === sizeId,
     );
 
     if (existingItem) {
-      dispatch(increaseQuantity({ id: product.id, colorId: colorId }));
-      toast.success(`یک عدد دیگر به ${product.name} (${colorName}) اضافه شد`);
+      dispatch(
+        increaseQuantity({
+          id: product.id,
+          colorId: colorId,
+          sizeId: sizeId,
+        }),
+      );
+      const sizeText = sizeName ? ` (${sizeName})` : "";
+      toast.success(`یک عدد دیگر به ${product.name}${sizeText} اضافه شد`);
     } else {
       dispatch(
         addItem({
@@ -142,33 +173,41 @@ function ProductDetails() {
           image: product.productImages?.[0]?.image || "",
           colorId: colorId,
           colorName: colorName,
+          sizeId: sizeId,
+          sizeName: sizeName,
         }),
       );
-      toast.success(`${product.name} (${colorName}) به سبد خرید اضافه شد`);
+      const sizeText = sizeName ? ` (${sizeName})` : "";
+      toast.success(`${product.name}${sizeText} به سبد خرید اضافه شد`);
     }
   };
 
   const handleRemoveFromCart = () => {
     if (!product) return;
     const colorId = selectedColor?.id || colors[0]?.id;
-    const colorName = selectedColor?.name || colors[0]?.name;
+    const sizeId = selectedSize?.id || null;
+    const sizeName = selectedSize?.name || null;
 
     dispatch(
       removeItem({
         id: product.id,
         colorId: colorId,
+        sizeId: sizeId,
       }),
     );
-    toast.success(`${product.name} (${colorName}) از سبد خرید حذف شد`);
+    const sizeText = sizeName ? ` (${sizeName})` : "";
+    toast.success(`${product.name}${sizeText} از سبد خرید حذف شد`);
   };
 
   const handleIncrease = () => {
     if (!product) return;
     const colorId = selectedColor?.id || colors[0]?.id;
+    const sizeId = selectedSize?.id || null;
     dispatch(
       increaseQuantity({
         id: product.id,
         colorId: colorId,
+        sizeId: sizeId,
       }),
     );
   };
@@ -176,25 +215,37 @@ function ProductDetails() {
   const handleDecrease = () => {
     if (!product) return;
     const colorId = selectedColor?.id || colors[0]?.id;
-    const colorName = selectedColor?.name || colors[0]?.name;
+    const sizeId = selectedSize?.id || null;
+    const sizeName = selectedSize?.name || null;
 
     if (quantity === 1) {
       dispatch(
         removeItem({
           id: product.id,
           colorId: colorId,
+          sizeId: sizeId,
         }),
       );
-      toast.success(`${product.name} (${colorName}) از سبد خرید حذف شد`);
+      const sizeText = sizeName ? ` (${sizeName})` : "";
+      toast.success(`${product.name}${sizeText} از سبد خرید حذف شد`);
     } else {
       dispatch(
         decreaseQuantity({
           id: product.id,
           colorId: colorId,
+          sizeId: sizeId,
         }),
       );
     }
   };
+
+  // بررسی اینکه آیا آیتم با رنگ و سایز فعلی در سبد خرید هست
+  const isInCart = cartItems.some(
+    (item) =>
+      item.id === Number(productId) &&
+      item.colorId === selectedColor?.id &&
+      item.sizeId === selectedSize?.id,
+  );
 
   if (isLoading) {
     return (
@@ -260,11 +311,6 @@ function ProductDetails() {
 
   const isFirstImage = currentImageIndex === 0;
   const isLastImage = currentImageIndex === sortedImages.length - 1;
-
-  const isInCart = cartItems.some(
-    (item) =>
-      item.id === Number(productId) && item.colorId === selectedColor?.id,
-  );
 
   const relatedFiltered = relatedProducts
     .filter((p) => p.id !== Number(productId))
@@ -366,6 +412,7 @@ function ProductDetails() {
               {product.name}
             </h1>
 
+            {/* رنگ‌های موجود */}
             {colors.length > 0 && (
               <div className="mt-6">
                 <span className="text-sm font-sansMed text-stone-600 block mb-2">
@@ -378,7 +425,9 @@ function ProductDetails() {
                       <div
                         key={color.id}
                         onClick={() => setSelectedColor(color)}
-                        className={`w-9 h-9 rounded-full ${colorClassMap[color.name] || "bg-gray-400"} ring-2 ring-offset-2 transition-all cursor-pointer ${
+                        className={`w-9 h-9 rounded-full ${
+                          colorClassMap[color.name] || "bg-gray-400"
+                        } ring-2 ring-offset-2 transition-all cursor-pointer ${
                           isSelected
                             ? "ring-stone-800"
                             : "ring-transparent hover:ring-stone-400"
@@ -390,7 +439,10 @@ function ProductDetails() {
                 </div>
                 {colors.map((color) => {
                   const item = cartItems.find(
-                    (i) => i.id === Number(productId) && i.colorId === color.id,
+                    (i) =>
+                      i.id === Number(productId) &&
+                      i.colorId === color.id &&
+                      i.sizeId === selectedSize?.id,
                   );
                   if (item) {
                     return (
@@ -406,6 +458,14 @@ function ProductDetails() {
                 })}
               </div>
             )}
+
+            {/* سایزهای موجود */}
+            <SizeSelector
+              productId={product.id}
+              selectedSize={selectedSize}
+              onSizeChange={setSelectedSize}
+            />
+
             {product.description && (
               <div className="mt-6">
                 <span className="text-sm font-sansMed text-stone-600 block mb-2">
@@ -448,7 +508,7 @@ function ProductDetails() {
                 </button>
               ) : (
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 bg-stone-100 rounded-xl p-1.5 ">
+                  <div className="flex items-center gap-2 bg-stone-100 rounded-xl p-1.5">
                     <button
                       onClick={handleIncrease}
                       className="w-10 h-10 bg-white hover:bg-stone-200 rounded-lg transition-all duration-200 flex items-center justify-center cursor-pointer shadow-sm"

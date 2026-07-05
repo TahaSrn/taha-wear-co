@@ -8,6 +8,36 @@ import { HiOutlineTrash, HiOutlinePlus, HiOutlineMinus } from "react-icons/hi";
 function CartItem({ item }) {
   const dispatch = useDispatch();
 
+  const handleRemove = () => {
+    dispatch(
+      removeItem({
+        id: item.id,
+        colorId: item.colorId,
+        sizeId: item.sizeId || null,
+      }),
+    );
+  };
+
+  const handleDecrease = () => {
+    dispatch(
+      decreaseQuantity({
+        id: item.id,
+        colorId: item.colorId,
+        sizeId: item.sizeId || null,
+      }),
+    );
+  };
+
+  const handleIncrease = () => {
+    dispatch(
+      increaseQuantity({
+        id: item.id,
+        colorId: item.colorId,
+        sizeId: item.sizeId || null,
+      }),
+    );
+  };
+
   return (
     <>
       {/* حالت موبایل - کارتی */}
@@ -31,14 +61,15 @@ function CartItem({ item }) {
                 رنگ: {item.colorName}
               </p>
             )}
+            {item.sizeName && (
+              <p className="text-xs text-stone-500">سایز: {item.sizeName}</p>
+            )}
             <p className="text-stone-600 text-sm mt-1">
               {formatCurrency(item.price)} تومان
             </p>
           </div>
           <button
-            onClick={() =>
-              dispatch(removeItem({ id: item.id, colorId: item.colorId }))
-            }
+            onClick={handleRemove}
             className="text-red-400 hover:text-red-600 transition-colors flex-shrink-0"
           >
             <HiOutlineTrash size={20} />
@@ -48,11 +79,7 @@ function CartItem({ item }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
-              onClick={() =>
-                dispatch(
-                  decreaseQuantity({ id: item.id, colorId: item.colorId }),
-                )
-              }
+              onClick={handleDecrease}
               className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
             >
               <HiOutlineMinus size={16} />
@@ -61,11 +88,7 @@ function CartItem({ item }) {
               {item.quantity}
             </span>
             <button
-              onClick={() =>
-                dispatch(
-                  increaseQuantity({ id: item.id, colorId: item.colorId }),
-                )
-              }
+              onClick={handleIncrease}
               className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
             >
               <HiOutlinePlus size={16} />
@@ -82,9 +105,7 @@ function CartItem({ item }) {
       {/* حالت تبلت و دسکتاپ - جدولی */}
       <div className="hidden md:grid grid-cols-12 gap-2 items-center py-3 lg:py-4 border-b-2 border-stone-200 font-sansBold w-full">
         <button
-          onClick={() =>
-            dispatch(removeItem({ id: item.id, colorId: item.colorId }))
-          }
+          onClick={handleRemove}
           className="col-span-1 text-red-400 hover:text-red-600 transition-colors cursor-pointer flex justify-center"
         >
           <HiOutlineTrash size={20} className="lg:size-[22px]" />
@@ -105,8 +126,13 @@ function CartItem({ item }) {
             </h3>
           </Link>
           {item.colorName && (
-            <span className="text-xs text-stone-500">
+            <span className="text-xs text-stone-500 block">
               رنگ: {item.colorName}
+            </span>
+          )}
+          {item.sizeName && (
+            <span className="text-xs text-stone-500 block">
+              سایز: {item.sizeName}
             </span>
           )}
         </div>
@@ -117,9 +143,7 @@ function CartItem({ item }) {
 
         <div className="col-span-2 flex items-center justify-center gap-1 lg:gap-2">
           <button
-            onClick={() =>
-              dispatch(decreaseQuantity({ id: item.id, colorId: item.colorId }))
-            }
+            onClick={handleDecrease}
             className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
             <HiOutlineMinus size={16} className="lg:size-4.5" />
@@ -130,9 +154,7 @@ function CartItem({ item }) {
           </span>
 
           <button
-            onClick={() =>
-              dispatch(increaseQuantity({ id: item.id, colorId: item.colorId }))
-            }
+            onClick={handleIncrease}
             className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
             <HiOutlinePlus size={16} className="lg:size-[18px]" />
