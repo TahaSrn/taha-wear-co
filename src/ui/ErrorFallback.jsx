@@ -1,4 +1,3 @@
-// src/ui/ErrorFallback.jsx
 import { useNavigate } from "react-router";
 import { HiOutlineExclamationCircle, HiOutlineHome } from "react-icons/hi";
 
