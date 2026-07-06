@@ -12,6 +12,7 @@ function Banners() {
           <img
             src="/banner1.jpg"
             alt="بنر زمستان"
+            loading="lazy"
             className="w-full h-full object-cover"
           />
         </Link>
@@ -22,6 +23,7 @@ function Banners() {
         >
           <img
             src="/banner2.jpg"
+            loading="lazy"
             alt="بنر پاییز"
             className="w-full h-full object-cover object-[10%_center]"
           />
