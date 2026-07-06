@@ -1,46 +1,47 @@
-import { GoogleGenAI } from "@google/genai";
-
 export default async function handler(req, res) {
-  console.log("API KEY:", process.env.GEMINI_API_KEY);
   if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed",
-    });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const { message } = req.body;
 
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    });
-
-    const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
             {
-              text: `
-تو یک دستیار فروشگاه لباس هستی.
+              parts: [
+                {
+                  text: `
+تو دستیار فروشگاه لباس هستی.
 فقط فارسی جواب بده.
-مختصر، دوستانه و کاربردی باش.
+مختصر و دوستانه باش.
 
-کاربر گفته:
+پیام کاربر:
 ${message}
-              `,
+                  `,
+                },
+              ],
             },
           ],
-        },
-      ],
-    });
+        }),
+      },
+    );
 
-    return res.status(200).json({
-      reply: response.text,
-    });
-  } catch (error) {
-    console.error(error);
+    const data = await response.json();
+
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد";
+
+    return res.status(200).json({ reply });
+  } catch (err) {
+    console.error(err);
 
     return res.status(500).json({
       error: "Gemini request failed",
