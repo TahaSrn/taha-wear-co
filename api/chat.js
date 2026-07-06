@@ -13,51 +13,72 @@ export default async function handler(req, res) {
   try {
     const { message } = req.body;
 
-    if (!message) {
-      return res.status(400).json({ error: "Message is required" });
+    const text = message.toLowerCase();
+
+    // 🧠 1. تشخیص قیمت (مثلاً: 3 میلیون)
+    let maxPrice = null;
+    const priceMatch = text.match(/(\d+)\s*میلیون/);
+    if (priceMatch) {
+      maxPrice = Number(priceMatch[1]) * 1000000;
     }
 
-    const text = message.toLowerCase().trim();
+    // 🧠 2. تشخیص رنگ
+    let color = null;
 
-    // 🔥 مهم: فقط اولین کلمه واقعی (برای اینکه همیشه نتیجه بده)
-    const words = text.split(" ");
-    const keyword = words[0];
+    if (text.includes("مشکی")) color = "مشکی";
+    if (text.includes("سفید")) color = "سفید";
+    if (text.includes("آبی")) color = "آبی";
+    if (text.includes("قهوه")) color = "قهوه‌ای";
 
-    console.log("KEYWORD:", keyword);
+    // 🧠 3. تشخیص نوع محصول
+    let keyword = null;
 
-    // 🧠 جستجو در اسم و توضیحات
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
-      .limit(10);
+    if (text.includes("کت")) keyword = "کت";
+    else if (text.includes("شلوار")) keyword = "شلوار";
+    else if (text.includes("دورس")) keyword = "دورس";
+    else if (text.includes("تی شرت") || text.includes("تیشرت")) keyword = "تی";
+
+    // 🧠 4. ساخت query
+    let query = supabase.from("products").select("*");
+
+    if (keyword) {
+      query = query.ilike("name", `%${keyword}%`);
+    }
+
+    if (maxPrice) {
+      query = query.lte("price", maxPrice);
+    }
+
+    const { data, error } = await query.limit(20);
 
     if (error) {
-      console.log("DB ERROR:", error);
-      return res.status(500).json({ error: "Database error" });
+      return res.status(500).json({ error: "DB error" });
     }
 
-    // ❌ هیچ نتیجه‌ای نبود
-    if (!data || data.length === 0) {
-      return res.status(200).json({
+    // 🧠 5. فیلتر رنگ در JS (چون دیتابیس نداریش)
+    let filtered = data;
+
+    if (color) {
+      filtered = filtered.filter(
+        (p) => p.name.includes(color) || p.description.includes(color),
+      );
+    }
+
+    // ❌ نتیجه خالی
+    if (!filtered.length) {
+      return res.json({
         reply: "چیزی پیدا نکردم 😕",
         products: [],
       });
     }
 
-    // 🟢 ساخت پاسخ ساده و مطمئن
-    const reply =
-      "این محصولات رو پیدا کردم 👇\n\n" +
-      data
-        .map((p) => `👕 ${p.name} - ${Number(p.price).toLocaleString()} تومان`)
-        .join("\n");
-
-    return res.status(200).json({
-      reply,
-      products: data,
+    // 🟢 پاسخ
+    return res.json({
+      reply: "این گزینه‌ها رو پیدا کردم 👇",
+      products: filtered,
     });
   } catch (err) {
-    console.log("SERVER ERROR:", err);
+    console.log(err);
     return res.status(500).json({ error: "Server error" });
   }
 }
