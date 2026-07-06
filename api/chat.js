@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
+  console.log("API KEY:", process.env.GEMINI_API_KEY);
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed",
