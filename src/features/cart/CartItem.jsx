@@ -1,4 +1,3 @@
-// src/features/cart/CartItem.jsx
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { removeItem, increaseQuantity, decreaseQuantity } from "./cartSlice";
@@ -40,10 +39,9 @@ function CartItem({ item }) {
 
   return (
     <>
-      {/* حالت موبایل - کارتی */}
       <div className="md:hidden bg-white rounded-xl p-4 shadow-md border border-stone-100 space-y-3">
         <div className="flex items-start gap-3">
-          <Link to={`/product/${item.id}`} className="flex-shrink-0">
+          <Link to={`/product/${item.id}`} className="shrink-0">
             <img
               src={item.image}
               alt={item.name}
@@ -70,7 +68,7 @@ function CartItem({ item }) {
           </div>
           <button
             onClick={handleRemove}
-            className="text-red-400 hover:text-red-600 transition-colors flex-shrink-0"
+            className="text-red-400 hover:text-red-600 transition-colors shrink-0"
           >
             <HiOutlineTrash size={20} />
           </button>
@@ -102,13 +100,12 @@ function CartItem({ item }) {
         </div>
       </div>
 
-      {/* حالت تبلت و دسکتاپ - جدولی */}
       <div className="hidden md:grid grid-cols-12 gap-2 items-center py-3 lg:py-4 border-b-2 border-stone-200 font-sansBold w-full">
         <button
           onClick={handleRemove}
           className="col-span-1 text-red-400 hover:text-red-600 transition-colors cursor-pointer flex justify-center"
         >
-          <HiOutlineTrash size={20} className="lg:size-[22px]" />
+          <HiOutlineTrash size={20} className="lg:size-5.5" />
         </button>
 
         <Link to={`/product/${item.id}`} className="col-span-2">
@@ -157,7 +154,7 @@ function CartItem({ item }) {
             onClick={handleIncrease}
             className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
           >
-            <HiOutlinePlus size={16} className="lg:size-[18px]" />
+            <HiOutlinePlus size={16} className="lg:size-4.5" />
           </button>
         </div>
 

@@ -1,4 +1,3 @@
-// src/features/categories/Categories.jsx
 import Category from "./Category";
 import useGetCategories from "./useGetCategories";
 import Spinner from "../../ui/Spinner";

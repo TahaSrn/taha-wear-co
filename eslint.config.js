@@ -1,3 +1,4 @@
+// eslint.config.js
 import js from "@eslint/js";
 import globals from "globals";
 import react from "eslint-plugin-react";
@@ -25,7 +26,6 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
-      "react/prop-types": "off",
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
@@ -34,6 +34,8 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      // غیرفعال کردن react/prop-types به صورت سراسری
+      "react/prop-types": "off",
     },
   },
 ];

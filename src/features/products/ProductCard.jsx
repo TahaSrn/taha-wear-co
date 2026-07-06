@@ -1,4 +1,3 @@
-// src/features/shop/ProductCard.jsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -21,7 +20,6 @@ function ProductCard({ product }) {
 
   const productColors = product.product_colors?.map((pc) => pc.colors) || [];
 
-  // دریافت سایزهای محصول
   useEffect(() => {
     const fetchSizes = async () => {
       if (product.id) {
@@ -29,7 +27,6 @@ function ProductCard({ product }) {
         try {
           const sizes = await getProductSizes(product.id);
           setProductSizes(sizes);
-          // اگر فقط یک سایز وجود داشت، به‌طور خودکار انتخابش کن
           if (sizes.length === 1) {
             setSelectedSize(sizes[0]);
           }
@@ -58,19 +55,16 @@ function ProductCard({ product }) {
     const hasMultipleColors = productColors.length > 1;
     const hasSizes = productSizes.length > 0;
 
-    // بررسی رنگ
     if (hasMultipleColors && !selectedColor) {
       setShowColorPicker(true);
       return;
     }
 
-    // بررسی سایز
     if (hasSizes && !selectedSize) {
       setShowSizePicker(true);
       return;
     }
 
-    // اگر همه چیز انتخاب شده، اضافه کن
     const colorToUse = selectedColor || productColors[0] || null;
     const sizeToUse = selectedSize || null;
 
@@ -101,13 +95,11 @@ function ProductCard({ product }) {
     setSelectedColor(color);
     setShowColorPicker(false);
 
-    // بعد از انتخاب رنگ، اگر سایز وجود داره و انتخاب نشده، پیکر سایز رو نمایش بده
     if (productSizes.length > 0 && !selectedSize) {
       setShowSizePicker(true);
       return;
     }
 
-    // اگر سایز هم انتخاب شده یا نیازی نیست، مستقیم اضافه کن
     const sizeToUse = selectedSize || null;
     dispatch(
       addItem({
@@ -136,7 +128,6 @@ function ProductCard({ product }) {
     setSelectedSize(size);
     setShowSizePicker(false);
 
-    // اگر رنگ هم انتخاب شده یا فقط یک رنگ داره، مستقیم اضافه کن
     const colorToUse = selectedColor || productColors[0] || null;
 
     dispatch(
@@ -184,7 +175,7 @@ function ProductCard({ product }) {
     <div className="group surface-card surface-card-hover rounded-xl overflow-hidden flex flex-col h-full">
       <Link
         to={`/product/${product.id}`}
-        className="block relative overflow-hidden flex-shrink-0"
+        className="block relative overflow-hidden shrink-0"
       >
         {imageUrl ? (
           <img
@@ -226,7 +217,7 @@ function ProductCard({ product }) {
           </h3>
         </Link>
 
-        <div className="min-h-[48px] flex flex-col justify-center">
+        <div className="min-h-12 flex flex-col justify-center">
           <p className="font-sansBold text-stone-800 text-base">
             {formatCurrency(discountedPrice)} تومان
           </p>
@@ -240,10 +231,8 @@ function ProductCard({ product }) {
           )}
         </div>
 
-        {/* پیکر رنگ و سایز - با هم */}
         {(showColorPicker || showSizePicker) && (
           <div className="mt-3 p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-3">
-            {/* انتخاب رنگ */}
             {showColorPicker && hasMultipleColors && (
               <div>
                 <span className="block text-center text-xs font-sansMed text-stone-600 mb-2">
@@ -268,7 +257,6 @@ function ProductCard({ product }) {
               </div>
             )}
 
-            {/* انتخاب سایز */}
             {showSizePicker && hasSizes && (
               <div>
                 <span className="block text-center text-xs font-sansMed text-stone-600 mb-2">

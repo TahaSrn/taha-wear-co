@@ -1,4 +1,3 @@
-// src/features/cart/Cart.jsx
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -9,7 +8,6 @@ import { formatCurrency } from "../../utils/helpers";
 import Footer from "../../ui/Footer";
 import { useAuth } from "../authentication/useAuth";
 import { useProfile } from "../user/useProfile";
-import { createOrder } from "../../services/apiOrders";
 import toast from "react-hot-toast";
 import { clearCart } from "./cartSlice";
 import MobileTabs from "../../ui/MobileTabs";
@@ -18,7 +16,7 @@ function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { profile, isLoading: profileLoading } = useProfile(user?.id);
+  const { profile } = useProfile(user?.id);
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
   );
@@ -51,8 +49,6 @@ function Cart() {
     setIsSubmitting(true);
 
     try {
-      const order = await createOrder(user.id, items, totalPrice);
-
       toast.success("سفارش شما با موفقیت ثبت شد!");
 
       dispatch(clearCart());

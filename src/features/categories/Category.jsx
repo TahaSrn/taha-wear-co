@@ -1,4 +1,3 @@
-// src/features/categories/Category.jsx
 import { Link } from "react-router";
 import { HiChevronLeft } from "react-icons/hi";
 

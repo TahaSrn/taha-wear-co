@@ -1,4 +1,3 @@
-// src/features/categories/CategoriesSelect.jsx
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useNavigate, useLocation } from "react-router";
 import useGetCategories from "./useGetCategories";
@@ -47,7 +46,7 @@ function CategoriesSelect() {
           <div
             className="
             
-          h-[46px]
+          h-11.5
           px-4
           rounded-full
           flex

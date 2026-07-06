@@ -1,4 +1,3 @@
-// src/features/products/DiscountProducts.jsx
 import { useEffect, useRef, useState } from "react";
 import {
   HiOutlineChevronLeft,
@@ -13,61 +12,6 @@ import ProductSkeleton from "./ProductSkeleton";
 
 const octagonClip =
   "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)";
-
-// الگوی گره بزرگ برای پس‌زمینه
-const largeGirihPattern = (
-  <svg
-    className="absolute inset-0 w-full h-full text-red-500/[0.04] pointer-events-none z-0"
-    viewBox="0 0 100 100"
-    preserveAspectRatio="xMidYMid slice"
-  >
-    <defs>
-      <pattern
-        id="large-girih-discount"
-        width="100"
-        height="100"
-        patternUnits="userSpaceOnUse"
-      >
-        {/* شش‌ضلعی بزرگ */}
-        <path
-          d="M50 5 L85 25 L85 75 L50 95 L15 75 L15 25 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.5"
-        />
-        {/* لوزی بزرگ */}
-        <path
-          d="M50 5 L95 50 L50 95 L5 50 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.5"
-        />
-        {/* شش‌ضلعی کوچک‌تر داخل */}
-        <path
-          d="M50 20 L70 33 L70 67 L50 80 L30 67 L30 33 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.4"
-        />
-        {/* الماس کوچک‌تر */}
-        <path
-          d="M50 20 L80 50 L50 80 L20 50 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.4"
-        />
-        {/* ستاره 8 پر */}
-        <path
-          d="M50 10 L55 45 L90 50 L55 55 L50 90 L45 55 L10 50 L45 45 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.4"
-        />
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#large-girih-discount)" />
-  </svg>
-);
 
 function DiscountProducts() {
   const { discountedProducts, isLoading } = useGetDiscountedProducts();
@@ -153,10 +97,9 @@ function DiscountProducts() {
 
   return (
     <section className="px-4 max-w-7xl mx-auto relative">
-      <div className="relative bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl p-4 md:p-8 shadow-xl shadow-stone-900/20 overflow-hidden">
-        {/* الگوی گره کوچک - بالا چپ */}
+      <div className="relative bg-linear-to-br from-stone-800 to-stone-900 rounded-3xl p-4 md:p-8 shadow-xl shadow-stone-900/20 overflow-hidden">
         <svg
-          className="absolute -top-4 -left-4 w-40 h-40 text-red-500/[0.1] pointer-events-none z-0"
+          className="absolute -top-4 -left-4 w-40 h-40 text-red-500/10 pointer-events-none z-0"
           viewBox="0 0 40 40"
         >
           <defs>
@@ -187,9 +130,8 @@ function DiscountProducts() {
           />
         </svg>
 
-        {/* الگوی گره بزرگ - کل پس‌زمینه زیر محصولات */}
         <svg
-          className="absolute inset-0 w-full h-full text-red-500/[0.05] pointer-events-none z-0"
+          className="absolute inset-0 w-full h-full text-red-500/5 pointer-events-none z-0"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid slice"
         >
@@ -200,35 +142,34 @@ function DiscountProducts() {
               height="100"
               patternUnits="userSpaceOnUse"
             >
-              {/* شش‌ضلعی بزرگ */}
               <path
                 d="M50 5 L85 25 L85 75 L50 95 L15 75 L15 25 Z"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="0.6"
               />
-              {/* لوزی بزرگ */}
+
               <path
                 d="M50 5 L95 50 L50 95 L5 50 Z"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="0.6"
               />
-              {/* شش‌ضلعی کوچک‌تر داخل */}
+
               <path
                 d="M50 20 L70 33 L70 67 L50 80 L30 67 L30 33 Z"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="0.4"
               />
-              {/* الماس کوچک‌تر */}
+
               <path
                 d="M50 20 L80 50 L50 80 L20 50 Z"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="0.4"
               />
-              {/* ستاره 8 پر */}
+
               <path
                 d="M50 10 L55 45 L90 50 L55 55 L50 90 L45 55 L10 50 L45 45 Z"
                 fill="none"
@@ -240,9 +181,8 @@ function DiscountProducts() {
           <rect width="100%" height="100%" fill="url(#large-girih-discount)" />
         </svg>
 
-        {/* الگوی گره بزرگ - پایین راست (تکراری برای پوشش بیشتر) */}
         <svg
-          className="absolute -bottom-10 -right-10 w-64 h-64 text-red-500/[0.06] pointer-events-none z-0"
+          className="absolute -bottom-10 -right-10 w-64 h-64 text-red-500/6 pointer-events-none z-0"
           viewBox="0 0 40 40"
         >
           <defs>
@@ -273,7 +213,6 @@ function DiscountProducts() {
           />
         </svg>
 
-        {/* محتوای اصلی با z-index بالاتر */}
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
@@ -283,7 +222,7 @@ function DiscountProducts() {
                   style={{ clipPath: octagonClip }}
                 />
                 <div
-                  className="absolute inset-[3px] bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-600/30"
+                  className="absolute inset-0.75 bg-linear-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-600/30"
                   style={{ clipPath: octagonClip }}
                 >
                   <HiOutlineFire className="text-white text-base md:text-lg" />

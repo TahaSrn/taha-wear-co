@@ -1,16 +1,8 @@
-// src/features/products/NewestProduct.jsx
-import { useState } from "react";
 import { Link } from "react-router";
 import { HiOutlineCube, HiOutlineTag } from "react-icons/hi";
 import { formatCurrency } from "../../utils/helpers";
-import { useDispatch } from "react-redux";
-import { addItem } from "../cart/cartSlice";
-import toast from "react-hot-toast";
 
 function NewestProduct({ product }) {
-  const dispatch = useDispatch();
-  const [selectedColor, setSelectedColor] = useState(null);
-
   const colors = product.product_colors?.map((pc) => pc.colors) || [];
 
   const colorClassMap = {
@@ -29,27 +21,6 @@ function NewestProduct({ product }) {
   const discountedPrice = hasDiscount
     ? product.price * (1 - discount / 100)
     : product.price;
-
-  const handleAddToCart = () => {
-    const colorToUse = selectedColor || colors[0];
-
-    dispatch(
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: discountedPrice,
-        image: product.productImages[0]?.image || "",
-        colorId: colorToUse?.id || null,
-        colorName: colorToUse?.name || null,
-      }),
-    );
-
-    toast.success("محصول با موفقیت به سبد خرید اضافه شد");
-  };
-
-  const handleColorSelect = (color) => {
-    setSelectedColor(color);
-  };
 
   return (
     <div className="w-full min-w-0 rounded-xl bg-white flex flex-col overflow-hidden shadow-md h-full font-sansMed">
