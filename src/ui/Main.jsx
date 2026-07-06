@@ -10,6 +10,7 @@ import KnowledgeSection from "../features/knowledge/KnowledgeSection";
 import Banner from "../ui/Banner";
 import Banners from "./Banners";
 import News from "./News";
+import FloatingFAQ from "./FloatingFAQ";
 
 function Main() {
   const categoriesRef = useRef(null);
@@ -60,6 +61,8 @@ function Main() {
       <KnowledgeSection />
 
       <News />
+
+      <FloatingFAQ />
     </main>
   );
 }
