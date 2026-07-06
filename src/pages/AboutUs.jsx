@@ -78,7 +78,13 @@ function AboutUs() {
               <div className="absolute inset-0 -top-20 z-1">
                 <Ballpit
                   count={isMobile ? 25 : 40} // موبایل: ۲۵، دسکتاپ: ۴۰
-                  colors={[0xfbf8f5, 0xf3ebe3, 0xe8ddd2, 0xd4c4b0, 0x6b5e58]}
+                  colors={[
+                    0x2e2724, // stone-800 (تیره)
+                    0x4a403a, // stone-700
+                    0x6b5e58, // stone-600
+                    0xa89888, // stone-400
+                    0xd4c4b0, // stone-300
+                  ]}
                   ambientColor={0xfbf8f5}
                   ambientIntensity={1.2}
                   lightIntensity={160}

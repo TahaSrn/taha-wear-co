@@ -36,6 +36,21 @@ function MenuSearch() {
     setSearchTerm("");
   };
 
+  const handleViewAllResults = () => {
+    if (searchTerm.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+      setIsOpen(false);
+    }
+  };
+
+  // تابع محاسبه قیمت با تخفیف
+  const getDiscountedPrice = (price, discount) => {
+    if (discount > 0) {
+      return price * (1 - discount / 100);
+    }
+    return price;
+  };
+
   return (
     <div ref={wrapperRef} className="relative w-full max-w-md">
       <form
@@ -93,6 +108,10 @@ function MenuSearch() {
             <div className="py-2">
               {products.slice(0, 6).map((product) => {
                 const imageUrl = product.productImages?.[0]?.image || "";
+                const discount = product.discount || 0;
+                const hasDiscount = discount > 0;
+                const finalPrice = getDiscountedPrice(product.price, discount);
+
                 return (
                   <div
                     key={product.id}
@@ -108,16 +127,31 @@ function MenuSearch() {
                       <p className="font-sansMed text-stone-800 text-sm">
                         {product.name}
                       </p>
-                      <p className="font-sansMed text-stone-500 text-xs">
-                        {formatCurrency(product.price)} تومان
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-sansMed text-stone-500 text-xs">
+                          {formatCurrency(finalPrice)} تومان
+                        </p>
+                        {hasDiscount && (
+                          <p className="font-sansMed text-stone-400 text-[10px] line-through">
+                            {formatCurrency(product.price)}
+                          </p>
+                        )}
+                      </div>
+                      {hasDiscount && (
+                        <span className="text-[10px] font-sansBold text-red-500 bg-red-50 px-1.5 py-0.5 rounded-full">
+                          {discount}٪
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
               })}
               {products.length > 6 && (
-                <div className="px-4 py-2 text-center text-sm text-stone-400 border-t border-stone-100">
-                  {products.length - 6} محصول دیگر ...
+                <div
+                  onClick={handleViewAllResults}
+                  className="px-4 py-2 text-center text-sm text-stone-400 border-t border-stone-100 hover:bg-stone-50 cursor-pointer transition-colors font-sansMed"
+                >
+                  مشاهده همه {products.length} نتیجه ...
                 </div>
               )}
             </div>

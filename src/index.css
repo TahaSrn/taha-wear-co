@@ -7,12 +7,17 @@
   --font-sansBold: "IranSansB", sans-serif;
 
   /* Brand palette — warm luxury ivory & espresso */
+  /* Brand palette — warm luxury ivory & espresso */
   --color-caffee-50: #fbf8f5;
   --color-caffee-100: #f3ebe3;
   --color-caffee-200: #e8ddd2;
   --color-caffee-300: #d4c4b0;
   --color-caffee-400: #bda898;
   --color-caffee-500: #9c8170;
+  --color-caffee-600: #7f675b;
+  --color-caffee-700: #5f4d44;
+  --color-caffee-800: #403531;
+  --color-caffee-900: #241f1c;
 
   /* Warm stone overrides — keeps existing class names, new look */
   --color-stone-50: #fbf8f5;
@@ -23,6 +28,7 @@
   --color-stone-500: #8a7870;
   --color-stone-600: #6b5e58;
   --color-stone-700: #4a403a;
+  --color-stone-750: #3a322e;
   --color-stone-800: #2e2724;
   --color-stone-900: #1a1614;
 
