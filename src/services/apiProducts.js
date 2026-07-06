@@ -259,8 +259,6 @@ export async function getDiscountedProducts() {
 // src/services/apiProducts.js
 export async function getProductSizes(productId) {
   try {
-    console.log("1. Getting sizes for product:", productId);
-
     // روش ساده با دو مرحله
     // مرحله 1: دریافت size_idها
     const { data: psData, error: psError } = await supabase
@@ -268,21 +266,15 @@ export async function getProductSizes(productId) {
       .select("size_id")
       .eq("product_id", productId);
 
-    console.log("2. product_sizes data:", psData);
-    console.log("3. product_sizes error:", psError);
-
     if (psError) {
-      console.error("Error in product_sizes:", psError);
       return [];
     }
 
     if (!psData || psData.length === 0) {
-      console.log("4. No sizes found for product:", productId);
       return [];
     }
 
     const sizeIds = psData.map((item) => item.size_id);
-    console.log("5. Size IDs:", sizeIds);
 
     // مرحله 2: دریافت نام سایزها
     const { data: sizesData, error: sizesError } = await supabase
@@ -291,17 +283,12 @@ export async function getProductSizes(productId) {
       .in("id", sizeIds)
       .order("sort_order", { ascending: true });
 
-    console.log("6. Sizes data:", sizesData);
-    console.log("7. Sizes error:", sizesError);
-
     if (sizesError) {
-      console.error("Error in sizes:", sizesError);
       return [];
     }
 
     return sizesData || [];
-  } catch (error) {
-    console.error("Caught error:", error);
+  } catch {
     return [];
   }
 }
