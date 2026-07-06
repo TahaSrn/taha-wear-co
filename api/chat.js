@@ -13,20 +13,23 @@ export default async function handler(req, res) {
   try {
     const { message } = req.body;
 
-    const text = message.toLowerCase();
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
 
-    // فقط کلمه‌های مهم
-    const keyword = text
-      .replace(/زیر|کمتر|میخوام|می‌خوام|یه|یک|برای|تومان|\d+|میلیون/g, "")
-      .trim();
+    const text = message.toLowerCase().trim();
+
+    // 🔥 مهم: فقط اولین کلمه واقعی (برای اینکه همیشه نتیجه بده)
+    const words = text.split(" ");
+    const keyword = words[0];
 
     console.log("KEYWORD:", keyword);
 
-    // ❗ مهم: بدون OR (پایدارترین حالت)
+    // 🧠 جستجو در اسم و توضیحات
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .ilike("name", `%${keyword}%`)
+      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
       .limit(10);
 
     if (error) {
@@ -34,33 +37,27 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Database error" });
     }
 
-    // اگر با name چیزی پیدا نشد → روی description تست کن
+    // ❌ هیچ نتیجه‌ای نبود
     if (!data || data.length === 0) {
-      const fallback = await supabase
-        .from("products")
-        .select("*")
-        .ilike("description", `%${keyword}%`)
-        .limit(10);
-
-      if (!fallback.data || fallback.data.length === 0) {
-        return res.json({
-          reply: "چیزی پیدا نکردم 😕",
-          products: [],
-        });
-      }
-
-      return res.json({
-        reply: "این محصولات رو پیدا کردم 👇",
-        products: fallback.data,
+      return res.status(200).json({
+        reply: "چیزی پیدا نکردم 😕",
+        products: [],
       });
     }
 
-    return res.json({
-      reply: "این محصولات رو پیدا کردم 👇",
+    // 🟢 ساخت پاسخ ساده و مطمئن
+    const reply =
+      "این محصولات رو پیدا کردم 👇\n\n" +
+      data
+        .map((p) => `👕 ${p.name} - ${Number(p.price).toLocaleString()} تومان`)
+        .join("\n");
+
+    return res.status(200).json({
+      reply,
       products: data,
     });
   } catch (err) {
-    console.log(err);
+    console.log("SERVER ERROR:", err);
     return res.status(500).json({ error: "Server error" });
   }
 }
