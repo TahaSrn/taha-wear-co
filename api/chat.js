@@ -17,27 +17,53 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    const text = message.trim();
+    const text = message.trim().toLowerCase();
 
-    // 🧠 استفاده از SQL function که ساختی
-    const { data, error } = await supabase.rpc("search_products", {
-      search_text: text,
-    });
+    // 🧠 1. تشخیص قیمت (مثلاً: 2 میلیون)
+    let maxPrice = null;
+
+    const priceMatch = text.match(/(\d+)\s*میلیون/);
+    if (priceMatch) {
+      maxPrice = Number(priceMatch[1]) * 1000000;
+    }
+
+    // 🧠 2. پاک کردن کلمات اضافی
+    let keyword = text
+      .replace(/زیر|کمتر از|میخوام|می‌خوام|یه|یک|برای/g, "")
+      .trim();
+
+    // 🧠 اگر چیزی نموند، کل متن رو بذار
+    if (!keyword) keyword = text;
+
+    // 🧠 3. ساخت query
+    let query = supabase.from("products").select("*");
+
+    if (keyword) {
+      query = query.or(
+        `name.ilike.%${keyword}%,description.ilike.%${keyword}%`,
+      );
+    }
+
+    if (maxPrice) {
+      query = query.lte("price", maxPrice);
+    }
+
+    const { data, error } = await query.limit(10);
 
     if (error) {
-      console.log("SUPABASE ERROR:", error);
+      console.log("DB ERROR:", error);
       return res.status(500).json({ error: "Database error" });
     }
 
-    // ❌ اگر چیزی پیدا نشد
+    // ❌ هیچ نتیجه‌ای نبود
     if (!data || data.length === 0) {
       return res.status(200).json({
-        reply: "محصولی پیدا نکردم 😕 یه چیز دیگه امتحان کن",
+        reply: "محصولی پیدا نکردم 😕 یه مدل دیگه امتحان کن",
         products: [],
       });
     }
 
-    // 🧠 ساخت پاسخ فارسی
+    // 🧠 4. ساخت جواب فارسی
     const reply =
       `این محصولات رو برات پیدا کردم 👇\n\n` +
       data
