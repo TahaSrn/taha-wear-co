@@ -13,69 +13,40 @@ export default async function handler(req, res) {
   try {
     const { message } = req.body;
 
-    if (!message) {
-      return res.status(400).json({ error: "Message is required" });
-    }
+    const text = message.toLowerCase();
 
-    const text = message.trim().toLowerCase();
-
-    // 🧠 1. تشخیص قیمت (مثلاً: 2 میلیون)
-    let maxPrice = null;
-
-    const priceMatch = text.match(/(\d+)\s*میلیون/);
-    if (priceMatch) {
-      maxPrice = Number(priceMatch[1]) * 1000000;
-    }
-
-    // 🧠 2. پاک کردن کلمات اضافی
-    let keyword = text
-      .replace(/زیر|کمتر از|میخوام|می‌خوام|یه|یک|برای/g, "")
+    // 🧠 فقط کلمات مهم (بدون عدد و کلمات اضافی)
+    const keyword = text
+      .replace(/زیر|کمتر|میخوام|می‌خوام|یه|یک|برای|تومان|\d+|میلیون/g, "")
       .trim();
 
-    // 🧠 اگر چیزی نموند، کل متن رو بذار
-    if (!keyword) keyword = text;
+    console.log("KEYWORD:", keyword);
 
-    // 🧠 3. ساخت query
-    let query = supabase.from("products").select("*");
-
-    if (keyword) {
-      query = query.or(
-        `name.ilike.%${keyword}%,description.ilike.%${keyword}%`,
-      );
-    }
-
-    if (maxPrice) {
-      query = query.lte("price", maxPrice);
-    }
-
-    const { data, error } = await query.limit(10);
+    // 🧠 سرچ مستقیم روی اسم + توضیحات
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
+      .limit(10);
 
     if (error) {
       console.log("DB ERROR:", error);
       return res.status(500).json({ error: "Database error" });
     }
 
-    // ❌ هیچ نتیجه‌ای نبود
     if (!data || data.length === 0) {
-      return res.status(200).json({
-        reply: "محصولی پیدا نکردم 😕 یه مدل دیگه امتحان کن",
+      return res.json({
+        reply: "چیزی پیدا نکردم 😕",
         products: [],
       });
     }
 
-    // 🧠 4. ساخت جواب فارسی
-    const reply =
-      `این محصولات رو برات پیدا کردم 👇\n\n` +
-      data
-        .map((p) => `👕 ${p.name} - ${Number(p.price).toLocaleString()} تومان`)
-        .join("\n");
-
-    return res.status(200).json({
-      reply,
+    return res.json({
+      reply: `این محصولات رو پیدا کردم 👇`,
       products: data,
     });
   } catch (err) {
-    console.log("SERVER ERROR:", err);
+    console.log(err);
     return res.status(500).json({ error: "Server error" });
   }
 }
