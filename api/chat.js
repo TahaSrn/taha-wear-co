@@ -1,4 +1,9 @@
+import { GoogleGenAI } from "@google/genai";
 import { createClient } from "@supabase/supabase-js";
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -13,89 +18,103 @@ export default async function handler(req, res) {
   try {
     const { message } = req.body;
 
-    const text = message.toLowerCase().trim();
+    // 🧠 STEP 1: فهم جمله با AI
+    const prompt = `
+تو یک سیستم تحلیل سفارش لباس هستی.
+این پیام کاربر را تبدیل به JSON کن:
 
-    // ----------------------------
-    // 🧠 1. تشخیص قیمت
-    // ----------------------------
-    let maxPrice = null;
-    const priceMatch = text.match(/(\d+)\s*میلیون/);
-    if (priceMatch) {
-      maxPrice = Number(priceMatch[1]) * 1_000_000;
+قوانین:
+- فقط JSON بده
+- هیچ متن اضافه نده
+- اگر نبود null بگذار
+
+ساختار:
+{
+  "category": "کت | شلوار | دورس | تی شرت | کاپشن | کفش | null",
+  "color": "مشکی | سفید | آبی | قهوه‌ای | null",
+  "maxPrice": عدد یا null
+}
+
+پیام:
+${message}
+`;
+
+    const aiRes = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+    });
+
+    let jsonText = aiRes.text;
+
+    // پاکسازی احتمالی متن
+    jsonText = jsonText.replace(/```json|```/g, "").trim();
+
+    let filters;
+    try {
+      filters = JSON.parse(jsonText);
+    } catch (e) {
+      console.log("PARSE ERROR:", jsonText);
+      return res.status(500).json({ error: "AI parse failed" });
     }
 
-    // ----------------------------
-    // 🧠 2. تشخیص رنگ
-    // ----------------------------
-    let color = null;
+    console.log("FILTERS:", filters);
 
-    if (text.includes("مشکی")) color = "مشکی";
-    else if (text.includes("سفید")) color = "سفید";
-    else if (text.includes("آبی")) color = "آبی";
-    else if (text.includes("قهوه")) color = "قهوه";
-
-    // ----------------------------
-    // 🧠 3. تشخیص دسته‌بندی (خیلی مهم)
-    // ----------------------------
-    let categoryId = null;
-
-    if (text.includes("کت")) categoryId = 2;
-    else if (text.includes("شلوار")) categoryId = 4;
-    else if (text.includes("دورس")) categoryId = 3;
-    else if (text.includes("تی") || text.includes("تیشرت")) categoryId = 1;
-    else if (text.includes("کاپشن")) categoryId = 5;
-    else if (text.includes("کفش")) categoryId = 6;
-
-    // ----------------------------
-    // 🧠 4. ساخت query
-    // ----------------------------
+    // 🧠 STEP 2: ساخت query
     let query = supabase.from("products").select("*");
 
-    if (categoryId) {
-      query = query.eq("categoryId", categoryId);
+    if (filters.category) {
+      const map = {
+        کت: 2,
+        شلوار: 4,
+        دورس: 3,
+        "تی شرت": 1,
+        کاپشن: 5,
+        کفش: 6,
+      };
+
+      const catId = map[filters.category];
+      if (catId) {
+        query = query.eq("categoryId", catId);
+      }
     }
 
-    if (maxPrice) {
-      query = query.lte("price", maxPrice);
+    if (filters.maxPrice) {
+      query = query.lte("price", filters.maxPrice);
     }
 
     const { data, error } = await query.limit(20);
 
     if (error) {
-      console.log("DB ERROR:", error);
-      return res.status(500).json({ error: "Database error" });
+      return res.status(500).json({ error: "DB error" });
     }
 
-    // ----------------------------
-    // 🧠 5. فیلتر رنگ (بعد از DB)
-    // ----------------------------
+    // 🧠 STEP 3: رنگ (ساده فیلتر JS)
     let filtered = data;
 
-    if (color) {
+    if (filters.color) {
       filtered = filtered.filter(
-        (p) => p.name.includes(color) || p.description.includes(color),
+        (p) =>
+          p.name.includes(filters.color) ||
+          p.description.includes(filters.color),
       );
     }
 
-    // ----------------------------
     // ❌ نتیجه خالی
-    // ----------------------------
-    if (!filtered || filtered.length === 0) {
-      return res.status(200).json({
+    if (!filtered.length) {
+      return res.json({
         reply: "چیزی پیدا نکردم 😕",
         products: [],
       });
     }
 
-    // ----------------------------
-    // 🟢 ساخت پاسخ
-    // ----------------------------
-    return res.status(200).json({
-      reply: "این گزینه‌ها رو پیدا کردم 👇",
+    // 🟢 پاسخ نهایی
+    return res.json({
+      reply: "این گزینه‌ها رو بر اساس درخواستت پیدا کردم 👇",
+      filters,
       products: filtered,
     });
   } catch (err) {
-    console.log("SERVER ERROR:", err);
+    console.log(err);
     return res.status(500).json({ error: "Server error" });
   }
 }
