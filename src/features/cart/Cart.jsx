@@ -53,7 +53,7 @@ function Cart() {
     try {
       const order = await createOrder(user.id, items, totalPrice);
 
-      toast.success("سفارش شما با موفقیت ثبت شد! ✅");
+      toast.success("سفارش شما با موفقیت ثبت شد!");
 
       dispatch(clearCart());
 
