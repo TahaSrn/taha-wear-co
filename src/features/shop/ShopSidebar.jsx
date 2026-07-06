@@ -1,4 +1,3 @@
-// src/features/shop/ShopSidebar.jsx
 import { useState, useEffect } from "react";
 import {
   HiChevronDown,
@@ -271,7 +270,6 @@ function ShopSidebar({
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 sticky top-5">
-      {/* بخش جستجو */}
       <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -292,6 +290,7 @@ function ShopSidebar({
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
                 size={18}
               />
+
               <input
                 type="text"
                 value={searchTerm}
@@ -303,7 +302,6 @@ function ShopSidebar({
           </div>
         )}
       </div>
-      {/* دسته‌بندی */}
       <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -336,6 +334,7 @@ function ShopSidebar({
                       onChange={() => handleCategoryChange(cat.id)}
                       className="rounded border-gray-300 accent-stone-800 cursor-pointer"
                     />
+
                     {cat.name}
                   </span>
                   <span className="text-xs text-stone-400">
@@ -347,7 +346,6 @@ function ShopSidebar({
           </div>
         )}
       </div>
-      {/* قیمت */}
       <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -410,7 +408,6 @@ function ShopSidebar({
           </div>
         )}
       </div>
-      {/* رنگ */}
       <div className="border-b border-gray-200 pb-2.5 mb-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -489,7 +486,6 @@ function ShopSidebar({
           </div>
         )}
       </div>
-      {/* کالکشن */}
       <div className="pt-2.5 mt-2.5">
         <button
           className="flex justify-between items-center w-full font-sansBold text-stone-800 text-sm"
@@ -521,6 +517,7 @@ function ShopSidebar({
                     onChange={() => handleCollectionChange(col.id)}
                     className="rounded border-gray-300 accent-stone-800 cursor-pointer"
                   />
+
                   {col.name}
                 </label>
               ))

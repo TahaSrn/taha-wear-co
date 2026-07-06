@@ -2,9 +2,9 @@ import { Link } from "react-router";
 
 function KnowledgeCard({ article }) {
   const shortSummary =
-    article.summary.length > 100
-      ? article.summary.slice(0, 100) + "..."
-      : article.summary;
+  article.summary.length > 100 ?
+  article.summary.slice(0, 100) + "..." :
+  article.summary;
 
   return (
     <Link to={`/article/${article.slug}`} className="block group">
@@ -13,8 +13,8 @@ function KnowledgeCard({ article }) {
           <img
             src={article.image}
             alt={article.title}
-            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
+          
         </div>
 
         <div className="p-4 flex flex-col flex-1">
@@ -31,8 +31,8 @@ function KnowledgeCard({ article }) {
           </button>
         </div>
       </div>
-    </Link>
-  );
+    </Link>);
+
 }
 
 export default KnowledgeCard;

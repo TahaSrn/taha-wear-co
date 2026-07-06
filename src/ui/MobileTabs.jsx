@@ -1,4 +1,4 @@
-// src/ui/MobileTabs.jsx
+
 import { useNavigate, useLocation } from "react-router";
 import { FaStore } from "react-icons/fa";
 import { HiOutlineHome } from "react-icons/hi";
@@ -35,14 +35,14 @@ function MobileTabs() {
     return location.pathname === path;
   };
 
-  const TabItem = ({ isActive, children }) => (
-    <div className="flex flex-col items-center justify-center gap-0.5 relative">
+  const TabItem = ({ isActive, children }) =>
+  <div className="flex flex-col items-center justify-center gap-0.5 relative">
       {children}
-      {isActive && (
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-stone-800 rounded-full" />
-      )}
-    </div>
-  );
+      {isActive &&
+    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-stone-800 rounded-full" />
+    }
+    </div>;
+
 
   return (
     <div className="block md:hidden bg-white/95 backdrop-blur-md border-t border-caffee-200 w-full fixed bottom-0 flex justify-around items-center pt-2 pb-2 font-sansMed z-50 shadow-[0_-4px_20px_rgba(46,39,36,0.08)]">
@@ -50,11 +50,11 @@ function MobileTabs() {
         <button
           onClick={handleHomeClick}
           className={`flex flex-col items-center gap-0.5 transition-colors ${
-            isActive("/")
-              ? "text-stone-800"
-              : "text-stone-600 hover:text-stone-900"
-          }`}
-        >
+          isActive("/") ?
+          "text-stone-800" :
+          "text-stone-600 hover:text-stone-900"}`
+          }>
+          
           <HiOutlineHome size={24} />
           <span className="text-[10px]">خانه</span>
         </button>
@@ -64,11 +64,11 @@ function MobileTabs() {
         <Link
           to="/shop"
           className={`flex flex-col items-center gap-0.5 transition-colors ${
-            isActive("/shop")
-              ? "text-stone-800"
-              : "text-stone-600 hover:text-stone-900"
-          }`}
-        >
+          isActive("/shop") ?
+          "text-stone-800" :
+          "text-stone-600 hover:text-stone-900"}`
+          }>
+          
           <FaStore size={24} />
           <span className="text-[10px]">فروشگاه</span>
         </Link>
@@ -78,11 +78,11 @@ function MobileTabs() {
         <Link
           to="/cart"
           className={`flex flex-col items-center gap-0.5 transition-colors ${
-            isActive("/cart")
-              ? "text-stone-800"
-              : "text-stone-600 hover:text-stone-900"
-          }`}
-        >
+          isActive("/cart") ?
+          "text-stone-800" :
+          "text-stone-600 hover:text-stone-900"}`
+          }>
+          
           <CartIcon size="xsmall" />
           <span className="text-[10px]">سبد خرید</span>
         </Link>
@@ -92,17 +92,17 @@ function MobileTabs() {
         <button
           onClick={handleUserClick}
           className={`flex flex-col items-center gap-0.5 transition-colors cursor-pointer ${
-            isActive("/user") || isActive("/login")
-              ? "text-stone-800"
-              : "text-stone-600 hover:text-stone-900"
-          }`}
-        >
+          isActive("/user") || isActive("/login") ?
+          "text-stone-800" :
+          "text-stone-600 hover:text-stone-900"}`
+          }>
+          
           <HiOutlineUser size={24} />
           <span className="text-[10px]">حساب کاربری</span>
         </button>
       </TabItem>
-    </div>
-  );
+    </div>);
+
 }
 
 export default MobileTabs;

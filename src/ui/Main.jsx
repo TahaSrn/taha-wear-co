@@ -1,4 +1,4 @@
-// src/pages/Main.jsx (یا Homepage.jsx)
+
 import { useRef, useEffect } from "react";
 import { useLocation } from "react-router";
 import Categories from "../features/categories/Categories";
@@ -24,7 +24,7 @@ function Main() {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth",
+        behavior: "smooth"
       });
     }
   };
@@ -63,8 +63,8 @@ function Main() {
       <News />
 
       <FloatingFAQ />
-    </main>
-  );
+    </main>);
+
 }
 
 export default Main;

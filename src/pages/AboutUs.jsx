@@ -1,4 +1,3 @@
-// src/pages/AboutUs.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Header from "../ui/Header";
@@ -69,7 +68,6 @@ function AboutUs() {
 
       <main className="flex-1 bg-caffee-50">
         <div className="relative">
-          {/* Ballpit - با تنظیمات بهینه برای موبایل */}
           <div
             className="absolute inset-0 w-full"
             style={{ height: "calc(100% - 100px)" }}
@@ -77,19 +75,13 @@ function AboutUs() {
             <div className="relative w-full h-full">
               <div className="absolute inset-0 -top-20 z-1">
                 <Ballpit
-                  count={isMobile ? 25 : 40} // موبایل: ۲۵، دسکتاپ: ۴۰
-                  colors={[
-                    0x2e2724, // stone-800 (تیره)
-                    0x4a403a, // stone-700
-                    0x6b5e58, // stone-600
-                    0xa89888, // stone-400
-                    0xd4c4b0, // stone-300
-                  ]}
+                  count={isMobile ? 25 : 40}
+                  colors={[0x2e2724, 0x4a403a, 0x6b5e58, 0xa89888, 0xd4c4b0]}
                   ambientColor={0xfbf8f5}
                   ambientIntensity={1.2}
                   lightIntensity={160}
-                  minSize={isMobile ? 0.3 : 0.35} // موبایل: کوچکتر
-                  maxSize={isMobile ? 0.6 : 0.8} // موبایل: کوچکتر
+                  minSize={isMobile ? 0.3 : 0.35}
+                  maxSize={isMobile ? 0.6 : 0.8}
                   size0={1}
                   gravity={0.3}
                   followCursor={false}
@@ -99,7 +91,6 @@ function AboutUs() {
             </div>
           </div>
 
-          {/* Hero */}
           <section className="relative z-10 py-16 md:py-24">
             <div className="max-w-7xl mx-auto px-4">
               <div className="max-w-3xl mx-auto text-center">
@@ -120,11 +111,10 @@ function AboutUs() {
             </div>
           </section>
 
-          {/* Story */}
           <section className="relative z-10 max-w-7xl mx-auto px-4 pb-14 md:pb-20">
             <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
               <div className="relative order-2 md:order-1 z-0">
-                <div className="rounded-3xl overflow-hidden shadow-xl bg-white p-1 max-h-[600px]">
+                <div className="rounded-3xl overflow-hidden shadow-xl bg-white p-1 max-h-150">
                   <img
                     src="/shop.jpg"
                     alt="Taha Wear"
@@ -163,11 +153,9 @@ function AboutUs() {
             </div>
           </section>
 
-          {/* Gradient transition */}
-          <div className="relative z-10 h-24 bg-gradient-to-b from-transparent to-caffee-50" />
+          <div className="relative z-10 h-24 bg-linear-to-b from-transparent to-caffee-50" />
         </div>
 
-        {/* Stats */}
         <section className="relative z-10 bg-caffee-50 py-12 md:py-16">
           <div className="max-w-4xl mx-auto px-4">
             <div className="grid grid-cols-3 gap-4 md:gap-8">
@@ -189,7 +177,6 @@ function AboutUs() {
           </div>
         </section>
 
-        {/* Values */}
         <section className="relative z-10 max-w-7xl mx-auto px-4 py-14 md:py-20 bg-caffee-50">
           <div className="mb-10 md:mb-14">
             <CategorySubject icon={HiOutlineSparkles} title="ارزش‌های ما" />
@@ -215,7 +202,6 @@ function AboutUs() {
           </div>
         </section>
 
-        {/* Mission banner */}
         <section className="relative z-10 max-w-7xl mx-auto px-4 pb-16 md:pb-24 bg-caffee-50">
           <div className="relative overflow-hidden rounded-3xl bg-stone-800 text-white px-6 py-12 md:px-16 md:py-16 text-center">
             <div className="absolute inset-0 opacity-10">

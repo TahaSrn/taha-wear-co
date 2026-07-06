@@ -1,4 +1,4 @@
-// src/ui/IconBar.jsx
+
 import { useNavigate, useLocation } from "react-router";
 import { HiOutlineUser } from "react-icons/hi";
 import { memo, useCallback } from "react";
@@ -18,9 +18,9 @@ function IconBar({ mobile = false }) {
       navigate("/login", {
         state: {
           from: {
-            pathname: location.pathname,
-          },
-        },
+            pathname: location.pathname
+          }
+        }
       });
     }
   }, [user, navigate, location.pathname]);
@@ -33,12 +33,12 @@ function IconBar({ mobile = false }) {
         gap-4
         shrink-0
         ${mobile ? "absolute left-4" : ""}
-      `}
-    >
-      {!mobile && (
-        <div
-          onClick={handleUserClick}
-          className="
+      `}>
+      
+      {!mobile &&
+      <div
+        onClick={handleUserClick}
+        className="
             rounded-full
             bg-stone-500/20
             p-2
@@ -47,15 +47,24 @@ function IconBar({ mobile = false }) {
             duration-300
             hover:bg-stone-800
             hover:text-white
-          "
-        >
+          ">
+
+
+
+
+
+
+
+
+
+        
           <HiOutlineUser size={30} strokeWidth={1.5} />
         </div>
-      )}
+      }
 
       <CartIcon size={mobile ? "small" : "medium"} />
-    </div>
-  );
+    </div>);
+
 }
 
 export default memo(IconBar);

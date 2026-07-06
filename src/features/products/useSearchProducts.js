@@ -6,13 +6,13 @@ export function useSearchProducts(searchTerm) {
     queryKey: ["products", "search", searchTerm],
     queryFn: () => getProducts({ search: searchTerm }),
     enabled: !!searchTerm?.trim(),
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60
   });
 
   return {
     products: data?.products ?? [],
     count: data?.count ?? 0,
     isLoading,
-    error,
+    error
   };
 }

@@ -1,4 +1,4 @@
-// src/features/user/UserProfile.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import supabase from "../../services/supabase";
@@ -9,14 +9,14 @@ import { HiOutlinePencil, HiOutlineCheck, HiOutlineX } from "react-icons/hi";
 function UserProfile({ user }) {
   const navigate = useNavigate();
   const { profile, isLoading, updateProfile, isUpdating } = useProfile(
-    user?.id,
+    user?.id
   );
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  // وقتی پروفایل لود شد، اطلاعات رو توی فیلدها بذار
+
   useEffect(() => {
     if (profile) {
       setName(profile.name || "");
@@ -35,8 +35,8 @@ function UserProfile({ user }) {
         },
         onError: (error) => {
           toast.error(error.message);
-        },
-      },
+        }
+      }
     );
   };
 
@@ -50,8 +50,8 @@ function UserProfile({ user }) {
     return (
       <div className="bg-white rounded-2xl shadow-md p-6">
         <p className="text-center text-stone-500">در حال بارگذاری...</p>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -72,8 +72,8 @@ function UserProfile({ user }) {
         </div>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="text-stone-500 hover:text-stone-800 transition-colors cursor-pointer"
-        >
+          className="text-stone-500 hover:text-stone-800 transition-colors cursor-pointer">
+          
           <HiOutlinePencil size={20} />
         </button>
       </div>
@@ -81,18 +81,18 @@ function UserProfile({ user }) {
       <div className="space-y-3 border-t border-stone-100 pt-4">
         <div>
           <label className="text-xs text-stone-500 font-sansMed">نام</label>
-          {isEditing ? (
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm"
-            />
-          ) : (
-            <p className="font-sansMed text-stone-700">
+          {isEditing ?
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm" /> :
+
+
+          <p className="font-sansMed text-stone-700">
               {profile?.name || "—"}
             </p>
-          )}
+          }
         </div>
 
         <div>
@@ -102,70 +102,70 @@ function UserProfile({ user }) {
 
         <div>
           <label className="text-xs text-stone-500 font-sansMed">تلفن</label>
-          {isEditing ? (
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm"
-            />
-          ) : (
-            <p className="font-sansMed text-stone-700">
+          {isEditing ?
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm" /> :
+
+
+          <p className="font-sansMed text-stone-700">
               {profile?.phone || "—"}
             </p>
-          )}
+          }
         </div>
 
         <div>
           <label className="text-xs text-stone-500 font-sansMed">آدرس</label>
-          {isEditing ? (
-            <textarea
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              rows={2}
-              className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm resize-none"
-            />
-          ) : (
-            <p className="font-sansMed text-stone-700">
+          {isEditing ?
+          <textarea
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            rows={2}
+            className="w-full mt-1 px-3 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-stone-400 focus:outline-none font-sansMed text-sm resize-none" /> :
+
+
+          <p className="font-sansMed text-stone-700">
               {profile?.address || "—"}
             </p>
-          )}
+          }
         </div>
       </div>
 
-      {isEditing && (
-        <div className="flex gap-2 mt-4 pt-4 border-t border-stone-100">
+      {isEditing &&
+      <div className="flex gap-2 mt-4 pt-4 border-t border-stone-100">
           <button
-            onClick={handleSave}
-            disabled={isUpdating}
-            className="flex-1 bg-stone-800 text-white py-2 rounded-xl hover:bg-stone-700 transition-colors font-sansMed flex items-center justify-center gap-2"
-          >
+          onClick={handleSave}
+          disabled={isUpdating}
+          className="flex-1 bg-stone-800 text-white py-2 rounded-xl hover:bg-stone-700 transition-colors font-sansMed flex items-center justify-center gap-2">
+          
             <HiOutlineCheck size={18} />
             {isUpdating ? "در حال ذخیره..." : "ذخیره"}
           </button>
           <button
-            onClick={() => {
-              setIsEditing(false);
-              setName(profile?.name || "");
-              setPhone(profile?.phone || "");
-              setAddress(profile?.address || "");
-            }}
-            className="flex-1 bg-stone-100 text-stone-700 py-2 rounded-xl hover:bg-stone-200 transition-colors font-sansMed flex items-center justify-center gap-2"
-          >
+          onClick={() => {
+            setIsEditing(false);
+            setName(profile?.name || "");
+            setPhone(profile?.phone || "");
+            setAddress(profile?.address || "");
+          }}
+          className="flex-1 bg-stone-100 text-stone-700 py-2 rounded-xl hover:bg-stone-200 transition-colors font-sansMed flex items-center justify-center gap-2">
+          
             <HiOutlineX size={18} />
             انصراف
           </button>
         </div>
-      )}
+      }
 
       <button
         onClick={handleLogout}
-        className="w-full mt-6 py-2.5 rounded-xl border border-red-300 text-red-500 hover:bg-red-50 transition-colors font-sansMed text-sm cursor-pointer"
-      >
+        className="w-full mt-6 py-2.5 rounded-xl border border-red-300 text-red-500 hover:bg-red-50 transition-colors font-sansMed text-sm cursor-pointer">
+        
         خروج از حساب
       </button>
-    </div>
-  );
+    </div>);
+
 }
 
 export default UserProfile;

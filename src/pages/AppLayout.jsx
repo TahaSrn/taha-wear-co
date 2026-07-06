@@ -5,8 +5,8 @@ function AppLayout() {
   return (
     <>
       <Homepage />
-    </>
-  );
+    </>);
+
 }
 
 export default AppLayout;

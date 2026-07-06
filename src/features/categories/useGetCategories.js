@@ -5,10 +5,10 @@ export default function useGetCategories() {
   const {
     data: categories,
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["categories"],
-    queryFn: getCategories,
+    queryFn: getCategories
   });
 
   if (error) throw new Error(error.message);
@@ -16,6 +16,6 @@ export default function useGetCategories() {
   return {
     categories,
     isLoading,
-    error,
+    error
   };
 }

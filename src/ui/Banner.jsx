@@ -6,12 +6,12 @@ function Banner() {
           <img
             src="/banner.jpg"
             alt="banner"
-            className="w-full h-full object-cover object-[10%_center] md:object-center"
-          />
+            className="w-full h-full object-cover object-[10%_center] md:object-center" />
+          
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default Banner;

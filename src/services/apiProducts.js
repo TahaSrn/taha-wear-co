@@ -5,7 +5,7 @@ const sortProductImages = (images) => {
 
   const pImages = images.filter((img) => img.image && img.image.includes("/P"));
   const mImages = images.filter(
-    (img) => img.image && !img.image.includes("/P"),
+    (img) => img.image && !img.image.includes("/P")
   );
 
   pImages.sort((a, b) => a.id - b.id);
@@ -24,7 +24,7 @@ export async function getProducts({
   search,
   discount,
   page = 1,
-  limit = 12,
+  limit = 12
 } = {}) {
   let query = supabase.from("products").select(
     `
@@ -38,10 +38,10 @@ export async function getProducts({
         )
       )
     `,
-    { count: "exact" },
+    { count: "exact" }
   );
 
-  // فیلتر تخفیف - این باید اول اعمال بشه
+
   if (discount) {
     query = query.gt("discount", 0);
   }
@@ -62,10 +62,10 @@ export async function getProducts({
   }
 
   if (colors && colors.length > 0) {
-    const { data: productColors } = await supabase
-      .from("product_colors")
-      .select("product_id")
-      .in("color_id", colors);
+    const { data: productColors } = await supabase.
+    from("product_colors").
+    select("product_id").
+    in("color_id", colors);
 
     const productIds = productColors?.map((p) => p.product_id) || [];
 
@@ -77,10 +77,10 @@ export async function getProducts({
   }
 
   if (collections && collections.length > 0) {
-    const { data: collectionProducts } = await supabase
-      .from("collection_products")
-      .select("product_id")
-      .in("collection_id", collections);
+    const { data: collectionProducts } = await supabase.
+    from("collection_products").
+    select("product_id").
+    in("collection_id", collections);
 
     const productIds = collectionProducts?.map((p) => p.product_id) || [];
 
@@ -123,16 +123,16 @@ export async function getProducts({
   return { products: products || [], count: count || 0 };
 }
 
-// src/services/apiProducts.js
+
 export async function getNewestProducts() {
   const categories = [1, 2, 3, 4, 5, 6];
 
   const results = await Promise.all(
     categories.map(async (category) => {
-      const { data, error } = await supabase
-        .from("products")
-        .select(
-          `
+      const { data, error } = await supabase.
+      from("products").
+      select(
+        `
       *,
       productImages (id, image, productId),
       product_colors (
@@ -142,12 +142,12 @@ export async function getNewestProducts() {
           name
         )
       )
-    `,
-        )
-        .eq("categoryId", category)
-        .eq("discount", 0) // فقط محصولاتی که تخفیف ندارن
-        .order("created_at", { ascending: false })
-        .limit(4);
+    `
+      ).
+      eq("categoryId", category).
+      eq("discount", 0).
+      order("created_at", { ascending: false }).
+      limit(4);
 
       if (error) throw new Error(error.message);
 
@@ -160,7 +160,7 @@ export async function getNewestProducts() {
       }
 
       return data;
-    }),
+    })
   );
 
   return results.flat();
@@ -185,10 +185,10 @@ export async function getMaxPrice() {
 }
 
 export async function getProduct(productId) {
-  const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
+  const { data, error } = await supabase.
+  from("products").
+  select(
+    `
       *,
       productImages (*),
       product_colors (
@@ -202,10 +202,10 @@ export async function getProduct(productId) {
         id,
         name
       )
-    `,
-    )
-    .eq("id", productId)
-    .single();
+    `
+  ).
+  eq("id", productId).
+  single();
 
   if (error) {
     console.error("Error fetching product:", error);
@@ -219,12 +219,12 @@ export async function getProduct(productId) {
   return data;
 }
 
-// src/services/apiProducts.js
+
 export async function getDiscountedProducts() {
-  const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
+  const { data, error } = await supabase.
+  from("products").
+  select(
+    `
       *,
       productImages (*),
       product_colors (
@@ -234,11 +234,11 @@ export async function getDiscountedProducts() {
           name
         )
       )
-    `,
-    )
-    .gt("discount", 0)
-    .order("discount", { ascending: false })
-    .limit(10);
+    `
+  ).
+  gt("discount", 0).
+  order("discount", { ascending: false }).
+  limit(10);
 
   if (error) {
     console.error("Error fetching discounted products:", error);
@@ -256,15 +256,15 @@ export async function getDiscountedProducts() {
   return data;
 }
 
-// src/services/apiProducts.js
+
 export async function getProductSizes(productId) {
   try {
-    // روش ساده با دو مرحله
-    // مرحله 1: دریافت size_idها
-    const { data: psData, error: psError } = await supabase
-      .from("product_sizes")
-      .select("size_id")
-      .eq("product_id", productId);
+
+
+    const { data: psData, error: psError } = await supabase.
+    from("product_sizes").
+    select("size_id").
+    eq("product_id", productId);
 
     if (psError) {
       return [];
@@ -276,12 +276,12 @@ export async function getProductSizes(productId) {
 
     const sizeIds = psData.map((item) => item.size_id);
 
-    // مرحله 2: دریافت نام سایزها
-    const { data: sizesData, error: sizesError } = await supabase
-      .from("sizes")
-      .select("id, name, sort_order")
-      .in("id", sizeIds)
-      .order("sort_order", { ascending: true });
+
+    const { data: sizesData, error: sizesError } = await supabase.
+    from("sizes").
+    select("id, name, sort_order").
+    in("id", sizeIds).
+    order("sort_order", { ascending: true });
 
     if (sizesError) {
       return [];

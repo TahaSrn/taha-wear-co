@@ -18,7 +18,7 @@ function Cart() {
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
   const { items, totalQuantity, totalPrice } = useSelector(
-    (state) => state.cart,
+    (state) => state.cart
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -77,12 +77,12 @@ function Cart() {
             </div>
 
             <div className="mt-4 space-y-4 pb-10">
-              {items.map((item, index) => (
-                <CartItem
-                  key={`${item.id}-${item.colorId}-${item.sizeId || "no-size"}-${index}`}
-                  item={item}
-                />
-              ))}
+              {items.map((item, index) =>
+              <CartItem
+                key={`${item.id}-${item.colorId}-${item.sizeId || "no-size"}-${index}`}
+                item={item} />
+
+              )}
             </div>
           </div>
 
@@ -120,24 +120,24 @@ function Cart() {
               onClick={handleCheckout}
               disabled={isSubmitting}
               className={`w-full font-sansMed mt-4 py-2.5 md:py-3 rounded-lg transition-colors cursor-pointer text-sm md:text-base ${
-                isSubmitting
-                  ? "bg-stone-400 cursor-not-allowed text-white"
-                  : "bg-stone-800 hover:bg-stone-700 text-white"
-              }`}
-            >
-              {isSubmitting
-                ? "در حال ثبت..."
-                : !user
-                  ? "ورود برای ثبت سفارش"
-                  : "ثبت سفارش"}
+              isSubmitting ?
+              "bg-stone-400 cursor-not-allowed text-white" :
+              "bg-stone-800 hover:bg-stone-700 text-white"}`
+              }>
+              
+              {isSubmitting ?
+              "در حال ثبت..." :
+              !user ?
+              "ورود برای ثبت سفارش" :
+              "ثبت سفارش"}
             </button>
           </div>
         </div>
       </div>
       <Footer />
       <MobileTabs />
-    </div>
-  );
+    </div>);
+
 }
 
 export default Cart;

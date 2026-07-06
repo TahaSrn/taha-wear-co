@@ -2,8 +2,8 @@ import {
   getOrCreateCart,
   addToCart,
   clearCart,
-  getCartItems,
-} from "../../services/apiCart";
+  getCartItems } from
+"../../services/apiCart";
 
 export async function syncCartWithServer(userId, localItems) {
   const cart = await getOrCreateCart(userId);
@@ -29,6 +29,6 @@ export async function loadCartFromServer(userId) {
     colorId: item.color_id,
     colorName: item.colors?.name || "",
     quantity: item.quantity,
-    totalPrice: item.price * item.quantity,
+    totalPrice: item.price * item.quantity
   }));
 }

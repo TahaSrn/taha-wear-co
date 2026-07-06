@@ -1,4 +1,4 @@
-// src/pages/Login.jsx
+
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
 import supabase from "../services/supabase";
@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import {
   HiOutlineMail,
   HiOutlineKey,
-  HiOutlineArrowLeft,
-} from "react-icons/hi";
+  HiOutlineArrowLeft } from
+"react-icons/hi";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 
 function Login() {
@@ -17,7 +17,7 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // گرفتن آدرس بازگشت از query parameter
+
   const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e) => {
@@ -27,7 +27,7 @@ function Login() {
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password,
+        password
       });
 
       if (error) {
@@ -53,12 +53,12 @@ function Login() {
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-md w-full border border-white/50">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group"
-        >
+          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group">
+          
           <HiOutlineArrowLeft
             className="group-hover:-translate-x-1 transition-transform"
-            size={20}
-          />
+            size={20} />
+          
           <span className="text-sm font-sansMed cursor-pointer">بازگشت</span>
         </button>
 
@@ -80,16 +80,16 @@ function Login() {
             <div className="relative">
               <HiOutlineMail
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="example@email.com"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -100,32 +100,32 @@ function Login() {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-sm text-stone-400 hover:text-stone-600 transition-colors font-sansMed"
-              >
+                className="text-sm text-stone-400 hover:text-stone-600 transition-colors font-sansMed">
+                
                 فراموش کردید؟
               </Link>
             </div>
             <div className="relative">
               <HiOutlineKey
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="••••••••"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:-translate-y-0.5"}`}
-          >
+            className={`w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:-translate-y-0.5"}`}>
+            
             {loading ? "در حال ورود..." : "ورود"}
           </button>
         </form>
@@ -135,15 +135,15 @@ function Login() {
             حساب کاربری ندارید؟{" "}
             <Link
               to="/register"
-              className="text-stone-800 cursor-pointer font-sansBold hover:underline transition-colors"
-            >
+              className="text-stone-800 cursor-pointer font-sansBold hover:underline transition-colors">
+              
               ثبت‌نام
             </Link>
           </p>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default Login;

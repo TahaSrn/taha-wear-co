@@ -19,8 +19,8 @@ import {
   PointLight as u,
   ACESFilmicToneMapping as v,
   Plane as w,
-  Raycaster as y,
-} from "three";
+  Raycaster as y } from
+"three";
 import { RoomEnvironment as z } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 class x {
@@ -41,7 +41,7 @@ class x {
     wWidth: 0,
     wHeight: 0,
     ratio: 0,
-    pixelRatio: 0,
+    pixelRatio: 0
   };
   render = this.#i;
   onBeforeRender = () => {};
@@ -83,7 +83,7 @@ class x {
     const e = {
       canvas: this.canvas,
       powerPreference: "high-performance",
-      ...(this.#e.rendererOptions ?? {}),
+      ...(this.#e.rendererOptions ?? {})
     };
     this.renderer = new s(e);
     this.renderer.outputColorSpace = n;
@@ -99,7 +99,7 @@ class x {
     this.#o = new IntersectionObserver(this.#u.bind(this), {
       root: null,
       rootMargin: "0px",
-      threshold: 0,
+      threshold: 0
     });
     this.#o.observe(this.canvas);
     document.addEventListener("visibilitychange", this.#v.bind(this));
@@ -148,9 +148,9 @@ class x {
       if (this.cameraMinAspect && this.camera.aspect < this.cameraMinAspect) {
         this.#A(this.cameraMinAspect);
       } else if (
-        this.cameraMaxAspect &&
-        this.camera.aspect > this.cameraMaxAspect
-      ) {
+      this.cameraMaxAspect &&
+      this.camera.aspect > this.cameraMaxAspect)
+      {
         this.#A(this.cameraMaxAspect);
       } else {
         this.camera.fov = this.cameraFov;
@@ -161,12 +161,12 @@ class x {
   }
   #A(e) {
     const t =
-      Math.tan(o.degToRad(this.cameraFov / 2)) / (this.camera.aspect / e);
+    Math.tan(o.degToRad(this.cameraFov / 2)) / (this.camera.aspect / e);
     this.camera.fov = 2 * o.radToDeg(Math.atan(t));
   }
   updateWorldSize() {
     if (this.camera.isPerspectiveCamera) {
-      const e = (this.camera.fov * Math.PI) / 180;
+      const e = this.camera.fov * Math.PI / 180;
       this.size.wHeight = 2 * Math.tan(e / 2) * this.camera.position.length();
       this.size.wWidth = this.size.wHeight * this.camera.aspect;
     } else if (this.camera.isOrthographicCamera) {
@@ -223,10 +223,10 @@ class x {
         Object.keys(e.material).forEach((t) => {
           const i = e.material[t];
           if (
-            i !== null &&
-            typeof i === "object" &&
-            typeof i.dispose === "function"
-          ) {
+          i !== null &&
+          typeof i === "object" &&
+          typeof i.dispose === "function")
+          {
             i.dispose();
           }
         });
@@ -261,7 +261,7 @@ function S(e) {
     onMove() {},
     onClick() {},
     onLeave() {},
-    ...e,
+    ...e
   };
   (function (e, t) {
     if (!b.has(e)) {
@@ -272,16 +272,16 @@ function S(e) {
         document.body.addEventListener("click", C);
 
         document.body.addEventListener("touchstart", TouchStart, {
-          passive: true,
+          passive: true
         });
         document.body.addEventListener("touchmove", TouchMove, {
-          passive: true,
+          passive: true
         });
         document.body.addEventListener("touchend", TouchEnd, {
-          passive: true,
+          passive: true
         });
         document.body.addEventListener("touchcancel", TouchEnd, {
-          passive: true,
+          passive: true
         });
 
         R = true;
@@ -409,8 +409,8 @@ function P(e, t) {
   const { position: i, nPosition: s } = e;
   i.x = A.x - t.left;
   i.y = A.y - t.top;
-  s.x = (i.x / t.width) * 2 - 1;
-  s.y = (-i.y / t.height) * 2 + 1;
+  s.x = i.x / t.width * 2 - 1;
+  s.y = -i.y / t.height * 2 + 1;
 }
 function D(e) {
   const { x: t, y: i } = A;
@@ -463,7 +463,7 @@ class W {
       center: i,
       positionData: s,
       sizeData: n,
-      velocityData: o,
+      velocityData: o
     } = this;
     let r = 0;
     if (t.controlSphere0) {
@@ -498,9 +498,9 @@ class W {
         const sumRadius = radius + otherRadius;
         if (dist < sumRadius) {
           const overlap = sumRadius - dist;
-          j.copy(_)
-            .normalize()
-            .multiplyScalar(0.5 * overlap);
+          j.copy(_).
+          normalize().
+          multiplyScalar(0.5 * overlap);
           H.copy(j).multiplyScalar(Math.max(B.length(), 1));
           T.copy(j).multiplyScalar(Math.max(N.length(), 1));
           I.sub(j);
@@ -565,7 +565,7 @@ const X = {
     metalness: 0.5,
     roughness: 0.5,
     clearcoat: 1,
-    clearcoatRoughness: 0.15,
+    clearcoatRoughness: 0.15
   },
   minSize: 0.5,
   maxSize: 1,
@@ -578,7 +578,7 @@ const X = {
   maxY: 5,
   maxZ: 2,
   controlSphere0: false,
-  followCursor: true,
+  followCursor: true
 };
 
 const U = new m();
@@ -600,7 +600,7 @@ class Z extends d {
   #S() {
     this.ambientLight = new f(
       this.config.ambientColor,
-      this.config.ambientIntensity,
+      this.config.ambientIntensity
     );
     this.add(this.ambientLight);
     this.light = new u(this.config.colors[0], this.config.lightIntensity);
@@ -608,7 +608,7 @@ class Z extends d {
   }
   setColors(e) {
     if (Array.isArray(e) && e.length > 1) {
-      const t = (function (e) {
+      const t = function (e) {
         let t, i;
         function setColors(e) {
           t = e;
@@ -631,9 +631,9 @@ class Z extends d {
             out.g = start.g + alpha * (end.g - start.g);
             out.b = start.b + alpha * (end.b - start.b);
             return out;
-          },
+          }
         };
-      })(e);
+      }(e);
       for (let idx = 0; idx < this.count; idx++) {
         this.setColorAt(idx, t.getColorAt(idx / this.count));
         if (idx === 0) {
@@ -664,7 +664,7 @@ function createBallpit(e, t = {}) {
   const i = new x({
     canvas: e,
     size: "parent",
-    rendererOptions: { antialias: true, alpha: true },
+    rendererOptions: { antialias: true, alpha: true }
   });
   let s;
   i.renderer.toneMapping = v;
@@ -693,7 +693,7 @@ function createBallpit(e, t = {}) {
     },
     onLeave() {
       s.config.controlSphere0 = false;
-    },
+    }
   });
   function initialize(e) {
     if (s) {
@@ -724,7 +724,7 @@ function createBallpit(e, t = {}) {
     dispose() {
       h.dispose();
       i.dispose();
-    },
+    }
   };
 }
 
@@ -754,7 +754,7 @@ const Ballpit = ({ className = "", followCursor = true, ...props }) => {
       try {
         spheresInstanceRef.current = createBallpit(canvas, {
           followCursor,
-          ...props,
+          ...props
         });
       } catch (error) {
         console.warn("Ballpit: WebGL initialization failed.", error);
@@ -776,12 +776,12 @@ const Ballpit = ({ className = "", followCursor = true, ...props }) => {
         container.removeChild(canvas);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return (
-    <div ref={containerRef} className={`w-full h-full ${className}`.trim()} />
-  );
+    <div ref={containerRef} className={`w-full h-full ${className}`.trim()} />);
+
 };
 
 export default Ballpit;

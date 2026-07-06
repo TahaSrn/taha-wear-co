@@ -1,4 +1,4 @@
-// src/hooks/useScrollVisibility.js
+
 import { useState, useEffect, useRef } from "react";
 
 export function useScrollVisibility(threshold = 0) {

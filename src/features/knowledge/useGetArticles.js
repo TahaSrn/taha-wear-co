@@ -5,10 +5,10 @@ export default function useGetArticles() {
   const {
     data: articles = [],
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["articles"],
-    queryFn: getArticles,
+    queryFn: getArticles
   });
 
   return { articles, isLoading, error };

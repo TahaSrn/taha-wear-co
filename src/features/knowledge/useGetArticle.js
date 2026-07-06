@@ -5,11 +5,11 @@ export default function useGetArticle(slug) {
   const {
     data: article,
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["article", slug],
     queryFn: () => getArticleBySlug(slug),
-    enabled: !!slug,
+    enabled: !!slug
   });
 
   return { article, isLoading, error };

@@ -1,4 +1,4 @@
-// src/ui/Menu.jsx
+
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,11 +15,11 @@ function Menu({ onCategoryClick }) {
   const handleCategoryClick = () => {
     setIsOpenMenu(false);
 
-    // اگر در صفحه اصلی نیستیم، به صفحه اصلی برو با state
+
     if (window.location.pathname !== "/") {
       navigate("/", { state: { scrollToCategories: true } });
     } else {
-      // اگر در صفحه اصلی هستیم، فقط اسکرول کن
+
       if (onCategoryClick) {
         onCategoryClick();
       }
@@ -27,18 +27,18 @@ function Menu({ onCategoryClick }) {
   };
 
   const menuItems = [
-    { id: 1, component: <MenuSearch />, label: "جستجو" },
-    {
-      id: 2,
-      component: (
-        <MenuItems
-          onClose={() => setIsOpenMenu(false)}
-          onCategoryClick={handleCategoryClick}
-        />
-      ),
-      label: "آیتم ها",
-    },
-  ];
+  { id: 1, component: <MenuSearch />, label: "جستجو" },
+  {
+    id: 2,
+    component:
+    <MenuItems
+      onClose={() => setIsOpenMenu(false)}
+      onCategoryClick={handleCategoryClick} />,
+
+
+    label: "آیتم ها"
+  }];
+
 
   useEffect(() => {
     if (isOpenMenu) {
@@ -55,59 +55,59 @@ function Menu({ onCategoryClick }) {
     <>
       <HiMenuAlt3
         className="text-5xl mr-1 text-stone-800 z-10 relative cursor-pointer transition-colors"
-        onClick={() => setIsOpenMenu((open) => !open)}
-      />
+        onClick={() => setIsOpenMenu((open) => !open)} />
+      
 
       {createPortal(
         <AnimatePresence>
-          {isOpenMenu && (
-            <>
+          {isOpenMenu &&
+          <>
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="fixed inset-0 bg-black/40 z-[9999]"
-                onClick={() => setIsOpenMenu(false)}
-              />
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/40 z-[9999]"
+              onClick={() => setIsOpenMenu(false)} />
+            
 
               <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 320,
-                  damping: 32,
-                }}
-                style={{
-                  willChange: "transform",
-                }}
-                className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-[10000] overflow-y-auto border transform-gpu"
-              >
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{
+                type: "spring",
+                stiffness: 320,
+                damping: 32
+              }}
+              style={{
+                willChange: "transform"
+              }}
+              className="fixed right-0 top-0 h-full w-[80vw] bg-caffee-50 shadow-2xl p-6 z-[10000] overflow-y-auto border transform-gpu">
+              
                 <nav className="mt-2">
                   <div className="space-y-4">
-                    {menuItems.map((item, index) => (
-                      <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="border-b pb-2"
-                      >
+                    {menuItems.map((item, index) =>
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="border-b pb-2">
+                    
                         {item.component}
                       </motion.div>
-                    ))}
+                  )}
                   </div>
                 </nav>
               </motion.div>
             </>
-          )}
+          }
         </AnimatePresence>,
-        document.body,
+        document.body
       )}
-    </>
-  );
+    </>);
+
 }
 
 export default Menu;

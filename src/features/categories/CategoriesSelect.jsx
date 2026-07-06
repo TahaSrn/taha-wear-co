@@ -41,8 +41,14 @@ function CategoriesSelect() {
       group
       text-gray-600
       mr-20
-      "
-        >
+      ">
+
+
+
+
+
+
+          
           <div
             className="
             
@@ -57,8 +63,21 @@ function CategoriesSelect() {
           font-sansMed
           cursor-pointer
           after:text-gray-500 
-          "
-          >
+          ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             دسته بندی محصولات {<IoIosArrowDown />}
           </div>
 
@@ -80,69 +99,86 @@ function CategoriesSelect() {
           duration-300
           text-sm
           z-2
-          "
-          >
+          ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             <p
               onClick={() => handleCategoryClick(null)}
-              className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer"
-            >
+              className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer">
+              
               همه محصولات
             </p>
 
-            {isLoading ? (
-              <p className="px-3 py-2 text-gray-400">در حال بارگذاری...</p>
-            ) : (
-              categories.map((category) => (
-                <p
-                  key={category.id}
-                  onClick={() => handleCategoryClick(category.id)}
-                  className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer"
-                >
+            {isLoading ?
+            <p className="px-3 py-2 text-gray-400">در حال بارگذاری...</p> :
+
+            categories.map((category) =>
+            <p
+              key={category.id}
+              onClick={() => handleCategoryClick(category.id)}
+              className="px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer">
+              
                   {category.name}
                 </p>
-              ))
-            )}
+            )
+            }
           </div>
         </div>
 
         <div className="flex gap-4 text-sm relative z-1">
           <Link
             className={`hover:text-stone-800 transition-colors cursor-pointer ${
-              isActive("/") ? "text-stone-800 font-sansBold" : "text-gray-600"
-            }`}
+            isActive("/") ? "text-stone-800 font-sansBold" : "text-gray-600"}`
+            }
             to="/"
-            onClick={handleHomeClick}
-          >
+            onClick={handleHomeClick}>
+            
             خانه
           </Link>
           <Link
             className={`hover:text-stone-800 transition-colors ${
-              isActive("/shop")
-                ? "text-stone-800 font-sansBold"
-                : "text-gray-600"
-            }`}
-            to="/shop"
-          >
+            isActive("/shop") ?
+            "text-stone-800 font-sansBold" :
+            "text-gray-600"}`
+            }
+            to="/shop">
+            
             فروشگاه
           </Link>
           <Link
             className={`hover:text-stone-800 transition-colors ${
-              isActive("/about-us")
-                ? "text-stone-800 font-sansBold"
-                : "text-gray-600"
-            }`}
-            to="/about-us"
-          >
+            isActive("/about-us") ?
+            "text-stone-800 font-sansBold" :
+            "text-gray-600"}`
+            }
+            to="/about-us">
+            
             درباره ما
           </Link>
           <Link
             className={`hover:text-stone-800 transition-colors ${
-              isActive("/contact-us")
-                ? "text-stone-800 font-sansBold"
-                : "text-gray-600"
-            }`}
-            to="/contact-us"
-          >
+            isActive("/contact-us") ?
+            "text-stone-800 font-sansBold" :
+            "text-gray-600"}`
+            }
+            to="/contact-us">
+            
             تماس با ما
           </Link>
         </div>
@@ -151,8 +187,8 @@ function CategoriesSelect() {
       <div className="hidden md:block bg-slate-100 px-4 py-2.5 text-gray-600 text-[12px] ml-8 rounded-full">
         مدت زمان ارسال برای تمامی سفارشات 5 روز کاری میباشد
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default CategoriesSelect;

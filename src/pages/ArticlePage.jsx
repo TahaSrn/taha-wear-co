@@ -1,4 +1,4 @@
-// src/pages/ArticlePage.jsx
+
 import { useParams, useNavigate } from "react-router";
 import { useEffect } from "react";
 import Header from "../ui/Header";
@@ -11,7 +11,7 @@ function ArticlePage() {
   const navigate = useNavigate();
   const { article, isLoading } = useGetArticle(slug);
 
-  // اسکرول به بالای صفحه هنگام ورود
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
@@ -34,8 +34,8 @@ function ArticlePage() {
           <Spinner />
         </main>
         <Footer />
-      </>
-    );
+      </>);
+
   }
 
   if (!article) {
@@ -48,8 +48,8 @@ function ArticlePage() {
           </p>
         </main>
         <Footer />
-      </>
-    );
+      </>);
+
   }
 
   const paragraphs = article.content.split("\n").filter((p) => p.trim());
@@ -62,8 +62,8 @@ function ArticlePage() {
           <img
             src={article.image}
             alt={article.title}
-            className="w-full h-full object-cover"
-          />
+            className="w-full h-full object-cover" />
+          
         </div>
 
         <h1 className="text-2xl md:text-3xl font-sansBold text-stone-800 mb-6">
@@ -80,8 +80,8 @@ function ArticlePage() {
                     {paragraph.match(/^[۰-۹0-9]+[\.\-\–]/)?.[0] || "•"}
                   </span>
                   <span>{paragraph.replace(/^[۰-۹0-9]+[\.\-\–]\s*/, "")}</span>
-                </div>
-              );
+                </div>);
+
             }
             return <p key={index}>{paragraph}</p>;
           })}
@@ -90,17 +90,17 @@ function ArticlePage() {
         <div className="mt-10">
           <button
             onClick={handleShopRedirect}
-            className="w-full bg-stone-800 text-white py-4 rounded-xl hover:bg-stone-700 transition-all duration-300 font-sansMed text-base cursor-pointer"
-          >
-            {!article.category_id || article.category_id === 0
-              ? "مشاهده همه محصولات"
-              : "مشاهده محصولات این دسته‌بندی"}
+            className="w-full bg-stone-800 text-white py-4 rounded-xl hover:bg-stone-700 transition-all duration-300 font-sansMed text-base cursor-pointer">
+            
+            {!article.category_id || article.category_id === 0 ?
+            "مشاهده همه محصولات" :
+            "مشاهده محصولات این دسته‌بندی"}
           </button>
         </div>
       </main>
       <Footer />
-    </div>
-  );
+    </div>);
+
 }
 
 export default ArticlePage;

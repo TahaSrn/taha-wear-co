@@ -12,8 +12,8 @@ function CartItem({ item }) {
       removeItem({
         id: item.id,
         colorId: item.colorId,
-        sizeId: item.sizeId || null,
-      }),
+        sizeId: item.sizeId || null
+      })
     );
   };
 
@@ -22,8 +22,8 @@ function CartItem({ item }) {
       decreaseQuantity({
         id: item.id,
         colorId: item.colorId,
-        sizeId: item.sizeId || null,
-      }),
+        sizeId: item.sizeId || null
+      })
     );
   };
 
@@ -32,8 +32,8 @@ function CartItem({ item }) {
       increaseQuantity({
         id: item.id,
         colorId: item.colorId,
-        sizeId: item.sizeId || null,
-      }),
+        sizeId: item.sizeId || null
+      })
     );
   };
 
@@ -45,8 +45,8 @@ function CartItem({ item }) {
             <img
               src={item.image}
               alt={item.name}
-              className="w-20 h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-            />
+              className="w-20 h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" />
+            
           </Link>
           <div className="flex-1">
             <Link to={`/product/${item.id}`}>
@@ -54,22 +54,22 @@ function CartItem({ item }) {
                 {item.name}
               </h3>
             </Link>
-            {item.colorName && (
-              <p className="text-xs text-stone-500 mt-0.5">
+            {item.colorName &&
+            <p className="text-xs text-stone-500 mt-0.5">
                 رنگ: {item.colorName}
               </p>
-            )}
-            {item.sizeName && (
-              <p className="text-xs text-stone-500">سایز: {item.sizeName}</p>
-            )}
+            }
+            {item.sizeName &&
+            <p className="text-xs text-stone-500">سایز: {item.sizeName}</p>
+            }
             <p className="text-stone-600 text-sm mt-1">
               {formatCurrency(item.price)} تومان
             </p>
           </div>
           <button
             onClick={handleRemove}
-            className="text-red-400 hover:text-red-600 transition-colors shrink-0"
-          >
+            className="text-red-400 hover:text-red-600 transition-colors shrink-0">
+            
             <HiOutlineTrash size={20} />
           </button>
         </div>
@@ -78,8 +78,8 @@ function CartItem({ item }) {
           <div className="flex items-center gap-2">
             <button
               onClick={handleDecrease}
-              className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
-            >
+              className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors">
+              
               <HiOutlineMinus size={16} />
             </button>
             <span className="font-bold w-6 text-center text-sm">
@@ -87,8 +87,8 @@ function CartItem({ item }) {
             </span>
             <button
               onClick={handleIncrease}
-              className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
-            >
+              className="p-1 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors">
+              
               <HiOutlinePlus size={16} />
             </button>
           </div>
@@ -103,8 +103,8 @@ function CartItem({ item }) {
       <div className="hidden md:grid grid-cols-12 gap-2 items-center py-3 lg:py-4 border-b-2 border-stone-200 font-sansBold w-full">
         <button
           onClick={handleRemove}
-          className="col-span-1 text-red-400 hover:text-red-600 transition-colors cursor-pointer flex justify-center"
-        >
+          className="col-span-1 text-red-400 hover:text-red-600 transition-colors cursor-pointer flex justify-center">
+          
           <HiOutlineTrash size={20} className="lg:size-5.5" />
         </button>
 
@@ -112,8 +112,8 @@ function CartItem({ item }) {
           <img
             src={item.image}
             alt={item.name}
-            className="w-16 h-20 lg:w-20 lg:h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-          />
+            className="w-16 h-20 lg:w-20 lg:h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" />
+          
         </Link>
 
         <div className="col-span-3">
@@ -122,16 +122,16 @@ function CartItem({ item }) {
               {item.name}
             </h3>
           </Link>
-          {item.colorName && (
-            <span className="text-xs text-stone-500 block">
+          {item.colorName &&
+          <span className="text-xs text-stone-500 block">
               رنگ: {item.colorName}
             </span>
-          )}
-          {item.sizeName && (
-            <span className="text-xs text-stone-500 block">
+          }
+          {item.sizeName &&
+          <span className="text-xs text-stone-500 block">
               سایز: {item.sizeName}
             </span>
-          )}
+          }
         </div>
 
         <div className="col-span-2 text-stone-600 text-sm lg:text-base text-center">
@@ -141,8 +141,8 @@ function CartItem({ item }) {
         <div className="col-span-2 flex items-center justify-center gap-1 lg:gap-2">
           <button
             onClick={handleDecrease}
-            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
-          >
+            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors">
+            
             <HiOutlineMinus size={16} className="lg:size-4.5" />
           </button>
 
@@ -152,8 +152,8 @@ function CartItem({ item }) {
 
           <button
             onClick={handleIncrease}
-            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors"
-          >
+            className="p-1 cursor-pointer rounded-full bg-stone-100 hover:bg-stone-200 transition-colors">
+            
             <HiOutlinePlus size={16} className="lg:size-4.5" />
           </button>
         </div>
@@ -164,8 +164,8 @@ function CartItem({ item }) {
           </span>
         </div>
       </div>
-    </>
-  );
+    </>);
+
 }
 
 export default CartItem;

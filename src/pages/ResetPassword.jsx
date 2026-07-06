@@ -1,4 +1,4 @@
-// src/pages/ResetPassword.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import supabase from "../services/supabase";
@@ -40,7 +40,7 @@ function ResetPassword() {
 
     try {
       const { error } = await supabase.auth.updateUser({
-        password: password,
+        password: password
       });
 
       if (error) throw new Error(error.message);
@@ -59,12 +59,12 @@ function ResetPassword() {
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-md w-full border border-white/50">
         <button
           onClick={() => navigate("/login")}
-          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group"
-        >
+          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group">
+          
           <HiOutlineArrowLeft
             className="group-hover:-translate-x-1 transition-transform"
-            size={20}
-          />
+            size={20} />
+          
           <span className="text-sm font-sansMed cursor-pointer">بازگشت</span>
         </button>
 
@@ -88,8 +88,8 @@ function ResetPassword() {
             <div className="relative">
               <HiOutlineKey
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="password"
                 value={password}
@@ -97,8 +97,8 @@ function ResetPassword() {
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="••••••••"
                 required
-                minLength={6}
-              />
+                minLength={6} />
+              
             </div>
             <p className="text-xs text-stone-400 mt-1 font-sansMed">
               حداقل ۶ کاراکتر
@@ -112,16 +112,16 @@ function ResetPassword() {
             <div className="relative">
               <HiOutlineKey
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="••••••••"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -129,17 +129,17 @@ function ResetPassword() {
             type="submit"
             disabled={loading}
             className={`w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${
-              loading
-                ? "opacity-70 cursor-not-allowed"
-                : "hover:shadow-lg hover:-translate-y-0.5"
-            }`}
-          >
+            loading ?
+            "opacity-70 cursor-not-allowed" :
+            "hover:shadow-lg hover:-translate-y-0.5"}`
+            }>
+            
             {loading ? "در حال تغییر..." : "تغییر رمز عبور"}
           </button>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default ResetPassword;

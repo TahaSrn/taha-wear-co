@@ -1,4 +1,4 @@
-// src/pages/ForgotPassword.jsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import supabase from "../services/supabase";
@@ -17,12 +17,12 @@ function ForgotPassword() {
     setLoading(true);
 
     try {
-      // Supabase خودش چک میکنه که ایمیل وجود داره یا نه
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${window.location.origin}/reset-password`
       });
 
-      // اگه ایمیل وجود نداشته باشه، Supabase خطا میده
+
       if (error) {
         if (error.message.includes("User not found")) {
           toast.error("کاربری با این ایمیل یافت نشد");
@@ -47,12 +47,12 @@ function ForgotPassword() {
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-md w-full border border-white/50">
         <button
           onClick={() => navigate("/login")}
-          className="flex items-center gap-2 cursor-pointer text-stone-500 hover:text-stone-800 transition-colors mb-6 group"
-        >
+          className="flex items-center gap-2 cursor-pointer text-stone-500 hover:text-stone-800 transition-colors mb-6 group">
+          
           <HiOutlineArrowLeft
             className="group-hover:-translate-x-1 transition-transform"
-            size={20}
-          />
+            size={20} />
+          
           <span className="text-sm font-sansMed ">بازگشت</span>
         </button>
 
@@ -68,8 +68,8 @@ function ForgotPassword() {
           </p>
         </div>
 
-        {sent ? (
-          <div className="text-center">
+        {sent ?
+        <div className="text-center">
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
               <p className="text-green-700 font-sansMed text-sm">
                 ✅ لینک بازیابی به ایمیل شما ارسال شد.
@@ -79,50 +79,50 @@ function ForgotPassword() {
               </p>
             </div>
             <button
-              onClick={() => navigate("/login")}
-              className="w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm"
-            >
+            onClick={() => navigate("/login")}
+            className="w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm">
+            
               بازگشت به صفحه ورود
             </button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
+          </div> :
+
+        <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-sansMed text-stone-600 mb-1.5">
                 ایمیل
               </label>
               <div className="relative">
                 <HiOutlineMail
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                  size={20}
-                />
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
+                size={20} />
+              
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
-                  placeholder="example@email.com"
-                  required
-                />
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
+                placeholder="example@email.com"
+                required />
+              
               </div>
             </div>
 
             <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${
-                loading
-                  ? "opacity-70 cursor-not-allowed"
-                  : "hover:shadow-lg hover:-translate-y-0.5"
-              }`}
-            >
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3.5 cursor-pointer rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${
+            loading ?
+            "opacity-70 cursor-not-allowed" :
+            "hover:shadow-lg hover:-translate-y-0.5"}`
+            }>
+            
               {loading ? "در حال بررسی..." : "ارسال لینک بازیابی"}
             </button>
           </form>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default ForgotPassword;

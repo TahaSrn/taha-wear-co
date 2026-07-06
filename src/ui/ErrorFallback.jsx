@@ -26,22 +26,22 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           متأسفیم، خطایی در نمایش این صفحه رخ داده است.
         </p>
 
-        {error?.message && (
-          <p className="text-xs text-stone-400 font-sansMed mb-6 bg-stone-50 p-3 rounded-xl border border-stone-100 break-all">
+        {error?.message &&
+        <p className="text-xs text-stone-400 font-sansMed mb-6 bg-stone-50 p-3 rounded-xl border border-stone-100 break-all">
             {error.message}
           </p>
-        )}
+        }
 
         <button
           onClick={handleGoHome}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-stone-800 text-white rounded-xl hover:bg-stone-700 transition-all duration-300 font-sansMed hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
-        >
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-stone-800 text-white rounded-xl hover:bg-stone-700 transition-all duration-300 font-sansMed hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
+          
           <HiOutlineHome size={20} />
           بازگشت به صفحه اصلی
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default ErrorFallback;

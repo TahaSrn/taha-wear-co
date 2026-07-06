@@ -1,4 +1,4 @@
-// src/pages/User.jsx
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../features/authentication/useAuth";
@@ -15,9 +15,9 @@ function User() {
   const { user, loading: authLoading } = useAuth();
   const { orders, isLoading: ordersLoading } = useOrders(user?.id);
 
-  // اسکرول به بالای صفحه با تاخیر
+
   useEffect(() => {
-    // تاخیر کوچک برای اطمینان از رندر شدن کامل صفحه
+
     const timer = setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "instant" });
     }, 50);
@@ -40,8 +40,8 @@ function User() {
         </main>
         <Footer />
         <MobileTabs />
-      </>
-    );
+      </>);
+
   }
 
   if (!user) return null;
@@ -67,8 +67,8 @@ function User() {
       </main>
       <Footer />
       <MobileTabs />
-    </div>
-  );
+    </div>);
+
 }
 
 export default User;

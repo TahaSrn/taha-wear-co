@@ -5,11 +5,11 @@ export default function useGetCollections() {
   const {
     data: collections = [],
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["collections"],
     queryFn: getCollections,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5
   });
 
   return { collections, isLoading, error };

@@ -10,8 +10,8 @@ function Homepage() {
       <Main />
       <Footer />
       <MobileTabs />
-    </>
-  );
+    </>);
+
 }
 
 export default Homepage;

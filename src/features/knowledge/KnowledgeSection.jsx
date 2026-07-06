@@ -10,16 +10,16 @@ function KnowledgeSection() {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-80 rounded-xl bg-gray-100 flex items-center justify-center"
-          >
+        {Array.from({ length: 4 }).map((_, i) =>
+        <div
+          key={i}
+          className="h-80 rounded-xl bg-gray-100 flex items-center justify-center">
+          
             <Spinner />
           </div>
-        ))}
-      </div>
-    );
+        )}
+      </div>);
+
   }
 
   if (articles.length === 0) {
@@ -33,12 +33,12 @@ function KnowledgeSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
-        {articles.map((article) => (
-          <KnowledgeCard key={article.id} article={article} />
-        ))}
+        {articles.map((article) =>
+        <KnowledgeCard key={article.id} article={article} />
+        )}
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default KnowledgeSection;

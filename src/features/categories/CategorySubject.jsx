@@ -7,8 +7,8 @@ function CategorySubject({ icon: Icon, title, textColor }) {
         <h2 className="text-md md:text-2xl font-bold">{title}</h2>
       </div>
       <div className="w-12 md:w-16 h-0.5 bg-linear-to-r from-transparent to-brand-accent/60"></div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default CategorySubject;

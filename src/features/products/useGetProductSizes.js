@@ -1,4 +1,4 @@
-// src/features/products/useGetProductSizes.js
+
 import { useQuery } from "@tanstack/react-query";
 import { getProductSizes } from "../../services/apiProducts";
 
@@ -6,7 +6,7 @@ export default function useGetProductSizes(productId) {
   const {
     data: sizes = [],
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["productSizes", productId],
     queryFn: () => {
@@ -15,7 +15,7 @@ export default function useGetProductSizes(productId) {
     },
     enabled: !!productId,
     staleTime: 1000 * 60 * 5,
-    retry: 1,
+    retry: 1
   });
 
   console.log("useGetProductSizes - result:", { sizes, isLoading, error });

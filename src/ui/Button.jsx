@@ -1,15 +1,15 @@
-// src/ui/Button.jsx
+
 function Button({ children, type, onClick, size, disabled = false }) {
   const styles = {
     primary: "bg-caffee-100 hover:bg-caffee-200 border border-caffee-300/50",
     secondary: "bg-caffee-200 hover:bg-caffee-300 border border-caffee-300/50",
-    tertiary: "bg-stone-800 text-white hover:bg-stone-700 border border-stone-700",
+    tertiary: "bg-stone-800 text-white hover:bg-stone-700 border border-stone-700"
   };
 
   const sizes = {
     small: "text-[10px] md:text-sm px-4 py-2",
     medium: "text-[10px] md:text-[12px] md:text-sm px-4 md:px-13 py-2",
-    large: "text-sm md:text-base px-6 md:px-20 py-3",
+    large: "text-sm md:text-base px-6 md:px-20 py-3"
   };
 
   return (
@@ -17,12 +17,12 @@ function Button({ children, type, onClick, size, disabled = false }) {
       onClick={onClick}
       disabled={disabled}
       className={`flex items-center gap-1 justify-center rounded-full font-sansBold text-stone-800 transition-all duration-300 hover:bg-caffee-200 hover:scale-105 ${
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-      } ${sizes[size]} ${styles[type]}`}
-    >
+      disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${
+      sizes[size]} ${styles[type]}`}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 export default Button;

@@ -1,4 +1,4 @@
-// src/ui/Logo.jsx
+
 import { memo } from "react";
 
 function Logo({ mobile = false }) {
@@ -12,9 +12,9 @@ function Logo({ mobile = false }) {
         select-none
 
         ${mobile ? "h-13 scale-[300%]" : "h-8 scale-[700%] mr-28 mt-4"}
-      `}
-    />
-  );
+      `} />);
+
+
 }
 
 export default memo(Logo);

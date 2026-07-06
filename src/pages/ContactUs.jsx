@@ -1,4 +1,3 @@
-// src/pages/ContactUs.jsx
 import { useEffect, useState } from "react";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
@@ -97,7 +96,6 @@ function ContactUs() {
       <Header />
 
       <main className="flex-1 bg-caffee-50">
-        {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-to-br from-caffee-200 via-caffee-100 to-caffee-50 py-14 md:py-20">
           <div className="absolute inset-0 opacity-30">
             <div className="absolute top-0 left-1/4 w-72 h-72 rounded-full bg-caffee-300 blur-3xl" />
@@ -115,7 +113,6 @@ function ContactUs() {
 
         <section className="max-w-7xl mx-auto px-4 py-12 md:py-16 -mt-4">
           <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
-            {/* Contact cards */}
             <div className="lg:col-span-2 space-y-4">
               {contactInfo.map(({ icon: Icon, title, value, href }) => (
                 <div
@@ -165,7 +162,6 @@ function ContactUs() {
               </div>
             </div>
 
-            {/* Form */}
             <div className="lg:col-span-3">
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 md:p-10 border border-white/50">
                 <h2 className="text-xl md:text-2xl font-sansBold text-stone-800 mb-2">
@@ -186,6 +182,7 @@ function ContactUs() {
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
                           size={20}
                         />
+
                         <input
                           type="text"
                           name="name"
@@ -207,6 +204,7 @@ function ContactUs() {
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
                           size={20}
                         />
+
                         <input
                           type="email"
                           name="email"
@@ -268,7 +266,6 @@ function ContactUs() {
           </div>
         </section>
 
-        {/* Map */}
         <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-24">
           <div className="rounded-3xl overflow-hidden shadow-lg border border-caffee-200 h-64 md:h-80">
             <iframe

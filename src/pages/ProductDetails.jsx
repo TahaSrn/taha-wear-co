@@ -1,4 +1,3 @@
-// src/pages/ProductDetails.jsx
 import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -128,7 +127,6 @@ function ProductDetails() {
     navigate(-1);
   };
 
-  // محاسبه قیمت با تخفیف
   const getDiscountedPrice = (price, discount) => {
     if (discount > 0) {
       return price * (1 - discount / 100);
@@ -346,6 +344,7 @@ function ProductDetails() {
                   size={18}
                   className="text-stone-700 group-hover:-translate-x-1 transition-transform"
                 />
+
                 <span className="text-sm font-sansMed text-stone-700">
                   بازگشت
                 </span>
@@ -507,7 +506,6 @@ function ProductDetails() {
               </p>
             </div>
 
-            {/* نمایش قیمت با تخفیف */}
             <div className="mt-6">
               {hasDiscount ? (
                 <div className="flex flex-col items-start gap-1">

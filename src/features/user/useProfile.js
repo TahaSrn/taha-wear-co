@@ -2,8 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getProfile,
   createProfile,
-  updateProfile,
-} from "../../services/apiProfiles";
+  updateProfile } from
+"../../services/apiProfiles";
 
 export function useProfile(userId) {
   const queryClient = useQueryClient();
@@ -11,25 +11,25 @@ export function useProfile(userId) {
   const {
     data: profile,
     isLoading,
-    error,
+    error
   } = useQuery({
     queryKey: ["profile", userId],
     queryFn: () => getProfile(userId),
-    enabled: !!userId,
+    enabled: !!userId
   });
 
   const createMutation = useMutation({
     mutationFn: ({ name }) => createProfile(userId, name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
-    },
+    }
   });
 
   const updateMutation = useMutation({
     mutationFn: (updates) => updateProfile(userId, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
-    },
+    }
   });
 
   return {
@@ -39,6 +39,6 @@ export function useProfile(userId) {
     createProfile: createMutation.mutate,
     updateProfile: updateMutation.mutate,
     isCreating: createMutation.isPending,
-    isUpdating: updateMutation.isPending,
+    isUpdating: updateMutation.isPending
   };
 }

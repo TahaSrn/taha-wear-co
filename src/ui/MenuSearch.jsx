@@ -1,4 +1,3 @@
-// src/features/menu/MenuSearch.jsx
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useSearchProducts } from "../features/products/useSearchProducts";
@@ -43,7 +42,6 @@ function MenuSearch() {
     }
   };
 
-  // تابع محاسبه قیمت با تخفیف
   const getDiscountedPrice = (price, discount) => {
     if (discount > 0) {
       return price * (1 - discount / 100);
@@ -85,6 +83,7 @@ function MenuSearch() {
           placeholder="جستجوی محصولات..."
           className="w-full h-full outline-none text-sm text-gray-500"
         />
+
         <button
           type="submit"
           className="bg-stone-800 w-32 h-9 rounded-full text-sm text-white hover:bg-stone-700 transition-colors cursor-pointer"
@@ -93,7 +92,6 @@ function MenuSearch() {
         </button>
       </form>
 
-      {/* Dropdown نتایج جستجو */}
       {isOpen && searchTerm.trim().length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-stone-100 max-h-96 overflow-y-auto z-50">
           {isLoading ? (
@@ -123,6 +121,7 @@ function MenuSearch() {
                       alt={product.name}
                       className="w-12 h-12 object-cover rounded-lg"
                     />
+
                     <div className="flex-1">
                       <p className="font-sansMed text-stone-800 text-sm">
                         {product.name}

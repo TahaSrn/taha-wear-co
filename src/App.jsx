@@ -31,29 +31,29 @@ function App() {
             background: "#ffffff",
             color: "#2e2724",
             border: "1px solid #e8ddd2",
-            boxShadow: "0 4px 16px rgba(46, 39, 36, 0.12)",
+            boxShadow: "0 4px 16px rgba(46, 39, 36, 0.12)"
           },
           success: {
             iconTheme: {
               primary: "#6b8e6b",
-              secondary: "#ffffff",
-            },
+              secondary: "#ffffff"
+            }
           },
           error: {
             iconTheme: {
               primary: "#a0524b",
-              secondary: "#ffffff",
-            },
-          },
-        }}
-      />
+              secondary: "#ffffff"
+            }
+          }
+        }} />
+      
       <BrowserRouter>
         <ErrorBoundary
           FallbackComponent={ErrorFallback}
           onReset={() => {
             window.location.reload();
-          }}
-        >
+          }}>
+          
           <Routes>
             <Route path="/" element={<AppLayout />} />
             <Route index element={<Homepage />} />
@@ -74,8 +74,8 @@ function App() {
           </Routes>
         </ErrorBoundary>
       </BrowserRouter>
-    </>
-  );
+    </>);
+
 }
 
 export default App;

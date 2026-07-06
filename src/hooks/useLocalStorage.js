@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export function useLocalStorage(key, initialValue) {
-  // خواندن مقدار از localStorage
+
   const readValue = () => {
     try {
       const item = localStorage.getItem(key);
@@ -14,11 +14,11 @@ export function useLocalStorage(key, initialValue) {
 
   const [storedValue, setStoredValue] = useState(readValue);
 
-  // تابع برای ذخیره مقدار جدید
+
   const setValue = (value) => {
     try {
       const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
+      value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
       localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
@@ -26,7 +26,7 @@ export function useLocalStorage(key, initialValue) {
     }
   };
 
-  // همگام‌سازی با تغییرات localStorage در تب‌های دیگر
+
   useEffect(() => {
     const handleStorageChange = (event) => {
       if (event.key === key && event.newValue) {

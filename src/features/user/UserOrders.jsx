@@ -1,4 +1,3 @@
-// src/features/user/UserOrders.jsx
 import { useState, useEffect } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import { HiOutlineClock, HiOutlineCheckCircle } from "react-icons/hi";
@@ -115,14 +114,12 @@ function UserOrders({ orders }) {
                       {item.products?.name || "محصول"}
                     </span>
 
-                    {/* نمایش رنگ */}
                     {item.colors?.name && (
                       <span className="text-xs font-sansMed text-stone-400">
                         رنگ: {item.colors.name}
                       </span>
                     )}
 
-                    {/* نمایش سایز - از فیلد size_name */}
                     {item.size_name && (
                       <span className="text-xs font-sansMed text-stone-400">
                         سایز: {item.size_name}

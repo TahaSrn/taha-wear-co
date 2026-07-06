@@ -1,9 +1,7 @@
-// src/ui/FloatingFAQ.jsx
 import { useState } from "react";
 import { HiOutlineQuestionMarkCircle, HiOutlineX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 
-// داده‌های سوالات متداول
 const faqData = [
   {
     id: 1,
@@ -35,7 +33,6 @@ const faqData = [
   },
 ];
 
-// کامپوننت هر سوال
 function FAQItem({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -78,7 +75,6 @@ function FloatingFAQ() {
 
   return (
     <>
-      {/* دکمه شناور - سمت راست */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-[999] group"
@@ -87,10 +83,8 @@ function FloatingFAQ() {
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
         <div className="relative">
-          {/* جلوه سایه ملایم به جای رینگ متحرک */}
           <div className="absolute inset-0 rounded-full bg-stone-800/20 blur-sm" />
 
-          {/* خود دکمه */}
           <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-stone-800 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center cursor-pointer">
             <motion.div
               animate={{ rotate: isOpen ? 90 : 0 }}
@@ -106,7 +100,6 @@ function FloatingFAQ() {
         </div>
       </motion.button>
 
-      {/* پنل سوالات - سمت راست */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -122,7 +115,6 @@ function FloatingFAQ() {
             }}
             className="fixed bottom-28 sm:bottom-24 right-4 sm:right-6 z-[999] w-[calc(100%-2rem)] sm:w-80 md:w-96 max-h-[60vh] sm:max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-stone-100 overflow-hidden"
           >
-            {/* هدر */}
             <div className="bg-stone-800 px-4 py-3 flex items-center justify-between">
               <h3 className="text-white font-sansBold text-sm sm:text-base">
                 سوالات متداول
@@ -135,7 +127,6 @@ function FloatingFAQ() {
               </button>
             </div>
 
-            {/* لیست سوالات */}
             <div className="overflow-y-auto max-h-[calc(60vh-60px)] sm:max-h-[calc(70vh-60px)]">
               {faqData.map((item) => (
                 <FAQItem

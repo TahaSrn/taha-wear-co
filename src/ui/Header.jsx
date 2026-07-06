@@ -1,4 +1,3 @@
-// src/ui/Header.jsx
 import { useState, useEffect, useCallback, memo } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useScrollVisibility } from "../hooks/useScrollVisibility";
@@ -9,7 +8,6 @@ import Logo from "./Logo";
 import Menu from "./Menu";
 import Search from "./Search";
 
-// کامپوننت‌های داخلی رو memo کنیم
 const MemoizedCategoriesSelect = memo(CategoriesSelect);
 const MemoizedIconBar = memo(IconBar);
 const MemoizedLogo = memo(Logo);
@@ -54,12 +52,10 @@ function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      {/* Mobile Menu */}
       <div className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 z-30">
         <MemoizedMenu onCategoryClick={handleCategoryClick} />
       </div>
 
-      {/* Top Row */}
       <div className="hidden md:flex items-center gap-8 px-8 py-3">
         <MemoizedLogo />
 
@@ -70,13 +66,11 @@ function Header() {
         <MemoizedIconBar />
       </div>
 
-      {/* Mobile */}
       <div className="flex md:hidden items-center justify-center py-4">
         <MemoizedLogo mobile />
         <MemoizedIconBar mobile />
       </div>
 
-      {/* Bottom Row */}
       <div className="hidden md:block">
         <MemoizedCategoriesSelect />
       </div>
@@ -84,5 +78,4 @@ function Header() {
   );
 }
 
-// جلوگیری از رندر مجدد Header در صورت عدم تغییر props
 export default memo(Header);

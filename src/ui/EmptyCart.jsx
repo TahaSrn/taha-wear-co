@@ -16,8 +16,8 @@ function EmptyCart() {
           <HiOutlineHome size={17} />
         </Button>
       </Link>
-    </div>
-  );
+    </div>);
+
 }
 
 export default EmptyCart;

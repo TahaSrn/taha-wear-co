@@ -1,4 +1,4 @@
-// src/pages/Shop.jsx
+
 import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { useSearchParams, useLocation } from "react-router";
 import Header from "../ui/Header";
@@ -7,7 +7,7 @@ import ShopSidebar from "../features/shop/ShopSidebar";
 import ProductGrid from "../features/products/ProductGrid";
 import MobileTabs from "../ui/MobileTabs";
 
-// memo کردن کامپوننت‌های ثابت
+
 const MemoizedHeader = memo(Header);
 const MemoizedFooter = memo(Footer);
 const MemoizedMobileTabs = memo(MobileTabs);
@@ -21,7 +21,7 @@ function Shop() {
     collections: [],
     priceRange: { min: null, max: null },
     search: "",
-    discount: false,
+    discount: false
   });
   const mainRef = useRef(null);
 
@@ -37,7 +37,7 @@ function Shop() {
       collections: collectionIds.length > 0 ? collectionIds.map(Number) : [],
       priceRange: { min: null, max: null },
       search: searchQuery,
-      discount: discountParam,
+      discount: discountParam
     });
   }, [searchParams]);
 
@@ -73,7 +73,7 @@ function Shop() {
 
       setSearchParams(params, { replace: true });
     },
-    [setSearchParams],
+    [setSearchParams]
   );
 
   const isOpenFromCategory = !!searchParams.get("category");
@@ -90,8 +90,8 @@ function Shop() {
                 onFilterChange={handleFilterChange}
                 initialFilters={filters}
                 isOpenFromCategory={isOpenFromCategory}
-                searchQuery={searchParams.get("search") || ""}
-              />
+                searchQuery={searchParams.get("search") || ""} />
+              
             </aside>
 
             <div className="flex-1">
@@ -103,8 +103,8 @@ function Shop() {
 
       <MemoizedFooter />
       <MemoizedMobileTabs />
-    </div>
-  );
+    </div>);
+
 }
 
 export default memo(Shop);

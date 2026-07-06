@@ -1,4 +1,4 @@
-// src/features/products/ProductGrid.jsx
+
 import { useState, useEffect, useRef } from "react";
 import { HiChevronDown, HiOutlineSortAscending } from "react-icons/hi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ function ProductGrid({ filters }) {
   const {
     products = [],
     count = 0,
-    isLoading,
+    isLoading
   } = useGetProducts({
     categoryIds: filters?.categories || [],
     colors: filters?.colors || [],
@@ -29,7 +29,7 @@ function ProductGrid({ filters }) {
     search: filters?.search || "",
     discount: filters?.discount || false,
     page: currentPage,
-    limit: productsPerPage,
+    limit: productsPerPage
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function ProductGrid({ filters }) {
 
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   }, [currentPage]);
 
@@ -55,31 +55,31 @@ function ProductGrid({ filters }) {
     if (nextPage <= totalPages) {
       queryClient.prefetchQuery({
         queryKey: [
-          "products",
-          filters?.categories || [],
-          filters?.colors || [],
-          filters?.collections || [],
-          filters?.priceRange?.min || null,
-          filters?.priceRange?.max || null,
-          sortBy,
-          filters?.search || "",
-          filters?.discount || false,
-          nextPage,
-          productsPerPage,
-        ],
+        "products",
+        filters?.categories || [],
+        filters?.colors || [],
+        filters?.collections || [],
+        filters?.priceRange?.min || null,
+        filters?.priceRange?.max || null,
+        sortBy,
+        filters?.search || "",
+        filters?.discount || false,
+        nextPage,
+        productsPerPage],
+
         queryFn: () =>
-          getProducts({
-            categoryIds: filters?.categories || [],
-            colors: filters?.colors || [],
-            collections: filters?.collections || [],
-            minPrice: filters?.priceRange?.min || null,
-            maxPrice: filters?.priceRange?.max || null,
-            sortBy: sortBy,
-            search: filters?.search || "",
-            discount: filters?.discount || false,
-            page: nextPage,
-            limit: productsPerPage,
-          }),
+        getProducts({
+          categoryIds: filters?.categories || [],
+          colors: filters?.colors || [],
+          collections: filters?.collections || [],
+          minPrice: filters?.priceRange?.min || null,
+          maxPrice: filters?.priceRange?.max || null,
+          sortBy: sortBy,
+          search: filters?.search || "",
+          discount: filters?.discount || false,
+          page: nextPage,
+          limit: productsPerPage
+        })
       });
     }
   }, [currentPage, filters, sortBy, count, productsPerPage, queryClient]);
@@ -100,25 +100,25 @@ function ProductGrid({ filters }) {
             <div className="w-full h-10 bg-gray-200 rounded-xl animate-pulse"></div>
             <HiChevronDown
               className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
-              size={18}
-            />
+              size={18} />
+            
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={56} />
-          ))}
+          {Array.from({ length: 12 }).map((_, i) =>
+          <ProductSkeleton key={i} contentSpaces={1.5} imageHeight={56} />
+          )}
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (products.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="text-stone-500 font-sansMed">محصولی یافت نشد</p>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -136,8 +136,8 @@ function ProductGrid({ filters }) {
           <select
             value={sortBy}
             onChange={handleSortChange}
-            className="w-full appearance-none bg-transparent border-2 border-stone-300 hover:border-stone-400 rounded-xl px-10 py-2.5 text-sm font-sansMed text-stone-700 text-center focus:ring-2 focus:ring-stone-400 focus:border-stone-400 focus:outline-none transition-all duration-200 cursor-pointer"
-          >
+            className="w-full appearance-none bg-transparent border-2 border-stone-300 hover:border-stone-400 rounded-xl px-10 py-2.5 text-sm font-sansMed text-stone-700 text-center focus:ring-2 focus:ring-stone-400 focus:border-stone-400 focus:outline-none transition-all duration-200 cursor-pointer">
+            
             <option value="newest">جدیدترین</option>
             <option value="price-asc">ارزان‌ترین</option>
             <option value="price-desc">گران‌ترین</option>
@@ -145,15 +145,15 @@ function ProductGrid({ filters }) {
 
           <HiChevronDown
             className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
-            size={18}
-          />
+            size={18} />
+          
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products.map((product) =>
+        <ProductCard key={product.id} product={product} />
+        )}
       </div>
 
       <div className="mt-8">
@@ -161,11 +161,11 @@ function ProductGrid({ filters }) {
           totalProducts={count}
           productsPerPage={productsPerPage}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+          onPageChange={setCurrentPage} />
+        
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default ProductGrid;

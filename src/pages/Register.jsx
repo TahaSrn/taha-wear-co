@@ -1,4 +1,4 @@
-// src/pages/Register.jsx
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import supabase from "../services/supabase";
@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import {
   HiOutlineMail,
   HiOutlineKey,
-  HiOutlineArrowLeft,
-} from "react-icons/hi";
+  HiOutlineArrowLeft } from
+"react-icons/hi";
 import { HiOutlineUserPlus } from "react-icons/hi2";
 
 function Register() {
@@ -36,7 +36,7 @@ function Register() {
     try {
       const { error } = await supabase.auth.signUp({
         email,
-        password,
+        password
       });
 
       if (error) throw new Error(error.message);
@@ -55,12 +55,12 @@ function Register() {
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-md w-full border border-white/50">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group"
-        >
+          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 transition-colors mb-6 group">
+          
           <HiOutlineArrowLeft
             className="group-hover:-translate-x-1 transition-transform"
-            size={20}
-          />
+            size={20} />
+          
           <span className="text-sm font-sansMed">بازگشت</span>
         </button>
 
@@ -82,16 +82,16 @@ function Register() {
             <div className="relative">
               <HiOutlineMail
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="example@email.com"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -102,8 +102,8 @@ function Register() {
             <div className="relative">
               <HiOutlineKey
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="password"
                 value={password}
@@ -111,8 +111,8 @@ function Register() {
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="••••••••"
                 required
-                minLength={6}
-              />
+                minLength={6} />
+              
             </div>
             <p className="text-xs text-stone-400 mt-1 font-sansMed">
               حداقل ۶ کاراکتر
@@ -126,24 +126,24 @@ function Register() {
             <div className="relative">
               <HiOutlineKey
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
-                size={20}
-              />
+                size={20} />
+              
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-caffee-300 focus:border-caffee-300 focus:outline-none font-sansMed bg-stone-50/50 transition-all"
                 placeholder="••••••••"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full cursor-pointer py-3.5 rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:-translate-y-0.5"}`}
-          >
+            className={`w-full cursor-pointer py-3.5 rounded-xl font-sansBold text-white bg-stone-800 hover:bg-stone-700 transition-all duration-300 text-sm ${loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:-translate-y-0.5"}`}>
+            
             {loading ? "در حال ثبت‌نام..." : "ثبت‌نام"}
           </button>
         </form>
@@ -153,15 +153,15 @@ function Register() {
             قبلاً ثبت‌نام کردید؟{" "}
             <Link
               to="/login"
-              className="cursor-pointer text-stone-800 font-sansBold hover:underline transition-colors"
-            >
+              className="cursor-pointer text-stone-800 font-sansBold hover:underline transition-colors">
+              
               ورود
             </Link>
           </p>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default Register;

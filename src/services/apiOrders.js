@@ -1,16 +1,16 @@
-// src/services/apiOrders.js
+
 import supabase from "./supabase";
 
 export async function createOrder(userId, cartItems, totalPrice) {
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert({
-      user_id: userId,
-      total_price: totalPrice,
-      status: "pending",
-    })
-    .select()
-    .single();
+  const { data: order, error: orderError } = await supabase.
+  from("orders").
+  insert({
+    user_id: userId,
+    total_price: totalPrice,
+    status: "pending"
+  }).
+  select().
+  single();
 
   if (orderError) throw new Error(orderError.message);
 
@@ -21,21 +21,21 @@ export async function createOrder(userId, cartItems, totalPrice) {
     size_id: item.sizeId || null,
     size_name: item.sizeName || null,
     quantity: item.quantity,
-    price: item.price,
+    price: item.price
   }));
 
-  const { error: itemsError } = await supabase
-    .from("order_items")
-    .insert(orderItems);
+  const { error: itemsError } = await supabase.
+  from("order_items").
+  insert(orderItems);
 
   if (itemsError) throw new Error(itemsError.message);
 
   const cartId = cartItems[0]?.cartId;
   if (cartId) {
-    const { error: clearError } = await supabase
-      .from("cart_items")
-      .delete()
-      .eq("cart_id", cartId);
+    const { error: clearError } = await supabase.
+    from("cart_items").
+    delete().
+    eq("cart_id", cartId);
     if (clearError) throw new Error(clearError.message);
   }
 
@@ -43,21 +43,21 @@ export async function createOrder(userId, cartItems, totalPrice) {
 }
 
 export async function getUserOrders(userId) {
-  // بدون JOIN با sizes چون ممکنه RLS مشکل داشته باشه
-  const { data, error } = await supabase
-    .from("orders")
-    .select(
-      `
+
+  const { data, error } = await supabase.
+  from("orders").
+  select(
+    `
       *,
       order_items (
         *,
         products (id, name, price),
         colors (id, name)
       )
-    `,
-    )
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    `
+  ).
+  eq("user_id", userId).
+  order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching user orders:", error);

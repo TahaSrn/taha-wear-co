@@ -1,4 +1,4 @@
-// src/ui/Footer.jsx
+
 import { Link } from "react-router";
 import {
   HiOutlineHome,
@@ -7,15 +7,15 @@ import {
   HiOutlineHeart,
   HiOutlinePhone,
   HiOutlineMail,
-  HiOutlineLocationMarker,
-} from "react-icons/hi";
+  HiOutlineLocationMarker } from
+"react-icons/hi";
 import {
   FaInstagram,
   FaTelegramPlane,
   FaWhatsapp,
   FaLinkedin,
-  FaGithub,
-} from "react-icons/fa";
+  FaGithub } from
+"react-icons/fa";
 
 function Footer() {
   return (
@@ -36,8 +36,8 @@ function Footer() {
               <li>
                 <Link
                   to="/"
-                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed"
-                >
+                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed">
+                  
                   <HiOutlineHome size={18} />
                   خانه
                 </Link>
@@ -45,8 +45,8 @@ function Footer() {
               <li>
                 <Link
                   to="/shop"
-                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed"
-                >
+                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed">
+                  
                   <HiOutlineShoppingBag size={18} />
                   فروشگاه
                 </Link>
@@ -54,8 +54,8 @@ function Footer() {
               <li>
                 <Link
                   to="/about-us"
-                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed"
-                >
+                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed">
+                  
                   <HiOutlineUser size={18} />
                   درباره ما
                 </Link>
@@ -63,8 +63,8 @@ function Footer() {
               <li>
                 <Link
                   to="/contact-us"
-                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed"
-                >
+                  className="text-stone-400 hover:text-white transition-colors flex items-center gap-2 font-sansMed">
+                  
                   <HiOutlineHeart size={18} />
                   تماس با ما
                 </Link>
@@ -100,8 +100,8 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-stone-400 hover:text-white transition-colors text-2xl"
-                aria-label="گیت‌هاب"
-              >
+                aria-label="گیت‌هاب">
+                
                 <FaGithub />
               </a>
               <a
@@ -109,8 +109,8 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-stone-400 hover:text-blue-400 transition-colors text-2xl"
-                aria-label="لینکدین"
-              >
+                aria-label="لینکدین">
+                
                 <FaLinkedin />
               </a>
               <a
@@ -118,22 +118,22 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-stone-400 hover:text-sky-400 transition-colors text-2xl"
-                aria-label="تلگرام"
-              >
+                aria-label="تلگرام">
+                
                 <FaTelegramPlane />
               </a>
               <a
                 href="#"
                 className="text-stone-400 hover:text-pink-500 transition-colors text-2xl"
-                aria-label="اینستاگرام"
-              >
+                aria-label="اینستاگرام">
+                
                 <FaInstagram />
               </a>
               <a
                 href="#"
                 className="text-stone-400 hover:text-green-500 transition-colors text-2xl"
-                aria-label="واتساپ"
-              >
+                aria-label="واتساپ">
+                
                 <FaWhatsapp />
               </a>
             </div>
@@ -144,8 +144,8 @@ function Footer() {
           <p>تمامی حقوق محفوظ است © {new Date().getFullYear()} Taha Wear</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 }
 
 export default Footer;
