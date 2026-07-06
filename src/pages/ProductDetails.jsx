@@ -113,7 +113,6 @@ function ProductDetails() {
     }
   }, [hasSingleColor, colors]);
 
-  // اگر سایز وجود داشت و قبلاً سایزی انتخاب نشده، اولین سایز رو انتخاب کن
   useEffect(() => {
     if (hasSizes && productSizes.length > 0 && !selectedSize) {
       setSelectedSize(productSizes[0]);
@@ -127,6 +126,14 @@ function ProductDetails() {
 
   const handleBack = () => {
     navigate(-1);
+  };
+
+  // محاسبه قیمت با تخفیف
+  const getDiscountedPrice = (price, discount) => {
+    if (discount > 0) {
+      return price * (1 - discount / 100);
+    }
+    return price;
   };
 
   const handleAddToCart = () => {
@@ -146,6 +153,8 @@ function ProductDetails() {
     const colorName = selectedColor?.name || colors[0]?.name;
     const sizeId = selectedSize?.id || null;
     const sizeName = selectedSize?.name || null;
+
+    const finalPrice = getDiscountedPrice(product.price, product.discount);
 
     const existingItem = cartItems.find(
       (item) =>
@@ -169,7 +178,7 @@ function ProductDetails() {
         addItem({
           id: product.id,
           name: product.name,
-          price: product.price,
+          price: finalPrice,
           image: product.productImages?.[0]?.image || "",
           colorId: colorId,
           colorName: colorName,
@@ -239,7 +248,6 @@ function ProductDetails() {
     }
   };
 
-  // بررسی اینکه آیا آیتم با رنگ و سایز فعلی در سبد خرید هست
   const isInCart = cartItems.some(
     (item) =>
       item.id === Number(productId) &&
@@ -316,6 +324,9 @@ function ProductDetails() {
     .filter((p) => p.id !== Number(productId))
     .slice(0, 5);
 
+  const finalPrice = getDiscountedPrice(product.price, product.discount);
+  const hasDiscount = product.discount > 0;
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -326,7 +337,6 @@ function ProductDetails() {
               className="relative bg-gray-100 rounded-2xl overflow-hidden group"
               style={{ height: "750px" }}
             >
-              {/* دکمه بازگشت */}
               <button
                 onClick={handleBack}
                 className="absolute top-4 right-4 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 hover:bg-white shadow-lg transition-all duration-200 hover:scale-105 border border-stone-200/50 cursor-pointer group"
@@ -348,6 +358,12 @@ function ProductDetails() {
                 style={{ opacity: isTransitioning ? 0.7 : 1 }}
                 onClick={handleOpenLightbox}
               />
+
+              {hasDiscount && (
+                <div className="absolute top-3 left-3 bg-red-500 text-white text-sm font-sansBold px-3 py-1.5 rounded-full shadow-md z-10">
+                  {product.discount}٪ تخفیف
+                </div>
+              )}
 
               {sortedImages.length > 1 && (
                 <>
@@ -412,7 +428,6 @@ function ProductDetails() {
               {product.name}
             </h1>
 
-            {/* رنگ‌های موجود */}
             {colors.length > 0 && (
               <div className="mt-6">
                 <span className="text-sm font-sansMed text-stone-600 block mb-2">
@@ -459,7 +474,6 @@ function ProductDetails() {
               </div>
             )}
 
-            {/* سایزهای موجود */}
             <SizeSelector
               productId={product.id}
               selectedSize={selectedSize}
@@ -492,11 +506,30 @@ function ProductDetails() {
                 ۵ الی ۱۰ روز کاری
               </p>
             </div>
+
+            {/* نمایش قیمت با تخفیف */}
             <div className="mt-6">
-              <span className="text-2xl md:text-3xl font-sansBold text-stone-800">
-                {formatCurrency(product.price)} تومان
-              </span>
+              {hasDiscount ? (
+                <div className="flex flex-col items-start gap-1">
+                  <span className="text-2xl md:text-3xl font-sansBold text-stone-800">
+                    {formatCurrency(finalPrice)} تومان
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm md:text-base font-sansMed text-stone-400 line-through">
+                      {formatCurrency(product.price)} تومان
+                    </span>
+                    <span className="text-xs md:text-sm font-sansBold text-red-500 bg-red-50 px-2.5 py-0.5 rounded-full">
+                      {product.discount}٪ تخفیف
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <span className="text-2xl md:text-3xl font-sansBold text-stone-800">
+                  {formatCurrency(product.price)} تومان
+                </span>
+              )}
             </div>
+
             <div className="mt-6">
               {!isInCart ? (
                 <button
