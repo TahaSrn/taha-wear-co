@@ -13,36 +13,46 @@ export default async function handler(req, res) {
   try {
     const { message } = req.body;
 
-    const text = message.toLowerCase();
+    const text = message.toLowerCase().trim();
 
-    // 🧠 1. تشخیص قیمت (مثلاً: 3 میلیون)
+    // ----------------------------
+    // 🧠 1. تشخیص قیمت
+    // ----------------------------
     let maxPrice = null;
     const priceMatch = text.match(/(\d+)\s*میلیون/);
     if (priceMatch) {
-      maxPrice = Number(priceMatch[1]) * 1000000;
+      maxPrice = Number(priceMatch[1]) * 1_000_000;
     }
 
+    // ----------------------------
     // 🧠 2. تشخیص رنگ
+    // ----------------------------
     let color = null;
 
     if (text.includes("مشکی")) color = "مشکی";
-    if (text.includes("سفید")) color = "سفید";
-    if (text.includes("آبی")) color = "آبی";
-    if (text.includes("قهوه")) color = "قهوه‌ای";
+    else if (text.includes("سفید")) color = "سفید";
+    else if (text.includes("آبی")) color = "آبی";
+    else if (text.includes("قهوه")) color = "قهوه";
 
-    // 🧠 3. تشخیص نوع محصول
-    let keyword = null;
+    // ----------------------------
+    // 🧠 3. تشخیص دسته‌بندی (خیلی مهم)
+    // ----------------------------
+    let categoryId = null;
 
-    if (text.includes("کت")) keyword = "کت";
-    else if (text.includes("شلوار")) keyword = "شلوار";
-    else if (text.includes("دورس")) keyword = "دورس";
-    else if (text.includes("تی شرت") || text.includes("تیشرت")) keyword = "تی";
+    if (text.includes("کت")) categoryId = 2;
+    else if (text.includes("شلوار")) categoryId = 4;
+    else if (text.includes("دورس")) categoryId = 3;
+    else if (text.includes("تی") || text.includes("تیشرت")) categoryId = 1;
+    else if (text.includes("کاپشن")) categoryId = 5;
+    else if (text.includes("کفش")) categoryId = 6;
 
+    // ----------------------------
     // 🧠 4. ساخت query
+    // ----------------------------
     let query = supabase.from("products").select("*");
 
-    if (keyword) {
-      query = query.ilike("name", `%${keyword}%`);
+    if (categoryId) {
+      query = query.eq("categoryId", categoryId);
     }
 
     if (maxPrice) {
@@ -52,10 +62,13 @@ export default async function handler(req, res) {
     const { data, error } = await query.limit(20);
 
     if (error) {
-      return res.status(500).json({ error: "DB error" });
+      console.log("DB ERROR:", error);
+      return res.status(500).json({ error: "Database error" });
     }
 
-    // 🧠 5. فیلتر رنگ در JS (چون دیتابیس نداریش)
+    // ----------------------------
+    // 🧠 5. فیلتر رنگ (بعد از DB)
+    // ----------------------------
     let filtered = data;
 
     if (color) {
@@ -64,21 +77,25 @@ export default async function handler(req, res) {
       );
     }
 
+    // ----------------------------
     // ❌ نتیجه خالی
-    if (!filtered.length) {
-      return res.json({
+    // ----------------------------
+    if (!filtered || filtered.length === 0) {
+      return res.status(200).json({
         reply: "چیزی پیدا نکردم 😕",
         products: [],
       });
     }
 
-    // 🟢 پاسخ
-    return res.json({
+    // ----------------------------
+    // 🟢 ساخت پاسخ
+    // ----------------------------
+    return res.status(200).json({
       reply: "این گزینه‌ها رو پیدا کردم 👇",
       products: filtered,
     });
   } catch (err) {
-    console.log(err);
+    console.log("SERVER ERROR:", err);
     return res.status(500).json({ error: "Server error" });
   }
 }
