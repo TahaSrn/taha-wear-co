@@ -15,18 +15,18 @@ export default async function handler(req, res) {
 
     const text = message.toLowerCase();
 
-    // 🧠 فقط کلمات مهم (بدون عدد و کلمات اضافی)
+    // فقط کلمه‌های مهم
     const keyword = text
       .replace(/زیر|کمتر|میخوام|می‌خوام|یه|یک|برای|تومان|\d+|میلیون/g, "")
       .trim();
 
     console.log("KEYWORD:", keyword);
 
-    // 🧠 سرچ مستقیم روی اسم + توضیحات
+    // ❗ مهم: بدون OR (پایدارترین حالت)
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
+      .ilike("name", `%${keyword}%`)
       .limit(10);
 
     if (error) {
@@ -34,15 +34,29 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Database error" });
     }
 
+    // اگر با name چیزی پیدا نشد → روی description تست کن
     if (!data || data.length === 0) {
+      const fallback = await supabase
+        .from("products")
+        .select("*")
+        .ilike("description", `%${keyword}%`)
+        .limit(10);
+
+      if (!fallback.data || fallback.data.length === 0) {
+        return res.json({
+          reply: "چیزی پیدا نکردم 😕",
+          products: [],
+        });
+      }
+
       return res.json({
-        reply: "چیزی پیدا نکردم 😕",
-        products: [],
+        reply: "این محصولات رو پیدا کردم 👇",
+        products: fallback.data,
       });
     }
 
     return res.json({
-      reply: `این محصولات رو پیدا کردم 👇`,
+      reply: "این محصولات رو پیدا کردم 👇",
       products: data,
     });
   } catch (err) {
