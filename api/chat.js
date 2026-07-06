@@ -6,63 +6,43 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
+  console.log("METHOD:", req.method); // 👈 برای دیباگ
+
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(200).json({ error: "Only POST allowed" });
   }
 
   try {
     const { message } = req.body;
+    console.log("MESSAGE:", message);
 
-    if (!message) {
-      return res.status(400).json({ error: "Message is required" });
-    }
-
-    const text = message.toLowerCase();
-
-    // 🎯 تشخیص ساده ولی فارسی‌محور
-    let keyword = "";
-
-    if (text.includes("هودی")) keyword = "هودی";
-    else if (text.includes("تیشرت")) keyword = "تیشرت";
-    else if (text.includes("شلوار")) keyword = "شلوار";
-    else keyword = text; // اگر چیزی نفهمید، کل جمله رو سرچ کن
-
-    // 🔍 سرچ قوی در Supabase
+    // 🔥 خیلی ساده: کل جمله رو سرچ کن
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
+      .or(`name.ilike.%${message}%,description.ilike.%${message}%`)
       .limit(5);
 
+    console.log("DATA:", data);
+
     if (error) {
-      console.error("DB Error:", error);
-      return res.status(500).json({ error: "Database error" });
+      console.log(error);
+      return res.status(500).json({ error: "DB error" });
     }
 
-    // ❌ اگر چیزی پیدا نشد
     if (!data || data.length === 0) {
       return res.status(200).json({
-        reply: "محصولی پیدا نکردم 😕 یه مدل دیگه امتحان کن",
+        reply: "هیچی پیدا نکردم 😕 (باید دیتابیس چک بشه)",
         products: [],
       });
     }
 
-    // 🧠 ساخت جواب طبیعی
-    const reply =
-      `این چند محصول برات پیدا کردم 👇\n\n` +
-      data
-        .map((p) => `👕 ${p.name} - ${p.price.toLocaleString()} تومان`)
-        .join("\n");
-
     return res.status(200).json({
-      reply,
+      reply: `چند محصول پیدا کردم 👌`,
       products: data,
     });
-  } catch (err) {
-    console.error("Server Error:", err);
-
-    return res.status(500).json({
-      error: "Server error",
-    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Server error" });
   }
 }
