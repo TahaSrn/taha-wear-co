@@ -19,39 +19,47 @@ export default async function handler(req, res) {
 
     const text = message.toLowerCase();
 
-    // استخراج keyword ساده
+    // 🎯 تشخیص ساده ولی فارسی‌محور
     let keyword = "";
 
-    if (text.includes("هودی")) keyword = "hoodie";
-    else if (text.includes("تیشرت")) keyword = "tshirt";
-    else if (text.includes("شلوار")) keyword = "pants";
-    else keyword = "shirt";
+    if (text.includes("هودی")) keyword = "هودی";
+    else if (text.includes("تیشرت")) keyword = "تیشرت";
+    else if (text.includes("شلوار")) keyword = "شلوار";
+    else keyword = text; // اگر چیزی نفهمید، کل جمله رو سرچ کن
 
-    // سرچ در Supabase
+    // 🔍 سرچ قوی در Supabase
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .ilike("name", `%${keyword}%`)
+      .or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
       .limit(5);
 
     if (error) {
-      console.error(error);
-      return res.status(500).json({ error: "DB error" });
+      console.error("DB Error:", error);
+      return res.status(500).json({ error: "Database error" });
     }
 
+    // ❌ اگر چیزی پیدا نشد
     if (!data || data.length === 0) {
       return res.status(200).json({
-        reply: "محصولی پیدا نکردم 😕 یه چیز دیگه امتحان کن",
+        reply: "محصولی پیدا نکردم 😕 یه مدل دیگه امتحان کن",
+        products: [],
       });
     }
 
+    // 🧠 ساخت جواب طبیعی
     const reply =
-      "این چند محصول برات پیدا کردم 👇\n\n" +
-      data.map((p) => `👕 ${p.name} - ${p.price} تومان`).join("\n");
+      `این چند محصول برات پیدا کردم 👇\n\n` +
+      data
+        .map((p) => `👕 ${p.name} - ${p.price.toLocaleString()} تومان`)
+        .join("\n");
 
-    return res.status(200).json({ reply, products: data });
+    return res.status(200).json({
+      reply,
+      products: data,
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Server Error:", err);
 
     return res.status(500).json({
       error: "Server error",
