@@ -1,3 +1,6 @@
+// src/ui/Logo.jsx
+import { memo } from "react";
+
 function Logo({ mobile = false }) {
   return (
     <img
@@ -14,4 +17,4 @@ function Logo({ mobile = false }) {
   );
 }
 
-export default Logo;
+export default memo(Logo);

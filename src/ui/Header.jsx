@@ -1,6 +1,7 @@
 // src/ui/Header.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useScrollVisibility } from "../hooks/useScrollVisibility";
 
 import CategoriesSelect from "../features/categories/CategoriesSelect";
 import IconBar from "./IconBar";
@@ -8,14 +9,19 @@ import Logo from "./Logo";
 import Menu from "./Menu";
 import Search from "./Search";
 
+// کامپوننت‌های داخلی رو memo کنیم
+const MemoizedCategoriesSelect = memo(CategoriesSelect);
+const MemoizedIconBar = memo(IconBar);
+const MemoizedLogo = memo(Logo);
+const MemoizedMenu = memo(Menu);
+const MemoizedSearch = memo(Search);
+
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const isVisible = useScrollVisibility();
 
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const handleCategoryClick = () => {
+  const handleCategoryClick = useCallback(() => {
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollToCategories: true } });
       return;
@@ -30,7 +36,6 @@ function Header() {
 
     if (categoriesSection) {
       const offset = 80;
-
       const top =
         categoriesSection.getBoundingClientRect().top +
         window.pageYOffset -
@@ -41,29 +46,7 @@ function Header() {
         behavior: "smooth",
       });
     }
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY;
-
-      if (current === 0) {
-        setIsVisible(true);
-        setLastScrollY(current);
-        return;
-      }
-
-      setIsVisible(current < lastScrollY);
-
-      setLastScrollY(current);
-    };
-
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, [location.pathname, navigate]);
 
   return (
     <header
@@ -73,32 +56,33 @@ function Header() {
     >
       {/* Mobile Menu */}
       <div className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 z-30">
-        <Menu onCategoryClick={handleCategoryClick} />
+        <MemoizedMenu onCategoryClick={handleCategoryClick} />
       </div>
 
       {/* Top Row */}
       <div className="hidden md:flex items-center gap-8 px-8 py-3">
-        <Logo />
+        <MemoizedLogo />
 
         <div className="flex-1 min-w-0 pr-10">
-          <Search />
+          <MemoizedSearch />
         </div>
 
-        <IconBar />
+        <MemoizedIconBar />
       </div>
 
       {/* Mobile */}
       <div className="flex md:hidden items-center justify-center py-4">
-        <Logo mobile />
-        <IconBar mobile />
+        <MemoizedLogo mobile />
+        <MemoizedIconBar mobile />
       </div>
 
       {/* Bottom Row */}
       <div className="hidden md:block">
-        <CategoriesSelect />
+        <MemoizedCategoriesSelect />
       </div>
     </header>
   );
 }
 
-export default Header;
+// جلوگیری از رندر مجدد Header در صورت عدم تغییر props
+export default memo(Header);

@@ -1,11 +1,16 @@
 // src/pages/Shop.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { useSearchParams, useLocation } from "react-router";
 import Header from "../ui/Header";
 import Footer from "../ui/Footer";
 import ShopSidebar from "../features/shop/ShopSidebar";
 import ProductGrid from "../features/products/ProductGrid";
 import MobileTabs from "../ui/MobileTabs";
+
+// memo کردن کامپوننت‌های ثابت
+const MemoizedHeader = memo(Header);
+const MemoizedFooter = memo(Footer);
+const MemoizedMobileTabs = memo(MobileTabs);
 
 function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,36 +48,39 @@ function Shop() {
     window.scrollTo(0, 0);
   }, [location.pathname, searchParams]);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      setFilters(newFilters);
 
-    const params = new URLSearchParams();
+      const params = new URLSearchParams();
 
-    if (newFilters.categories && newFilters.categories.length > 0) {
-      newFilters.categories.forEach((catId) => {
-        params.append("category", catId);
-      });
-    }
-    if (newFilters.collections && newFilters.collections.length > 0) {
-      newFilters.collections.forEach((colId) => {
-        params.append("collection", colId);
-      });
-    }
-    if (newFilters.search) {
-      params.set("search", newFilters.search);
-    }
-    if (newFilters.discount) {
-      params.set("discount", "true");
-    }
+      if (newFilters.categories && newFilters.categories.length > 0) {
+        newFilters.categories.forEach((catId) => {
+          params.append("category", catId);
+        });
+      }
+      if (newFilters.collections && newFilters.collections.length > 0) {
+        newFilters.collections.forEach((colId) => {
+          params.append("collection", colId);
+        });
+      }
+      if (newFilters.search) {
+        params.set("search", newFilters.search);
+      }
+      if (newFilters.discount) {
+        params.set("discount", "true");
+      }
 
-    setSearchParams(params, { replace: true });
-  };
+      setSearchParams(params, { replace: true });
+    },
+    [setSearchParams],
+  );
 
   const isOpenFromCategory = !!searchParams.get("category");
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <MemoizedHeader />
 
       <div ref={mainRef} className="flex-1 bg-caffee-50 pt-8">
         <div className="max-w-7xl mx-auto px-4">
@@ -93,10 +101,10 @@ function Shop() {
         </div>
       </div>
 
-      <Footer />
-      <MobileTabs />
+      <MemoizedFooter />
+      <MemoizedMobileTabs />
     </div>
   );
 }
 
-export default Shop;
+export default memo(Shop);

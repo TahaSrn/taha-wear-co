@@ -25,8 +25,8 @@ function Footer() {
           <div>
             <h4 className="text-lg font-sansBold mb-3 md:mb-4">درباره ما</h4>
             <p className="text-stone-400 text-sm font-sansMed leading-relaxed">
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است.
+              هر استایل، یک داستان است؛ ما به تو کمک می‌کنیم بهترین روایت را
+              داشته باشی
             </p>
           </div>
 

@@ -1,12 +1,18 @@
+// src/ui/CartIcon.jsx
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { formatCurrency } from "../utils/helpers";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { memo, useCallback } from "react";
 
-function CartIcon({ size }) {
+function CartIcon({ size = "medium" }) {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const navigate = useNavigate();
   const { totalQuantity } = useSelector((state) => state.cart);
+
+  const handleCartClick = useCallback(() => {
+    navigate("/cart");
+  }, [navigate]);
 
   const sizes = {
     medium: "w-12 h-12 p-2 px-0 md:px-7",
@@ -17,7 +23,7 @@ function CartIcon({ size }) {
   return (
     <div
       className={`${size === "medium" ? "ml-2 md:ml-0" : ""} bg-stone-800 relative rounded-full font-sansBold flex items-center justify-center text-white hover:text-stone-500 transition-all duration-300 cursor-pointer md:h-auto md:w-auto z-1 ${sizes[size]}`}
-      onClick={() => navigate("/cart")}
+      onClick={handleCartClick}
     >
       <HiOutlineShoppingCart
         size={size === "medium" ? 32 : 20}
@@ -36,4 +42,4 @@ function CartIcon({ size }) {
   );
 }
 
-export default CartIcon;
+export default memo(CartIcon);

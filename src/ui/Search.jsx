@@ -1,5 +1,5 @@
 // src/ui/Search.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useSearchProducts } from "../features/products/useSearchProducts";
 import { formatCurrency } from "../utils/helpers";
@@ -23,40 +23,54 @@ function Search() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (searchTerm.trim()) {
+        navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+        setIsOpen(false);
+      }
+    },
+    [searchTerm, navigate],
+  );
+
+  const handleProductClick = useCallback(
+    (productId) => {
+      navigate(`/product/${productId}`);
       setIsOpen(false);
-    }
-  };
+      setSearchTerm("");
+    },
+    [navigate],
+  );
 
-  const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
-    setIsOpen(false);
-    setSearchTerm("");
-  };
-
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     if (searchTerm.trim().length > 0) {
       setIsOpen(true);
     }
-  };
+  }, [searchTerm]);
 
-  const handleViewAllResults = () => {
+  const handleViewAllResults = useCallback(() => {
     if (searchTerm.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
       setIsOpen(false);
     }
-  };
+  }, [searchTerm, navigate]);
 
-  // تابع محاسبه قیمت با تخفیف
-  const getDiscountedPrice = (price, discount) => {
+  const handleChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+    if (e.target.value.trim().length > 0) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, []);
+
+  const getDiscountedPrice = useCallback((price, discount) => {
     if (discount > 0) {
       return price * (1 - discount / 100);
     }
     return price;
-  };
+  }, []);
 
   return (
     <div ref={wrapperRef} className="relative w-full">
@@ -77,21 +91,13 @@ function Search() {
           ref={inputRef}
           type="text"
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            if (e.target.value.trim().length > 0) {
-              setIsOpen(true);
-            } else {
-              setIsOpen(false);
-            }
-          }}
+          onChange={handleChange}
           onFocus={handleFocus}
           placeholder="جستجوی محصولات"
           className="flex-1 pr-3 outline-none bg-transparent text-sm font-sansMed placeholder-gray-500"
         />
       </form>
 
-      {/* Dropdown نتایج جستجو */}
       {isOpen && searchTerm.trim().length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-stone-100 overflow-hidden max-h-96 overflow-y-auto z-50">
           {isLoading ? (
@@ -160,4 +166,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default memo(Search);

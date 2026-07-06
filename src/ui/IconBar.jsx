@@ -1,5 +1,7 @@
+// src/ui/IconBar.jsx
 import { useNavigate, useLocation } from "react-router";
 import { HiOutlineUser } from "react-icons/hi";
+import { memo, useCallback } from "react";
 
 import CartIcon from "./CartIcon";
 import { useAuth } from "../features/authentication/useAuth";
@@ -7,10 +9,9 @@ import { useAuth } from "../features/authentication/useAuth";
 function IconBar({ mobile = false }) {
   const navigate = useNavigate();
   const location = useLocation();
-
   const { user } = useAuth();
 
-  const handleUserClick = () => {
+  const handleUserClick = useCallback(() => {
     if (user) {
       navigate("/user");
     } else {
@@ -22,7 +23,7 @@ function IconBar({ mobile = false }) {
         },
       });
     }
-  };
+  }, [user, navigate, location.pathname]);
 
   return (
     <div
@@ -57,4 +58,4 @@ function IconBar({ mobile = false }) {
   );
 }
 
-export default IconBar;
+export default memo(IconBar);
