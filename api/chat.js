@@ -1,3 +1,10 @@
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY,
+);
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -10,52 +17,41 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [
-                {
-                  text: `
-تو یک دستیار فروشگاه لباس هستی.
-فقط فارسی جواب بده.
-مختصر، دوستانه و کاربردی باش.
+    const text = message.toLowerCase();
 
-کاربر گفته:
-${message}
-                  `,
-                },
-              ],
-            },
-          ],
-        }),
-      },
-    );
+    // استخراج keyword ساده
+    let keyword = "";
 
-    const data = await response.json();
+    if (text.includes("هودی")) keyword = "hoodie";
+    else if (text.includes("تیشرت")) keyword = "tshirt";
+    else if (text.includes("شلوار")) keyword = "pants";
+    else keyword = "shirt";
 
-    // اگر خطا از Gemini اومد
-    if (!response.ok) {
-      console.error("GEMINI ERROR:", data);
-      return res.status(500).json({
-        error: "Gemini API Error",
-        detail: data,
+    // سرچ در Supabase
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .ilike("name", `%${keyword}%`)
+      .limit(5);
+
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: "DB error" });
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(200).json({
+        reply: "محصولی پیدا نکردم 😕 یه چیز دیگه امتحان کن",
       });
     }
 
     const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد";
+      "این چند محصول برات پیدا کردم 👇\n\n" +
+      data.map((p) => `👕 ${p.name} - ${p.price} تومان`).join("\n");
 
-    return res.status(200).json({ reply });
+    return res.status(200).json({ reply, products: data });
   } catch (err) {
-    console.error("SERVER ERROR:", err);
+    console.error(err);
 
     return res.status(500).json({
       error: "Server error",
