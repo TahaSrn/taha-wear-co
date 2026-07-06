@@ -19,7 +19,7 @@ function News() {
     <div className="relative w-full max-w-7xl mx-auto px-4 mt-8 md:mt-12 mb-6 md:mb-8">
       <div className="relative overflow-hidden rounded-2xl max-h-[280px] md:max-h-[320px] flex items-center justify-center">
         <img
-          src="/news.png"
+          src="/news.jpg"
           alt="عضویت در خبرنامه"
           className="w-full h-full object-cover"
         />

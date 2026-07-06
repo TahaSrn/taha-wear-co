@@ -10,7 +10,7 @@ function Banners() {
           className="block overflow-hidden rounded-xl border border-caffee-300 transition-transform duration-300 hover:scale-[1.02]"
         >
           <img
-            src="/banner1.png"
+            src="/banner1.jpg"
             alt="بنر زمستان"
             className="w-full h-full object-cover"
           />
@@ -21,7 +21,7 @@ function Banners() {
           className="block overflow-hidden rounded-xl border border-caffee-300 transition-transform duration-300 hover:scale-[1.02]"
         >
           <img
-            src="/banner2.png"
+            src="/banner2.jpg"
             alt="بنر پاییز"
             className="w-full h-full object-cover object-[10%_center]"
           />

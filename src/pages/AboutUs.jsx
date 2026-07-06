@@ -120,7 +120,7 @@ function AboutUs() {
               <div className="relative order-2 md:order-1 z-0">
                 <div className="rounded-3xl overflow-hidden shadow-xl bg-white p-1 max-h-[600px]">
                   <img
-                    src="/shop.png"
+                    src="/shop.jpg"
                     alt="Taha Wear"
                     className="w-full h-full object-cover rounded-2xl"
                   />
