@@ -80,7 +80,7 @@ function DiscountProducts() {
               key={i}
               contentSpaces={2}
               desktopImageHeight={"200px"}
-              mobileImageHeight={28}
+              mobileImageHeight={"200px"}
               imageDivPadding={1}
               imageRounded="xl" />
 

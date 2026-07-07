@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import { useNavigate } from "react-router";
 import EmptyCart from "../../ui/EmptyCart";
 import CartItem from "./CartItem";
@@ -8,9 +8,15 @@ import { formatCurrency } from "../../utils/helpers";
 import Footer from "../../ui/Footer";
 import { useAuth } from "../authentication/useAuth";
 import { useProfile } from "../user/useProfile";
+import { createOrder } from "../../services/apiOrders";
 import toast from "react-hot-toast";
 import { clearCart } from "./cartSlice";
 import MobileTabs from "../../ui/MobileTabs";
+
+const MemoizedHeader = memo(Header);
+const MemoizedFooter = memo(Footer);
+const MemoizedMobileTabs = memo(MobileTabs);
+const MemoizedCartItem = memo(CartItem);
 
 function Cart() {
   const dispatch = useDispatch();
@@ -18,7 +24,7 @@ function Cart() {
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
   const { items, totalQuantity, totalPrice } = useSelector(
-    (state) => state.cart
+    (state) => state.cart,
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,7 +38,7 @@ function Cart() {
 
   if (items.length === 0) return <EmptyCart />;
 
-  const handleCheckout = async () => {
+  const handleCheckout = useCallback(async () => {
     if (isSubmitting) return;
 
     if (!user) {
@@ -49,21 +55,20 @@ function Cart() {
     setIsSubmitting(true);
 
     try {
+      await createOrder(user.id, items, totalPrice);
       toast.success("سفارش شما با موفقیت ثبت شد!");
-
       dispatch(clearCart());
-
       navigate("/user");
     } catch (error) {
       toast.error("خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.");
       console.error("Order error:", error);
       setIsSubmitting(false);
     }
-  };
+  }, [isSubmitting, user, profile, items, totalPrice, dispatch, navigate]);
 
   return (
     <div className="flex flex-col min-h-screen bg-caffee-50">
-      <Header />
+      <MemoizedHeader />
       <div className="pt-15 flex-1 flex flex-col">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 px-3 md:px-8 max-w-7xl mx-auto w-full">
           <div className="flex-1">
@@ -77,12 +82,12 @@ function Cart() {
             </div>
 
             <div className="mt-4 space-y-4 pb-10">
-              {items.map((item, index) =>
-              <CartItem
-                key={`${item.id}-${item.colorId}-${item.sizeId || "no-size"}-${index}`}
-                item={item} />
-
-              )}
+              {items.map((item, index) => (
+                <MemoizedCartItem
+                  key={`${item.id}-${item.colorId}-${item.sizeId || "no-size"}-${index}`}
+                  item={item}
+                />
+              ))}
             </div>
           </div>
 
@@ -120,24 +125,24 @@ function Cart() {
               onClick={handleCheckout}
               disabled={isSubmitting}
               className={`w-full font-sansMed mt-4 py-2.5 md:py-3 rounded-lg transition-colors cursor-pointer text-sm md:text-base ${
-              isSubmitting ?
-              "bg-stone-400 cursor-not-allowed text-white" :
-              "bg-stone-800 hover:bg-stone-700 text-white"}`
-              }>
-              
-              {isSubmitting ?
-              "در حال ثبت..." :
-              !user ?
-              "ورود برای ثبت سفارش" :
-              "ثبت سفارش"}
+                isSubmitting
+                  ? "bg-stone-400 cursor-not-allowed text-white"
+                  : "bg-stone-800 hover:bg-stone-700 text-white"
+              }`}
+            >
+              {isSubmitting
+                ? "در حال ثبت..."
+                : !user
+                  ? "ورود برای ثبت سفارش"
+                  : "ثبت سفارش"}
             </button>
           </div>
         </div>
       </div>
-      <Footer />
-      <MobileTabs />
-    </div>);
-
+      <MemoizedFooter />
+      <MemoizedMobileTabs />
+    </div>
+  );
 }
 
-export default Cart;
+export default memo(Cart);
